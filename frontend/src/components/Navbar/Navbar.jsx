@@ -19,8 +19,8 @@ const Navbar = () => {
     },
     {
       id: 2,
-      title: "Courses",
-      path: "/courses",
+      title: "Programs",
+      path: "/programs",
     },
     {
       id: 3,
@@ -29,11 +29,16 @@ const Navbar = () => {
     },
     {
       id: 4,
-      title: "Contact Us",
-      path: "/contact",
+      title: "Blogs",
+      path: "/blogs",
     },
     {
       id: 5,
+      title: "Contact Us",
+      path: "/contact-us",
+    },
+    {
+      id: 6,
       title: "Donate Us",
       path: "/donate",
       isSpecial: true,
@@ -114,10 +119,10 @@ const Navbar = () => {
             {/* CTA Button */}
             <div className="hidden md:block">
               <Link
-                to={navItems[4].path}
+                to={navItems[5].path}
                 className="px-6 py-2 bg-gradient-to-r from-[#F0982E] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] text-white font-medium rounded-full transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
-                {navItems[4].title}
+                {navItems[5].title}
               </Link>
             </div>
 

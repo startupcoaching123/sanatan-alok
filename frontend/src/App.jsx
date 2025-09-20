@@ -9,6 +9,12 @@ import Footer from "./components/Footer/Footer";
 import ScrollToTop from "./components/Navbar/ScrollToTop";
 
 import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Programs from "./pages/Programs";
+import Donate from "./pages/Donate";
+import Blogs from "./pages/Blogs";
+import SingleBlogPage from "./pages/SingleBlogPage";
 
 function App() {
   const location = useLocation();
@@ -26,8 +32,13 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/about-us" element={<About />} />
+            <Route path="/contact-us" element={<Contact />} />
+            <Route path="/programs" element={<Programs />} />
+            <Route path="/donate" element={<Donate />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blogs/:id" element={<SingleBlogPage />} />
 
-            {/* Add more pages here later */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

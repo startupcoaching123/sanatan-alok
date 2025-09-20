@@ -291,13 +291,13 @@ function Home() {
                     {service.title}
                   </h3>
                   <p className="text-gray-600 leading-relaxed mb-6">{service.description}</p>
-                  <Link
+                  {/* <Link
                     to={`/services/${service.title.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-")}`}
                     className="flex items-center text-amber-600 font-medium"
                   >
                     <span className="text-sm">Learn More</span>
                     <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
+                  </Link> */}
                 </div>
               )
             })}
