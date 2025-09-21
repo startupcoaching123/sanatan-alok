@@ -3,6 +3,9 @@ import { Sun, Heart, Users, Target, Eye, Sparkles, ChevronLeft, ChevronRight, St
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
+import dipti from "../assets/dipti.jpg";
+import sanjay from "../assets/sanjay.jpg";
+import karuna from "../assets/karuna.jpg";
 
 const CustomPrevArrow = ({ onClick }) => (
   <button
@@ -25,22 +28,19 @@ const CustomNextArrow = ({ onClick }) => (
 function About() {
   const promoters = [
     {
-      name: "Dipti Moni Verma",
-      qualifications: "M.A. (Public Administration); LL.B.; B.ED.; Post-Graduate Diploma (M.A.) in Human Rights",
-      image: "/professional-woman-spiritual-leader-meditation-tea.jpg",
-      role: "Founder & Spiritual Guide",
+      name: "Dipti Moni",
+      description: "A distinguished academic with degrees in Public Administration, Law, Human Rights, and Education, Dipti Moni chose to dedicate her brilliance to nurturing the next generation. Her life reflects the power of knowledge lived through values, making her a beacon of quiet leadership and inspired wisdom at Sanatan Alok.",
+      image: dipti,
     },
     {
-      name: "Sanjay K.",
-      qualifications: "(elder brother of Dipti), M.A. (Sociology)",
-      image: "/professional-man-spiritual-teacher-meditation-guid.jpg",
-      role: "Senior Advisor",
+      name: "Sanjay Kumar",
+      description: "With a Master’s in Sociology and over 25 years shaping the honey industry, Sanjay Kumar embodies perseverance, innovation, and deep social awareness. His entrepreneurial journey is a testament to resilience and vision, bringing to Sanatan Alok the spirit of enterprise rooted in human connection.",
+      image: sanjay,
     },
     {
-      name: "Saroj V.",
-      qualifications: "(elder sister of both); M.A. (Sociology)",
-      image: "/professional-woman-spiritual-counselor-meditation-.jpg",
-      role: "Spiritual Counselor",
+      name: "Karuna D.",
+      description: "Holding a Master’s in Philosophy, Karuna D. unites contemplative depth with purposeful living. A devoted homemaker and co-entrepreneur, she symbolizes the harmony between thought and action, family and progress—anchoring Sanatan Alok in timeless values while guiding it toward modern relevance.",
+      image: karuna,
     },
   ]
 
@@ -145,16 +145,9 @@ function About() {
             </div>
 
             <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed space-y-6">
-              <p className="text-xl">
-                We began with a simple idea: to create a space where people can find genuine harmony, where old beliefs
-                and new ways of life intersect. This inspired us to create a community where people could explore their
-                inner selves, connect with their spiritual side, and discover inner peace.
-              </p>
+              <p className="text-center text-xl">
+                Sanatan Alok—Eternal Light—is where timeless wisdom meets modern living. We are a sanctuary of spiritual awakening, guiding seekers through meditation, mysticism, and ancient Indian knowledge systems. Our essence lies in re-engineering life, merging sacred practices with life-management technologies to help individuals master peace, success, and fulfillment. Here, spirituality is not separate from life; it is its very essence. We serve aspirants who yearn for transformation, clarity, and abundance—illuminating their journey with practices that harmonize the material and the spiritual. At Sanatan Alok, seekers encounter not dogma but direct experience, not escape but empowerment. We exist to awaken the eternal flame within, inspiring humanity to live with purpose, joy, and profound serenity.
 
-              <p className="text-xl">
-                We aim to help you discover more about yourself and the universe by creating a space that fosters
-                spiritual growth and enlightenment. Join us in finding serenity when old ideas meet new ways of
-                existence and awakening your highest self.
               </p>
             </div>
           </div>
@@ -265,25 +258,21 @@ function About() {
                 className="group bg-white/70 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:-translate-y-3 text-center"
               >
                 <div className="relative mb-8">
-                  <div className="w-32 h-32 mx-auto rounded-full overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300">
+                  <div className="w-40 h-40 mx-auto rounded-full overflow-hidden shadow-lg group-hover:scale-110 transition-transform duration-500">
                     <img
                       src={promoter.image || "/placeholder.svg"}
                       alt={promoter.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
                     />
                   </div>
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white px-4 py-1 rounded-full text-xs font-medium">
-                      {promoter.role}
-                    </div>
-                  </div>
                 </div>
+
 
                 <h3 className="text-2xl font-bold text-gray-800 mb-3 group-hover:text-[#F0982E] transition-colors">
                   {promoter.name}
                 </h3>
 
-                <p className="text-gray-600 text-sm leading-relaxed">{promoter.qualifications}</p>
+                <p className="text-gray-600 text-m leading-relaxed">{promoter.description}</p>
               </div>
             ))}
           </div>
@@ -311,7 +300,7 @@ function About() {
 
                     <h3 className="text-2xl font-bold text-gray-800 mb-3">{promoter.name}</h3>
 
-                    <p className="text-gray-600 text-sm leading-relaxed">{promoter.qualifications}</p>
+                    <p className="text-gray-600 text-sm leading-relaxed">{promoter.description}</p>
                   </div>
                 </div>
               ))}
