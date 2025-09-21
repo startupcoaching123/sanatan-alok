@@ -15,6 +15,8 @@ import Programs from "./pages/Programs";
 import Donate from "./pages/Donate";
 import Blogs from "./pages/Blogs";
 import SingleBlogPage from "./pages/SingleBlogPage";
+import AdminLogin from './pages/AdminLogin.jsx';
+import AdminPanel from './pages/AdminPanel.jsx';
 
 function App() {
   const location = useLocation();
@@ -40,6 +42,17 @@ function App() {
             <Route path="/blogs/:id" element={<SingleBlogPage />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />
+
+                      {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminPanel />
+              </ProtectedRoute>
+            }
+          ></Route>
           </Routes>
         </main>
 
@@ -64,6 +77,15 @@ function App() {
       </HelmetProvider>
     </div>
   );
+}
+
+
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    return <Navigate to="/admin/login" replace />;
+  }
+  return children;
 }
 
 export default App;

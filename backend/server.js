@@ -10,6 +10,7 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const Admin = require("./models/Admin");
 
 const app = express();
 const server = http.createServer(app);
@@ -131,13 +132,7 @@ const categorySchema = new mongoose.Schema({
 
 const Category = mongoose.model('Category', categorySchema);
 
-// Admin Schema
-const adminSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-});
 
-const Admin = mongoose.model("Admin", adminSchema);
 
 // Middleware to verify JWT
 const authenticateAdmin = async (req, res, next) => {
@@ -156,6 +151,82 @@ const authenticateAdmin = async (req, res, next) => {
     res.status(401).json({ message: "Invalid token" });
   }
 };
+
+
+
+
+app.get('/api/auth/validate', authenticateAdmin, (req, res) => {
+  res.json({ valid: true, admin: { id: req.admin._id, username: req.admin.username } });
+});
+
+// Admin Login API
+app.post("/api/admin/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ message: "Username and password are required" });
+    }
+
+    const admin = await Admin.findOne({ username });
+    if (!admin) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    res.json({
+      token,
+      admin: {
+        id: admin._id,
+        username: admin.username
+      }
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+
+/* ========== CATEGORY APIs ========== */
+
+// Public: Get all categories
+app.get('/api/categories', async (req, res) => {
+  try {
+    const categories = await Category.find().sort({ name: 1 });
+    res.json(categories);
+  } catch (error) {
+    console.error('Category fetch error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Protected: Create a new category
+app.post('/api/categories', authenticateAdmin, async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name) {
+      return res.status(400).json({ error: 'Category name is required' });
+    }
+
+    const existingCategory = await Category.findOne({ name: name.trim() });
+    if (existingCategory) {
+      return res.status(400).json({ error: 'Category already exists' });
+    }
+
+    const category = new Category({ name: name.trim() });
+    await category.save();
+    res.status(201).json(category);
+  } catch (error) {
+    console.error('Category creation error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Create blog post route
 const generateUniqueSlug = async (title) => {
@@ -332,6 +403,58 @@ app.delete("/api/blogs/:id", authenticateAdmin, async (req, res) => {
     res.json({ message: "Blog deleted successfully" });
   } catch (error) {
     console.error("Blog deletion error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Search Blogs API
+app.get("/api/blogs/search", async (req, res) => {
+  try {
+    const { q, category, page = 1, limit = 9 } = req.query;
+    let filter = { status: "published" };
+
+    // Add search query filter if provided
+    if (q) {
+      filter.$or = [
+        { title: { $regex: q, $options: "i" } },
+        { content: { $regex: q, $options: "i" } },
+        { metaDescription: { $regex: q, $options: "i" } },
+      ];
+    }
+
+    // Add category filter if a valid category ID is provided
+    if (category && category !== "") {
+      const categoryDoc = await Category.findById(category);
+      if (categoryDoc) {
+        filter.categories = categoryDoc._id;
+      } else {
+        return res.json({ blogs: [], total: 0, totalPages: 0 });
+      }
+    }
+
+    // Convert page and limit to numbers
+    const pageNum = parseInt(page, 10) || 1;
+    const limitNum = parseInt(limit, 10) || 9;
+    const skip = (pageNum - 1) * limitNum;
+
+    // Fetch blogs with pagination
+    const blogs = await Blog.find(filter)
+      .populate("categories")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limitNum);
+
+    // Get total count for pagination
+    const total = await Blog.countDocuments(filter);
+    const totalPages = Math.ceil(total / limitNum);
+
+    res.json({
+      blogs,
+      total,
+      totalPages,
+    });
+  } catch (error) {
+    console.error("Search error:", error);
     res.status(500).json({ error: error.message });
   }
 });

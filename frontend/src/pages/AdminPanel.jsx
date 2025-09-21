@@ -1,0 +1,1377 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import BlogForm from "../components/Blogs/BlogForm"
+import BlogList from "../components/Blogs/BlogList"
+import { validateSession } from "../utils/auth.js"
+
+const BACKENDURL = import.meta.env.VITE_BACKEND_URL
+
+function AdminPanel() {
+  const [blogs, setBlogs] = useState([])
+  const [filteredBlogs, setFilteredBlogs] = useState([])
+  const [selectedBlog, setSelectedBlog] = useState(null)
+  const [activeSection, setActiveSection] = useState("dashboard")
+  const [loading, setLoading] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [stats, setStats] = useState({
+    totalBlogs: 0,
+    publishedBlogs: 0,
+    draftBlogs: 0,
+    totalViews: 0,
+  })
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("")
+  const [categories, setCategories] = useState([])
+  const [contacts, setContacts] = useState([])
+  const [consultations, setConsultations] = useState([])
+  const [bookCalls, setBookCalls] = useState([])
+  const [newsletters, setNewsletters] = useState([])
+  const [selectedItem, setSelectedItem] = useState(null)
+  const [launchpadApplications, setLaunchpadApplications] = useState([]);
+  const [emailContent, setEmailContent] = useState('');
+  const [emailSubject, setEmailSubject] = useState('');
+  const [isSending, setIsSending] = useState(false);
+  const [leads, setLeads] = useState([]);
+  const [selectedLead, setSelectedLead] = useState(null);
+  const [sendingId, setSendingId] = useState(null);
+
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const checkAuthAndFetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        // First validate the session
+        const isValid = await validateSession();
+        if (!isValid) {
+          localStorage.removeItem("token");
+          navigate("/admin/login");
+          return;
+        }
+
+        // Only proceed with data fetching if validation passed
+        if (activeSection === "dashboard" || activeSection === "blogs") {
+          await fetchBlogs();
+          await fetchCategories();
+        }
+        if (activeSection === "contacts") await fetchContacts();
+        if (activeSection === "consultations") await fetchConsultations();
+        if (activeSection === "book-calls") await fetchBookCalls();
+        if (activeSection === "newsletters") await fetchNewsletters();
+        if (activeSection === "launchpad") await fetchLaunchpadApplications();
+        if (activeSection === "leads") await fetchLeads();
+
+      } catch (error) {
+        console.error("Error in initial data fetching:", error);
+        // Handle token expiration during data fetching
+        if (error.response?.status === 401) {
+          localStorage.removeItem("token");
+          navigate("/admin/login");
+        }
+      }
+    };
+
+    checkAuthAndFetchData();
+  }, [activeSection, navigate]);
+
+  const fetchLaunchpadApplications = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BACKENDURL}/api/admin/launchpad-applications`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setLaunchpadApplications(response.data);
+    } catch (err) {
+      console.error("Launchpad applications fetch error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error("Failed to fetch launchpad applications.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchLeads = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BACKENDURL}/api/admin/launchpad-leads`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setLeads(response.data);
+    } catch (err) {
+      console.error("Leads fetch error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error("Failed to fetch leads.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTokenExpiration = async (error, navigate) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      const Swal = (await import("sweetalert2")).default;
+      await Swal.fire({
+        title: "Session Expired",
+        text: "Your session has expired. Please login again.",
+        icon: "warning",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      });
+      navigate("/admin/login");
+      return true; // Indicates token was expired
+    }
+    return false; // Token was not expired
+  };
+
+  const fetchBlogs = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BACKENDURL}/api/blogs`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setBlogs(response.data);
+      setFilteredBlogs(response.data);
+      setStats({
+        totalBlogs: response.data.length,
+        publishedBlogs: response.data.filter((blog) => blog.status === "published").length,
+        draftBlogs: response.data.filter((blog) => blog.status === "draft").length,
+        totalViews: response.data.reduce((sum, blog) => sum + (blog.views || 0), 0),
+      });
+    } catch (err) {
+      console.error("Blog fetch error:", err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/admin/login");
+      } else {
+        toast.error("Failed to fetch blogs. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BACKENDURL}/api/categories`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCategories(response.data);
+    } catch (err) {
+      console.error("Category fetch error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error("Failed to fetch categories.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchContacts = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BACKENDURL}/api/contacts`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setContacts(response.data);
+    } catch (err) {
+      console.error("Contact fetch error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error("Failed to fetch contacts.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchConsultations = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BACKENDURL}/api/consultations`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setConsultations(response.data);
+    } catch (err) {
+      console.error("Consultation fetch error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error("Failed to fetch consultations.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchBookCalls = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BACKENDURL}/api/book-calls`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setBookCalls(response.data);
+    } catch (err) {
+      console.error("Book call fetch error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error("Failed to fetch book calls.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchNewsletters = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BACKENDURL}/api/newsletter`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setNewsletters(response.data);
+    } catch (err) {
+      console.error("Newsletter fetch error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error("Failed to fetch newsletters.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const handleResendConfirmation = async (id) => {
+    setSendingId(id);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${BACKENDURL}/api/admin/launchpad/resend-confirmation/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success(response.data.message);
+    } catch (err) {
+      console.error("Resend confirmation error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error(err.response?.data?.message || "Failed to resend confirmation email");
+      }
+    } finally {
+      setSendingId(null);
+    }
+  };
+
+
+  const handleSearch = (query) => {
+    setSearchQuery(query)
+    if (!query && !selectedCategory) {
+      setFilteredBlogs(blogs)
+      return
+    }
+    const filtered = blogs.filter(blog => {
+      const matchesSearch = blog.title.toLowerCase().includes(query.toLowerCase()) ||
+        blog.content.toLowerCase().includes(query.toLowerCase())
+      const matchesCategory = !selectedCategory ||
+        (blog.categories && blog.categories.some(cat => cat.name === selectedCategory))
+      return matchesSearch && matchesCategory
+    })
+    setFilteredBlogs(filtered)
+  }
+
+  const handleCategoryFilter = (category) => {
+    setSelectedCategory(category)
+    if (!category && !searchQuery) {
+      setFilteredBlogs(blogs)
+      return
+    }
+    handleSearch(searchQuery)
+  }
+
+  const handleCreate = async (formData) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(`${BACKENDURL}/api/blogs`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Blog created successfully!");
+      fetchBlogs();
+      fetchCategories();
+      setSelectedBlog(null);
+    } catch (err) {
+      console.error("Blog creation error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error(err.response?.data?.error || "Failed to create blog");
+      }
+    }
+  };
+
+  const handleUpdate = async (id, formData) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(`${BACKENDURL}/api/blogs/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Blog updated successfully!");
+      fetchBlogs();
+      fetchCategories();
+      setSelectedBlog(null);
+    } catch (err) {
+      console.error("Blog update error:", err);
+      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      if (!isTokenExpired) {
+        toast.error(err.response?.data?.error || "Failed to update blog");
+      }
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const Swal = (await import("sweetalert2")).default;
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+    if (result.isConfirmed) {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.delete(`${BACKENDURL}/api/blogs/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        toast.success("Blog deleted successfully!");
+        fetchBlogs();
+        Swal.fire("Deleted!", "Your blog has been deleted.", "success");
+      } catch (err) {
+        console.error("Blog deletion error:", err);
+        const isTokenExpired = await handleTokenExpiration(err, navigate);
+        if (!isTokenExpired) {
+          toast.error(err.response?.data?.error || "Failed to delete blog");
+        }
+      }
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    navigate("/admin/login")
+  }
+
+  const downloadCSV = (data, filename, type) => {
+    let csv = '';
+    switch (type) {
+      case 'contacts':
+        csv = 'Name,Email,Phone,Message,Submitted At\n';
+        csv += data.map(item =>
+          `"${item.name || ''}","${item.email || ''}","${item.phone || ''}","${item.message ? item.message.replace(/"/g, '""') : ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
+        ).join('\n');
+        break;
+      case 'consultations':
+        csv = 'Name,Business Name,Email,Phone,Industry,Message,Submitted At\n';
+        csv += data.map(item =>
+          `"${item.name || ''}","${item.businessName || ''}","${item.email || ''}","${item.phone || ''}","${item.industry || ''}","${item.message ? item.message.replace(/"/g, '""') : ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
+        ).join('\n');
+        break;
+      case 'book-calls':
+        csv = 'Name,Email,Phone,Service,Date,Time,Submitted At\n';
+        csv += data.map(item =>
+          `"${item.name || ''}","${item.email || ''}","${item.phone || ''}","${item.service || ''}","${item.date || ''}","${item.time || ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
+        ).join('\n');
+        break;
+      case 'newsletters':
+        csv = 'Email,Subscribed At\n';
+        csv += data.map(item =>
+          `"${item.email || ''}","${new Date(item.subscribedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
+        ).join('\n');
+        break;
+      case 'launchpad':
+        csv = 'Application Number,Full Name,Email,Phone,Business Name,Industry,Custom Industry,Pitch Deck URL,Payment Status,Status,Rejection Reason,Submitted At\n';
+        csv += data.map(item =>
+          `"${item.applicationNumber || ''}","${item.fullName || ''}","${item.email || ''}","${item.phone || ''}","${item.businessName || ''}","${item.industry || ''}","${item.customIndustry || ''}","${item.pitchDeckUrl || ''}","${item.paymentStatus || ''}","${item.status || 'pending'}","${item.rejectionReason || ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
+        ).join('\n');
+        break;
+      case 'leads':
+        csv = 'Full Name,Email,Phone,Business Name,Industry,Custom Industry,Pitch Deck URL,Follow-up Status,Last Follow-up,Submitted At\n';
+        csv += data.map(item =>
+          `"${item.fullName || ''}","${item.email || ''}","${item.phone || ''}","${item.businessName || ''}","${item.industry || ''}","${item.customIndustry || ''}","${item.pitchDeckUrl || ''}","${item.followUpStatus || 'new'}","${item.lastFollowUp ? new Date(item.lastFollowUp).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
+        ).join('\n');
+        break;
+    }
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', `${filename}.csv`);
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+  const menuItems = [
+    {
+      id: "dashboard",
+      name: "Dashboard",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "blogs",
+      name: "Blog Posts",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "contacts",
+      name: "Contacts",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "consultations",
+      name: "Consultations",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17 20h5v-2a2 2 0 00-2-2h-3m-2 4h-5v-2a2 2 0 012-2h3m-6-4V4h12v10m-6 4v2m-6-2h12"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "book-calls",
+      name: "Book Calls",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "newsletters",
+      name: "Newsletters",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "launchpad",
+      name: "Launchpad",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      ),
+    },
+    {
+      id: "leads",
+      name: "Leads",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+      ),
+    },
+
+  ]
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
+      <div
+        className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+      >
+        <div className="flex items-center justify-center h-16 px-4 bg-gradient-to-r from-purple-600 to-purple-700">
+          <h1 className="text-xl font-bold text-white">Admin Panel</h1>
+        </div>
+        <nav className="mt-8">
+          <div className="px-4 space-y-2">
+            {menuItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setActiveSection(item.id)
+                  setSidebarOpen(false)
+                }}
+                className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors ${activeSection === item.id
+                  ? "bg-purple-100 text-purple-700 border-r-4 border-purple-600"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                  }`}
+              >
+                {item.icon}
+                <span className="ml-3 font-medium">{item.name}</span>
+              </button>
+            ))}
+          </div>
+        </nav>
+        <div className="absolute bottom-0 w-full p-4">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+            <span className="ml-3 font-medium">Logout</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Header */}
+        <header className="bg-white shadow-sm border-b border-gray-200">
+          <div className="flex items-center justify-between px-6 py-4">
+            <div className="flex items-center">
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="lg:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <h2 className="ml-4 text-2xl font-bold text-gray-900 capitalize">
+                {activeSection === "dashboard" ? "Dashboard Overview" : activeSection}
+              </h2>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-medium">A</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
+          <div className="container mx-auto px-6 py-8">
+            {activeSection === "dashboard" && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div className="flex items-center">
+                      <div className="p-2 bg-purple-100 rounded-lg">
+                        <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Total Posts</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.totalBlogs}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div className="flex items-center">
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Published</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.publishedBlogs}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div className="flex items-center">
+                      <div className="p-2 bg-yellow-100 rounded-lg">
+                        <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Drafts</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.draftBlogs}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div className="flex items-center">
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Total Views</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.totalViews.toLocaleString()}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button
+                      onClick={() => {
+                        setActiveSection("blogs")
+                        setSelectedBlog({})
+                      }}
+                      className="flex items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors group"
+                    >
+                      <div className="p-2 bg-purple-600 rounded-lg group-hover:bg-purple-700 transition-colors">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                      </div>
+                      <div className="ml-3">
+                        <p className="font-medium text-gray-900">Create New Post</p>
+                        <p className="text-sm text-gray-600">Write a new blog post</p>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => setActiveSection("blogs")}
+                      className="flex items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group"
+                    >
+                      <div className="p-2 bg-blue-600 rounded-lg group-hover:bg-blue-700 transition-colors">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div className="ml-3">
+                        <p className="font-medium text-gray-900">Manage Posts</p>
+                        <p className="text-sm text-gray-600">Edit existing posts</p>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeSection === "blogs" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Blog Management</h3>
+                    <p className="text-gray-600">Create, edit, and manage your blog posts</p>
+                  </div>
+                  {selectedBlog === null && (
+                    <button
+                      onClick={() => {
+                        setSelectedBlog({ status: 'published' })
+                      }}
+                      className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      <span>Create New Blog</span>
+                    </button>
+                  )}
+                </div>
+                {selectedBlog === null && (
+                  <>
+                    <div className="flex flex-col md:flex-row gap-4">
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          placeholder="Search by title or content..."
+                          value={searchQuery}
+                          onChange={(e) => handleSearch(e.target.value)}
+                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+                        />
+                        <svg
+                          className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                          />
+                        </svg>
+                      </div>
+                      <select
+                        value={selectedCategory}
+                        onChange={(e) => handleCategoryFilter(e.target.value)}
+                        className="pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+                      >
+                        <option value="">All Categories</option>
+                        {categories.map((category) => (
+                          <option key={category._id || category.id} value={category.name}>
+                            {category.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <BlogList blogs={filteredBlogs} onEdit={setSelectedBlog} onDelete={handleDelete} />
+                  </>
+                )}
+                {selectedBlog !== null && (
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div className="p-6">
+                      <BlogForm
+                        onSubmit={selectedBlog._id ? (data) => handleUpdate(selectedBlog._id, data) : handleCreate}
+                        initialData={selectedBlog}
+                        onCancel={() => setSelectedBlog(null)}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeSection === "contacts" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Contact Form Submissions</h3>
+                    <p className="text-gray-600">View all contact form submissions</p>
+                  </div>
+                  <button
+                    onClick={() => downloadCSV(contacts, 'contacts', 'contacts')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>Download CSV</span>
+                  </button>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  {loading ? (
+                    <p>Loading...</p>
+                  ) : contacts.length === 0 ? (
+                    <p>No contact submissions found.</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {contacts.map((contact) => (
+                            <tr
+                              key={contact._id}
+                              onClick={() => setSelectedItem({ type: 'contact', data: contact })}
+                              className="cursor-pointer hover:bg-gray-50"
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap">{contact.name}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{contact.email}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {new Date(contact.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeSection === "consultations" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Consultation Requests</h3>
+                    <p className="text-gray-600">View all consultation requests</p>
+                  </div>
+                  <button
+                    onClick={() => downloadCSV(consultations, 'consultations', 'consultations')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>Download CSV</span>
+                  </button>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  {loading ? (
+                    <p>Loading...</p>
+                  ) : consultations.length === 0 ? (
+                    <p>No consultation requests found.</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Industry</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {consultations.map((consultation) => (
+                            <tr
+                              key={consultation._id}
+                              onClick={() => setSelectedItem({ type: 'consultation', data: consultation })}
+                              className="cursor-pointer hover:bg-gray-50"
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap">{consultation.name}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{consultation.email}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{consultation.industry}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {new Date(consultation.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeSection === "book-calls" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Book Call Requests</h3>
+                    <p className="text-gray-600">View all book call requests</p>
+                  </div>
+                  <button
+                    onClick={() => downloadCSV(bookCalls, 'book-calls', 'book-calls')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>Download CSV</span>
+                  </button>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  {loading ? (
+                    <p>Loading...</p>
+                  ) : bookCalls.length === 0 ? (
+                    <p>No book call requests found.</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {bookCalls.map((call) => (
+                            <tr
+                              key={call._id}
+                              onClick={() => setSelectedItem({ type: 'book-call', data: call })}
+                              className="cursor-pointer hover:bg-gray-50"
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap">{call.name}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{call.email}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{call.service}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {new Date(call.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeSection === "newsletters" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Newsletter Subscriptions</h3>
+                    <p className="text-gray-600">View all newsletter subscriptions</p>
+                  </div>
+                  <button
+                    onClick={() => downloadCSV(newsletters, 'newsletters', 'newsletters')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>Download CSV</span>
+                  </button>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  {loading ? (
+                    <p>Loading...</p>
+                  ) : newsletters.length === 0 ? (
+                    <p>No newsletter subscriptions found.</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subscribed At</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {newsletters.map((newsletter) => (
+                            <tr
+                              key={newsletter._id}
+                              onClick={() => setSelectedItem({ type: 'newsletter', data: newsletter })}
+                              className="cursor-pointer hover:bg-gray-50"
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap">{newsletter.email}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {new Date(newsletter.subscribedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            {activeSection === "launchpad" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Launchpad Applications</h3>
+                    <p className="text-gray-600">View all paid launchpad applications</p>
+                  </div>
+                  <button
+                    onClick={() => downloadCSV(launchpadApplications, 'launchpad-applications', 'launchpad')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>Download CSV</span>
+                  </button>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  {loading ? (
+                    <p>Loading...</p>
+                  ) : launchpadApplications.length === 0 ? (
+                    <p>No paid applications found.</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">App #</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Industry</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pitch Deck</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {launchpadApplications.map((application) => (
+                            <tr key={application._id}>
+                              <td className="px-6 py-4 whitespace-nowrap">{application.applicationNumber}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{application.fullName}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{application.email}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{application.businessName}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{application.industry}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {new Date(application.submittedAt).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {application.pitchDeckUrl ? (
+                                  <a
+                                    href={application.pitchDeckUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md text-sm font-medium transition-colors"
+                                  >
+                                    View
+                                  </a>
+                                ) : (
+                                  <span className="text-gray-500">No Pitch Deck</span>
+                                )}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                                <button
+                                  onClick={() => handleResendConfirmation(application._id)}
+                                  className={`px-3 py-1 rounded ${sendingId === application._id ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 text-white"
+                                    }`}
+                                  disabled={sendingId === application._id}
+                                  title="Resend Confirmation"
+                                >
+                                  {sendingId === application._id ? "Resending..." : "Resend Confirmation"}
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeSection === "leads" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Launchpad Leads</h3>
+                    <p className="text-gray-600">View all unpaid launchpad applications</p>
+                  </div>
+                  <button
+                    onClick={() => downloadCSV(leads, 'launchpad-leads', 'launchpad')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span>Download CSV</span>
+                  </button>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  {loading ? (
+                    <p>Loading...</p>
+                  ) : leads.length === 0 ? (
+                    <p>No leads found.</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Industry</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pitch Deck</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {leads.map((lead) => (
+                            <tr key={lead._id}>
+                              <td className="px-6 py-4 whitespace-nowrap">{lead.fullName}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{lead.email}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{lead.phone}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{lead.businessName}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{lead.industry}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {lead.pitchDeckUrl ? (
+                                  <a
+                                    href={lead.pitchDeckUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 hover:underline"
+                                  >
+                                    Open
+                                  </a>
+                                ) : (
+                                  "No Link"
+                                )}
+                              </td>
+
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {new Date(lead.submittedAt).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                                <button
+                                  onClick={() => {
+                                    setSelectedLead(lead);
+                                    setEmailSubject(`Follow-up on your Launch Pad application`);
+                                    setEmailContent(`
+              <p>Dear ${lead.fullName},</p>
+              
+              <p>We noticed you started but didn't complete your Launch Pad application. 
+              We'd love to help you take the next step in your startup journey.</p>
+              
+              <p>The Launch Pad program offers:</p>
+              <ul>
+                <li>Expert consultations worth ₹10,000</li>
+                <li>Legal documents pack worth ₹8,000</li>
+                <li>Professional pitch deck worth ₹12,000</li>
+                <li>Marketing assets worth ₹7,000</li>
+                <li>DPIIT registration support worth ₹5,000</li>
+                <li>Grant application help worth ₹8,000</li>
+              </ul>
+              
+              <p>All this for just ₹10,000!</p>
+              
+              <p>Would you like to complete your application?</p>
+              
+              <p>Best regards,<br/>
+              The Startup Coach Team</p>
+            `);
+                                  }}
+                                  className="text-purple-600 hover:text-purple-800"
+                                  title="Follow Up"
+                                >
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                  </svg>
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            {/* Follow Up Modal */}
+            {selectedLead && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+                <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Send Follow-up to {selectedLead.fullName}
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                      <input
+                        type="text"
+                        value={emailSubject}
+                        onChange={(e) => setEmailSubject(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Email Content</label>
+                      <textarea
+                        value={emailContent}
+                        onChange={(e) => setEmailContent(e.target.value)}
+                        rows={10}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-6 flex justify-end space-x-3">
+                    <button
+                      onClick={() => setSelectedLead(null)}
+                      className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={async () => {
+                        try {
+                          setIsSending(true);
+                          const response = await axios.post(
+                            `${BACKENDURL}/api/admin/launchpad/send-followup/${selectedLead._id}`,
+                            { subject: emailSubject, content: emailContent },
+                            {
+                              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                            }
+                          );
+                          toast.success("Follow-up email sent successfully");
+                          setSelectedLead(null);
+                          fetchLeads();
+                        } catch (error) {
+                          console.error("Error sending follow-up:", error);
+                          toast.error("Failed to send follow-up email");
+                        } finally {
+                          setIsSending(false);
+                        }
+                      }}
+                      disabled={isSending}
+                      className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50"
+                    >
+                      {isSending ? "Sending..." : "Send Follow-up"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            {/* Modal for Detailed View */}
+            {selectedItem && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+                <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    {selectedItem.type === 'contact' && 'Contact Details'}
+                    {selectedItem.type === 'consultation' && 'Consultation Details'}
+                    {selectedItem.type === 'book-call' && 'Book Call Details'}
+                    {selectedItem.type === 'newsletter' && 'Newsletter Subscription Details'}
+                  </h3>
+                  <div className="space-y-4">
+                    {selectedItem.type === 'contact' && (
+                      <>
+                        <p><strong>Name:</strong> {selectedItem.data.name}</p>
+                        <p><strong>Email:</strong> {selectedItem.data.email}</p>
+                        <p><strong>Phone:</strong> {selectedItem.data.phone || 'N/A'}</p>
+                        <p><strong>Message:</strong></p>
+                        <div className="whitespace-pre-line bg-gray-50 p-3 rounded-lg">
+                          {selectedItem.data.message || 'N/A'}
+                        </div>
+                        <p><strong>Submitted At:</strong> {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
+                      </>
+                    )}
+                    {selectedItem.type === 'consultation' && (
+                      <>
+                        <p><strong>Name:</strong> {selectedItem.data.name}</p>
+                        <p><strong>Business Name:</strong> {selectedItem.data.businessName || 'N/A'}</p>
+                        <p><strong>Email:</strong> {selectedItem.data.email}</p>
+                        <p><strong>Phone:</strong> {selectedItem.data.phone}</p>
+                        <p><strong>Industry:</strong> {selectedItem.data.industry}</p>
+                        <p><strong>Message:</strong></p>
+                        <div className="whitespace-pre-line bg-gray-50 p-3 rounded-lg">
+                          {selectedItem.data.message || 'N/A'}
+                        </div>
+                        <p><strong>Submitted At:</strong> {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
+                      </>
+                    )}
+                    {selectedItem.type === 'book-call' && (
+                      <>
+                        <p><strong>Name:</strong> {selectedItem.data.name}</p>
+                        <p><strong>Email:</strong> {selectedItem.data.email}</p>
+                        <p><strong>Phone:</strong> {selectedItem.data.phone}</p>
+                        <p><strong>Service:</strong> {selectedItem.data.service}</p>
+                        <p><strong>Date:</strong> {selectedItem.data.date}</p>
+                        <p><strong>Time:</strong> {selectedItem.data.time}</p>
+                        <p><strong>Submitted At:</strong> {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
+                      </>
+                    )}
+                    {selectedItem.type === 'newsletter' && (
+                      <>
+                        <p><strong>Email:</strong> {selectedItem.data.email}</p>
+                        <p><strong>Subscribed At:</strong> {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
+                      </>
+                    )}
+                  </div>
+                  <div className="mt-6 flex justify-end">
+                    <button
+                      onClick={() => setSelectedItem(null)}
+                      className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        ></div>
+      )}
+    </div>
+  )
+}
+
+export default AdminPanel

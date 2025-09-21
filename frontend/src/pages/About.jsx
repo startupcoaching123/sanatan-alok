@@ -107,8 +107,7 @@ function About() {
           </h1>
 
           <p className="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12">
-            At Sanatan Alok, we strive to apply ancient knowledge to modern problems. Our goal is to help people
-            understand themselves and the universe, fostering spiritual connection, self-discovery, and harmony.
+            Charity wears many faces and flows in countless streams, yet its soul is one. When we rise to meet one another’s burdens, our shared humanity is revealed—carrying us into unity, greatness, and the greater good.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
@@ -152,7 +151,7 @@ function About() {
                 inner selves, connect with their spiritual side, and discover inner peace.
               </p>
 
-              <p>
+              <p className="text-xl">
                 We aim to help you discover more about yourself and the universe by creating a space that fosters
                 spiritual growth and enlightenment. Join us in finding serenity when old ideas meet new ways of
                 existence and awakening your highest self.
@@ -176,11 +175,7 @@ function About() {
               </div>
 
               <p className="text-gray-600 leading-relaxed text-lg">
-                We aim to inspire individuals to reach their full potential and lead a life filled with meaning and
-                profound peace. We achieve this by providing people with easy access to real, life-changing resources
-                that blend traditional spiritual wisdom with practical, modern applications. We are dedicated to
-                building a global community where everyone can find the tools and help they need to start their journey
-                toward true harmony.
+                Our mission is to awaken the inner light of seekers by integrating spiritual wisdom with modern life. Through meditation, mysticism, and applied spirituality, we offer transformative tools that dissolve inner conflict and ignite peace, abundance, and success. Sanatan Alok is devoted to guiding aspirants toward mastery of the self, enabling them to live with clarity, harmony, and fulfillment—where the eternal wisdom of the ancients becomes the power of the present.
               </p>
             </div>
 
@@ -194,11 +189,7 @@ function About() {
               </div>
 
               <p className="text-gray-600 leading-relaxed text-lg">
-                We envision a world where spirituality is an integral part of everyday life, not something separate from
-                it. We aim to be a significant force in the global spiritual awakening, inspiring many people to live
-                with awareness, connect deeply, and find inner peace. We aim to create a future where everyone is
-                inspired to embark on the path of mystical awakening, ultimately making the world a kinder and more
-                peaceful place for all.
+                We envision a world where spirituality is seamlessly woven into daily life, elevating human consciousness to its highest potential. Sanatan Alok seeks to stand as a global beacon of awakening, inspiring leaders, seekers, and visionaries to embody wisdom, serenity, and abundance. Our vision is a luminous future where humanity transcends fear and limitation, and instead lives in harmony, purpose, and enlightened awareness—guided by the eternal light that reveals the profound oneness of existence.
               </p>
             </div>
           </div>
