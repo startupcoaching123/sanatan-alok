@@ -82,8 +82,9 @@ const Navbar = () => {
     <>
       {/* Loading Indicator */}
       {isLoading && (
-        <div className="fixed top-0 left-0 w-full h-1 bg-gradient-to-r from-[#7030A0] to-purple-600 animate-pulse z-60" />
+        <div className="fixed top-0 left-0 w-full h-1 bg-gradient-to-r from-[#F0982E] via-[#d97706] to-[#b45309] animate-pulse z-[60]" />
       )}
+
 
       {/* Desktop Navbar */}
       <nav
@@ -192,11 +193,11 @@ const Navbar = () => {
           {/* Mobile Menu Footer */}
           <div className="p-6 border-t border-gray-100">
             <Link
-              to={navItems[4].path}
+              to={navItems[5].path}
               className="block w-full px-6 py-3 bg-gradient-to-r from-[#F0982E] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] text-white font-medium rounded-full hover:from-purple-600 hover:to-purple-700 text-center transition-all duration-300"
               onClick={() => setMobileMenuOpen(false)}
             >
-              {navItems[4].title}
+              {navItems[5].title}
             </Link>
           </div>
         </div>

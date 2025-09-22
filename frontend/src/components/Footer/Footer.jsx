@@ -38,7 +38,7 @@ const Footer = () => {
                 title: "Subscribed!",
                 text: res.data.message || "You have successfully subscribed to our newsletter.",
                 icon: "success",
-                confirmButtonColor: "#7030A0",
+                confirmButtonColor: "#F0982E",
             })
 
             setEmail("")
@@ -48,14 +48,14 @@ const Footer = () => {
                     title: "Already Subscribed",
                     text: "This email is already registered for our newsletter.",
                     icon: "warning",
-                    confirmButtonColor: "#7030A0",
+                    confirmButtonColor: "#F0982E",
                 })
             } else {
                 Swal.fire({
                     title: "Oops!",
                     text: "Something went wrong. Please try again later.",
                     icon: "error",
-                    confirmButtonColor: "#7030A0",
+                    confirmButtonColor: "#F0982E",
                 })
             }
         } finally {

@@ -1,6 +1,9 @@
 "use client"
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle, Globe, Heart } from "lucide-react"
 import { useState } from "react"
+import Swal from "sweetalert2"
+
+const BACKENDURL = import.meta.env.VITE_BACKEND_URL;
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -10,31 +13,147 @@ function Contact() {
     subject: "",
     message: "",
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    const { name, value } = e.target
+    if (name === "phone") {
+      // Allow only digits and limit to 10 characters
+      if (/^\d{0,10}$/.test(value)) {
+        setFormData({
+          ...formData,
+          [name]: value,
+        })
+      }
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      })
+    }
   }
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      Swal.fire({
+        title: "Error!",
+        text: "Full Name is required.",
+        icon: "error",
+        confirmButtonColor: "#F0982E",
+      })
+      return false
+    }
+    if (!formData.email.trim()) {
+      Swal.fire({
+        title: "Error!",
+        text: "Email Address is required.",
+        icon: "error",
+        confirmButtonColor: "#F0982E",
+      })
+      return false
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      Swal.fire({
+        title: "Error!",
+        text: "Please enter a valid email address.",
+        icon: "error",
+        confirmButtonColor: "#F0982E",
+      })
+      return false
+    }
+    if (!formData.phone.trim()) {
+      Swal.fire({
+        title: "Error!",
+        text: "Phone Number is required.",
+        icon: "error",
+        confirmButtonColor: "#F0982E",
+      })
+      return false
+    }
+    if (!/^\d{10}$/.test(formData.phone)) {
+      Swal.fire({
+        title: "Error!",
+        text: "Phone Number must be exactly 10 digits.",
+        icon: "error",
+        confirmButtonColor: "#F0982E",
+      })
+      return false
+    }
+    if (!formData.subject) {
+      Swal.fire({
+        title: "Error!",
+        text: "Subject is required.",
+        icon: "error",
+        confirmButtonColor: "#F0982E",
+      })
+      return false
+    }
+    if (!formData.message.trim()) {
+      Swal.fire({
+        title: "Error!",
+        text: "Message is required.",
+        icon: "error",
+        confirmButtonColor: "#F0982E",
+      })
+      return false
+    }
+    return true
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Form submitted:", formData)
+    if (!validateForm()) return
+    setIsSubmitting(true)
+    try {
+      const response = await fetch(`${BACKENDURL}/api/send-contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      const result = await response.json()
+      console.log(result)
+      if (response.ok) {
+        Swal.fire({
+          title: "Success!",
+          text: "Your message has been sent successfully!",
+          icon: "success",
+          confirmButtonColor: "#F0982E",
+        })
+        setFormData({ name: "", email: "", phone: "", subject: "", message: "" })
+      } else {
+        Swal.fire({
+          title: "Error!",
+          text: "Error sending message. Please try again.",
+          icon: "error",
+          confirmButtonColor: "#F0982E",
+        })
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      Swal.fire({
+        title: "Error!",
+        text: "Error sending message. Please try again.",
+        icon: "error",
+        confirmButtonColor: "#F0982E",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const contactInfo = [
     {
       icon: MapPin,
       title: "Visit Us",
-      details: ["704, 7th Floor, Palm Court, Mehrauli-Gurgaon Road, Sector 16, Gurugram, Haryana", "India"],
+      details: ["Gurugram, Haryana", "India"],
       color: "from-[#F0982E] to-[#d97706]",
     },
     {
       icon: Phone,
       title: "Call Us",
-      details: ["+91 78274 68953", "Mon-Sat: 9AM-6PM"],
+      details: ["+91 78274 68953", "Mon-Sat: 11AM-4PM"],
       color: "from-emerald-500 to-green-600",
     },
     {
@@ -196,7 +315,7 @@ function Contact() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number
+                      Phone Number *
                     </label>
                     <input
                       type="tel"
@@ -204,8 +323,11 @@ function Contact() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
+                      required
+                      maxLength="10"
+                      pattern="\d*"
                       className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
-                      placeholder="+91 98765 43210"
+                      placeholder="9876543210"
                     />
                   </div>
                   <div>
@@ -225,6 +347,7 @@ function Contact() {
                       <option value="programs">Programs & Workshops</option>
                       <option value="consultation">Personal Consultation</option>
                       <option value="community">Join Community</option>
+                      <option value="donation-related">Donation Related</option>
                       <option value="other">Other</option>
                     </select>
                   </div>
@@ -248,10 +371,11 @@ function Contact() {
 
                 <button
                   type="submit"
-                  className="w-full px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className={`w-full px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <Send className="w-5 h-5" />
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>
@@ -287,7 +411,7 @@ function Contact() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-1">Address</h4>
-                    <p className="text-gray-600 text-sm">704, 7th Floor, Palm Court, Mehrauli-Gurgaon Road, Sector 16, Gurugram, Haryana</p>
+                    <p className="text-gray-600 text-sm">Gurugram, Haryana, India</p>
                   </div>
                 </div>
 

@@ -106,6 +106,7 @@ const upload = multer({
 ]);
 
 // Blog Schema
+// Blog Schema
 const blogSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
@@ -132,6 +133,19 @@ const categorySchema = new mongoose.Schema({
 
 const Category = mongoose.model('Category', categorySchema);
 
+const newsletterSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  subscribedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Newsletter = mongoose.model("Newsletter", newsletterSchema);
 
 
 // Middleware to verify JWT
@@ -151,9 +165,6 @@ const authenticateAdmin = async (req, res, next) => {
     res.status(401).json({ message: "Invalid token" });
   }
 };
-
-
-
 
 app.get('/api/auth/validate', authenticateAdmin, (req, res) => {
   res.json({ valid: true, admin: { id: req.admin._id, username: req.admin.username } });
@@ -191,7 +202,6 @@ app.post("/api/admin/login", async (req, res) => {
   }
 });
 
-
 /* ========== CATEGORY APIs ========== */
 
 // Public: Get all categories
@@ -227,8 +237,9 @@ app.post('/api/categories', authenticateAdmin, async (req, res) => {
   }
 });
 
+/* ========== BLOG APIs ========== */
 
-// Create blog post route
+// Add this function before the // Create blog post route
 const generateUniqueSlug = async (title) => {
   let slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   let uniqueSlug = slug;
@@ -241,6 +252,7 @@ const generateUniqueSlug = async (title) => {
   return uniqueSlug;
 };
 
+// Update the // Create blog post route
 app.post("/api/blogs", authenticateAdmin, (req, res, next) => {
   upload(req, res, async (err) => {
     if (err) {
@@ -255,6 +267,7 @@ app.post("/api/blogs", authenticateAdmin, (req, res, next) => {
         return res.status(400).json({ error: "Title and content are required" });
       }
 
+      // Parse categories if it's a JSON string
       let parsedCategories = [];
       if (categories) {
         try {
@@ -264,6 +277,7 @@ app.post("/api/blogs", authenticateAdmin, (req, res, next) => {
         }
       }
 
+      // Verify categories exist (only if categories are provided)
       if (parsedCategories.length) {
         const categoriesExist = await Category.find({ _id: { $in: parsedCategories } });
         if (categoriesExist.length !== parsedCategories.length) {
@@ -271,8 +285,10 @@ app.post("/api/blogs", authenticateAdmin, (req, res, next) => {
         }
       }
 
+      // Generate slug if not provided
       const slug = req.body.slug || await generateUniqueSlug(title);
 
+      // Prepare blog data
       const blogData = {
         title,
         content,
@@ -286,6 +302,7 @@ app.post("/api/blogs", authenticateAdmin, (req, res, next) => {
         updatedAt: Date.now()
       };
 
+      // Add image URLs if they exist
       if (req.files?.featuredImage?.[0]) {
         blogData.featuredImage = req.files.featuredImage[0].path;
       }
@@ -294,9 +311,11 @@ app.post("/api/blogs", authenticateAdmin, (req, res, next) => {
         blogData.contentImages = req.files.contentImages.map(file => file.path);
       }
 
+      // Create and save blog
       const blog = new Blog(blogData);
       await blog.save();
 
+      // Populate categories for response
       const populatedBlog = await Blog.findById(blog._id).populate('categories');
 
       res.status(201).json({
@@ -307,6 +326,7 @@ app.post("/api/blogs", authenticateAdmin, (req, res, next) => {
     } catch (error) {
       console.error("Blog creation error:", error);
 
+      // Delete any uploaded images if error occurs
       if (req.files) {
         const deleteImages = async (files) => {
           try {
@@ -331,6 +351,31 @@ app.post("/api/blogs", authenticateAdmin, (req, res, next) => {
   });
 });
 
+// Get all blogs (public for published, private for drafts)
+app.get("/api/blogs", async (req, res) => {
+  try {
+    const isAdmin = req.headers.authorization?.split(" ")[1];
+    const query = isAdmin ? {} : { status: "published" };
+    const blogs = await Blog.find(query).populate('categories').sort({ createdAt: -1 });
+    res.json(blogs);
+  } catch (error) {
+    console.error("Blog fetch error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get single blog by slug
+app.get("/api/blogs/:slug", async (req, res) => {
+  try {
+    const blog = await Blog.findOne({ slug: req.params.slug, status: "published" }).populate('categories');
+    if (!blog) return res.status(404).json({ error: "Blog not found" });
+    res.json(blog);
+  } catch (error) {
+    console.error("Single blog fetch error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Update blog post
 app.put("/api/blogs/:id", authenticateAdmin, (req, res, next) => {
   upload(req, res, async (err) => {
@@ -343,6 +388,7 @@ app.put("/api/blogs/:id", authenticateAdmin, (req, res, next) => {
         return res.status(400).json({ error: "Title and content are required" });
       }
 
+      // Only validate categories if they're provided
       if (categories.length > 0) {
         const categoriesExist = await Category.find({ _id: { $in: categories } });
         if (categoriesExist.length !== categories.length) {
@@ -408,6 +454,7 @@ app.delete("/api/blogs/:id", authenticateAdmin, async (req, res) => {
 });
 
 // Search Blogs API
+// Search Blogs API
 app.get("/api/blogs/search", async (req, res) => {
   try {
     const { q, category, page = 1, limit = 9 } = req.query;
@@ -459,94 +506,79 @@ app.get("/api/blogs/search", async (req, res) => {
   }
 });
 
-// Get all blogs
-app.get("/api/blogs", async (req, res) => {
-  try {
-    const isAdmin = req.headers.authorization?.split(" ")[1];
-    const query = isAdmin ? {} : { status: "published" };
-    const blogs = await Blog.find(query).populate('categories').sort({ createdAt: -1 });
-    res.json(blogs);
-  } catch (error) {
-    console.error("Blog fetch error:", error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Contact Schema
+// Define Contact Schema
 const contactSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String },
-  message: { type: String },
+  subject: { type: String, required: true },
+  message: { type: String, required: true },
   submittedAt: { type: Date, default: Date.now },
 });
 
-const Contact = mongoose.model("Contact", contactSchema);
+const Contact = mongoose.model('Contact', contactSchema);
 
 // Email transporter configuration
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
 
-// Contact Form API
-app.post("/api/send-contact", async (req, res) => {
-  const { name, email, phone, message } = req.body;
-  const contact = new Contact({ name, email, phone, message });
-  await contact.save();
-
-  const mailOptions = {
-    from: email,
-    to: process.env.EMAIL_USER,
-    subject: `New Contact Form Submission from ${name}`,
-    text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage:\n${message}`,
-    html: `
-      <h2>New Contact Form Submission</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Phone:</strong> ${phone}</p>
-      <p><strong>Message:</strong></p>
-      <div style="white-space: pre-line">${message}</div>
-      <p><small>Sent on: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</small></p>
-    `,
-  };
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error("Error sending email:", error);
-      return res.status(500).json({ message: "Error sending email", error: error.message });
-    }
-    res.status(200).json({ message: "Email sent and contact saved successfully" });
-  });
-});
-
-// Admin API to get all contacts
-app.get("/api/contacts", authenticateAdmin, async (req, res) => {
+// Form Data APIs
+app.get('/api/contacts', authenticateAdmin, async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ submittedAt: -1 });
     res.json(contacts);
   } catch (error) {
-    console.error("Contact fetch error:", error);
+    console.error('Contact fetch error:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// Newsletter Schema
-const newsletterSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  subscribedAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+// Contact Form API
+app.post('/api/send-contact', async (req, res) => {
+  const { name, email, phone, subject, message } = req.body;
 
-const Newsletter = mongoose.model("Newsletter", newsletterSchema);
+  // Validate input
+  if (!name || !email || !subject || !message) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  try {
+    // Save to MongoDB
+    const contact = new Contact({ name, email, phone, subject, message });
+    await contact.save();
+
+    // Prepare email
+    const mailOptions = {
+      from: email,
+      to: process.env.EMAIL_USER,
+      subject: `New Contact Form Submission: ${subject} from ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nSubject: ${subject}\nMessage:\n${message}`,
+      html: `
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+        <p><strong>Subject:</strong> ${subject}</p>
+        <p><strong>Message:</strong></p>
+        <div style="white-space: pre-line">${message}</div>
+        <p><small>Sent on: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</small></p>
+      `,
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Email sent and contact saved successfully' });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Error processing request', error: error.message });
+  }
+});
 
 // Newsletter APIs
 app.post("/api/newsletter/subscribe", async (req, res) => {
@@ -586,10 +618,11 @@ app.get("/api/newsletter", authenticateAdmin, async (req, res) => {
   }
 });
 
+
 // Start the server
 const PORT = process.env.PORT || 5000;
 connectDB().then(() => {
-  server.listen(PORT, () => {
+  server.listen(PORT, () => { // Use server.listen instead of app.listen
     console.log(`🚀 Server running on port ${process.env.BACKEND_URL}`);
   });
 });

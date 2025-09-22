@@ -125,12 +125,12 @@ function BlogPage() {
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "Blog",
-      "name": "Startup Coach Blog",
-      "description": "Expert insights, tips, and strategies for entrepreneurs and startup founders",
+      "name": "Sanatan Alok Blog",
+      "description": "Spiritual insights, Vedic wisdom, cultural teachings, and guidance for a balanced life.",
       "url": window.location.href,
       "publisher": {
         "@type": "Organization",
-        "name": "Startup Coach",
+        "name": "Sanatan Alok",
         "logo": {
           "@type": "ImageObject",
           "url": `${window.location.origin}/logo.png`
@@ -139,34 +139,36 @@ function BlogPage() {
       "blogPost": filteredBlogs.map(blog => ({
         "@type": "BlogPosting",
         "headline": blog.title,
-        "description": blog.metaDescription,
+        "description": blog.metaDescription || "Explore Sanatan Dharma, spirituality, and cultural teachings.",
         "image": blog.featuredImage,
         "author": {
           "@type": "Person",
-          "name": blog.author || "Startup Coach Team"
+          "name": blog.author || "Sanatan Alok Team"
         },
         "publisher": {
           "@type": "Organization",
-          "name": "Startup Coach"
+          "name": "Sanatan Alok"
         },
         "datePublished": blog.publishedAt || blog.createdAt,
         "dateModified": blog.updatedAt || blog.createdAt,
         "url": `${window.location.origin}/blogs/${blog.slug}`,
-        "keywords": blog.keywords?.join(", ") || "",
-        "articleSection": blog.categories?.map(cat => cat.name).join(", ") || ""
+        "keywords": blog.keywords?.join(", ") || "Sanatan Dharma, spirituality, Vedic wisdom, meditation, culture",
+        "articleSection": blog.categories?.map(cat => cat.name).join(", ") || "Spirituality, Culture, Wisdom"
       }))
     }
     return JSON.stringify(structuredData)
   }
 
+
   // Dynamic title generation
   const generateDynamicTitle = () => {
-    if (loading) return "Exploring Business Insights | Startup Coach";
-    if (error) return "Error Loading Business Insights | Startup Coach";
-    if (searchQuery && !selectedCategory) return `${searchQuery} - Business Insights | Startup Coach`;
-    if (selectedCategory) return `${selectedCategory} Insights for Entrepreneurs | Startup Coach`;
-    return "Startup Coach Blog - Expert Business Insights & Entrepreneurship Tips";
+    if (loading) return "Exploring Spiritual Wisdom | Sanatan Alok";
+    if (error) return "Error Loading Spiritual Insights | Sanatan Alok";
+    if (searchQuery && !selectedCategory) return `${searchQuery} - Spiritual Insights | Sanatan Alok`;
+    if (selectedCategory) return `${selectedCategory} Teachings & Wisdom | Sanatan Alok`;
+    return "Sanatan Alok Blog - Spiritual Teachings, Vedic Wisdom & Cultural Insights";
   };
+
 
   if (loading) {
     return (
@@ -224,31 +226,37 @@ function BlogPage() {
         <title>{generateDynamicTitle()}</title>
         <meta
           name="description"
-          content="Discover expert insights, practical tips, and proven strategies for entrepreneurs and startup founders. Learn from industry experts and grow your business with our comprehensive guides."
+          content="Explore spiritual teachings, Vedic wisdom, Sanatan Dharma philosophy, and cultural insights. Sanatan Alok shares divine knowledge, practices, and inspiration for a mindful life."
         />
         <meta
           name="keywords"
-          content="startup advice, entrepreneurship, business tips, startup guide, business strategy, startup coaching, entrepreneur tips, business growth, startup success"
+          content="Sanatan Dharma, Vedic wisdom, spiritual blog, meditation, Indian culture, Hindu philosophy, spirituality, Sanatan Alok, divine knowledge, Vedas, Upanishads"
         />
 
         {/* Open Graph Tags */}
         <meta property="og:title" content={generateDynamicTitle()} />
-        <meta property="og:description" content="Discover expert insights, practical tips, and proven strategies for entrepreneurs and startup founders." />
+        <meta
+          property="og:description"
+          content="Discover Vedic wisdom, Sanatan Dharma teachings, and spiritual insights at Sanatan Alok."
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={window.location.href} />
         <meta property="og:image" content={`${window.location.origin}/blog-og-image.jpg`} />
-        <meta property="og:site_name" content="Startup Coach" />
+        <meta property="og:site_name" content="Sanatan Alok" />
 
         {/* Twitter Card Tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={generateDynamicTitle()} />
-        <meta name="twitter:description" content="Discover expert insights, practical tips, and proven strategies for entrepreneurs and startup founders." />
+        <meta
+          name="twitter:description"
+          content="Explore spiritual teachings, Sanatan Dharma insights, and divine wisdom at Sanatan Alok."
+        />
         <meta name="twitter:image" content={`${window.location.origin}/blog-og-image.jpg`} />
 
         {/* Additional SEO Tags */}
         <link rel="canonical" href={window.location.href} />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        <meta name="author" content="Startup Coach Team" />
+        <meta name="author" content="Sanatan Alok Team" />
         <meta name="language" content="English" />
         <meta name="revisit-after" content="7 days" />
 
@@ -258,14 +266,16 @@ function BlogPage() {
         </script>
       </Helmet>
 
+
       <div className="min-h-screen bg-gray-50">
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white py-12">
+        <div className="bg-gradient-to-r from-[#F0982E] via-[#d97706] to-[#b45309] text-white py-12">
+
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Startup Coach Blog</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Sanatan Alok Blog</h1>
             <p className="text-xl text-purple-100 max-w-2xl mx-auto">
-              Expert insights, practical tips, and proven strategies for entrepreneurs and startup founders
-            </p>
+              Guiding souls with eternal wisdom, Sanatan values, and a vision for a brighter tomorrow.
+              </p>
 
             {/* Search Bar */}
             {/* <div className="max-w-2xl mx-auto">
@@ -364,8 +374,8 @@ function BlogPage() {
 
           {filteredBlogs.length === 0 ? (
             <div className="text-center py-16">
-              <div className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg className="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-12 h-12 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -504,8 +514,8 @@ function BlogPage() {
                         key={page}
                         onClick={() => setCurrentPage(page)}
                         className={`px-4 py-2 text-sm font-medium rounded-lg ${currentPage === page
-                            ? "bg-purple-600 text-white"
-                            : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
+                          ? "bg-purple-600 text-white"
+                          : "text-gray-500 bg-white border border-gray-300 hover:bg-gray-50"
                           }`}
                       >
                         {page}

@@ -267,11 +267,11 @@ function SingleBlogPage() {
       image: blog.featuredImage,
       author: {
         "@type": "Person",
-        name: blog.author || "Startup Coach Team",
+        name: blog.author || "Sanatan Alok Team",
       },
       publisher: {
         "@type": "Organization",
-        name: "Startup Coach",
+        name: "Sanatan Alok",
         logo: {
           "@type": "ImageObject",
           url: `${window.location.origin}/logo.png`,
@@ -297,7 +297,7 @@ function SingleBlogPage() {
     return (
       <>
         <Helmet>
-          <title>Exploring Business Article | Startup Coach</title>
+          <title>Exploring Business Article | Sanatan Alok</title>
           <meta name="robots" content="noindex" />
         </Helmet>
         <div className="min-h-screen bg-gray-50">
@@ -340,7 +340,7 @@ function SingleBlogPage() {
     return (
       <>
         <Helmet>
-          <title>Error Loading Business Article | Startup Coach</title>
+          <title>Error Loading Business Article | Sanatan Alok</title>
           <meta name="robots" content="noindex" />
         </Helmet>
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -381,7 +381,7 @@ function SingleBlogPage() {
     return (
       <>
         <Helmet>
-          <title>Business Article Not Found | Startup Coach</title>
+          <title>Business Article Not Found | Sanatan Alok</title>
           <meta name="robots" content="noindex" />
         </Helmet>
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -413,16 +413,21 @@ function SingleBlogPage() {
   return (
     <>
       <Helmet>
-        <title>{blog.title} | Startup Coach</title>
+        <title>{blog.title} | Sanatan Alok</title>
         <meta
           name="description"
-          content={blog.metaDescription || "Expert insights and tips for entrepreneurs and startup founders."}
+          content={blog.metaDescription || "Explore Sanatan Dharma, spiritual wisdom, meditation, Vedic culture, and guidance for a balanced life with Sanatan Alok."}
         />
         <meta
           name="keywords"
-          content={blog.keywords ? blog.keywords.join(", ") : "startup, entrepreneurship, business, coaching"}
+          content={
+            blog.keywords
+              ? blog.keywords.join(", ")
+              : "Sanatan Dharma, spirituality, meditation, Vedic culture, Hinduism, bhakti, yoga, spiritual guidance, Sanatan Alok"
+          }
         />
-        <meta name="author" content={blog.author || "Startup Coach Team"} />
+
+        <meta name="author" content={blog.author || "Sanatan Alok Team"} />
 
         {/* Open Graph Tags */}
         <meta property="og:title" content={blog.title} />
@@ -430,10 +435,10 @@ function SingleBlogPage() {
         <meta property="og:image" content={blog.featuredImage} />
         <meta property="og:type" content="article" />
         <meta property="og:url" content={window.location.href} />
-        <meta property="og:site_name" content="Startup Coach" />
+        <meta property="og:site_name" content="Sanatan Alok" />
         <meta property="article:published_time" content={blog.publishedAt || blog.createdAt} />
         <meta property="article:modified_time" content={blog.updatedAt || blog.createdAt} />
-        <meta property="article:author" content={blog.author || "Startup Coach Team"} />
+        <meta property="article:author" content={blog.author || "Sanatan Alok Team"} />
         {blog.categories &&
           blog.categories.map((category, index) => (
             <meta
@@ -476,8 +481,9 @@ function SingleBlogPage() {
             <div className="flex items-center justify-between">
               <button
                 onClick={() => navigate("/blogs")}
-                className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors group"
+                className="flex items-center space-x-2 text-gray-600 hover:bg-gradient-to-r hover:from-[#F0982E] hover:to-[#d97706] hover:bg-clip-text hover:text-transparent transition-colors group"
               >
+
                 <svg
                   className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
                   fill="none"

@@ -28,15 +28,11 @@ function AdminPanel() {
   const [selectedCategory, setSelectedCategory] = useState("")
   const [categories, setCategories] = useState([])
   const [contacts, setContacts] = useState([])
-  const [consultations, setConsultations] = useState([])
-  const [bookCalls, setBookCalls] = useState([])
   const [newsletters, setNewsletters] = useState([])
   const [selectedItem, setSelectedItem] = useState(null)
-  const [launchpadApplications, setLaunchpadApplications] = useState([]);
   const [emailContent, setEmailContent] = useState('');
   const [emailSubject, setEmailSubject] = useState('');
   const [isSending, setIsSending] = useState(false);
-  const [leads, setLeads] = useState([]);
   const [selectedLead, setSelectedLead] = useState(null);
   const [sendingId, setSendingId] = useState(null);
 
@@ -62,11 +58,7 @@ function AdminPanel() {
           await fetchCategories();
         }
         if (activeSection === "contacts") await fetchContacts();
-        if (activeSection === "consultations") await fetchConsultations();
-        if (activeSection === "book-calls") await fetchBookCalls();
         if (activeSection === "newsletters") await fetchNewsletters();
-        if (activeSection === "launchpad") await fetchLaunchpadApplications();
-        if (activeSection === "leads") await fetchLeads();
 
       } catch (error) {
         console.error("Error in initial data fetching:", error);
@@ -81,43 +73,7 @@ function AdminPanel() {
     checkAuthAndFetchData();
   }, [activeSection, navigate]);
 
-  const fetchLaunchpadApplications = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(`${BACKENDURL}/api/admin/launchpad-applications`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setLaunchpadApplications(response.data);
-    } catch (err) {
-      console.error("Launchpad applications fetch error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
-      if (!isTokenExpired) {
-        toast.error("Failed to fetch launchpad applications.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const fetchLeads = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(`${BACKENDURL}/api/admin/launchpad-leads`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setLeads(response.data);
-    } catch (err) {
-      console.error("Leads fetch error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
-      if (!isTokenExpired) {
-        toast.error("Failed to fetch leads.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleTokenExpiration = async (error, navigate) => {
     if (error.response?.status === 401) {
@@ -203,43 +159,7 @@ function AdminPanel() {
     }
   };
 
-  const fetchConsultations = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(`${BACKENDURL}/api/consultations`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setConsultations(response.data);
-    } catch (err) {
-      console.error("Consultation fetch error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
-      if (!isTokenExpired) {
-        toast.error("Failed to fetch consultations.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const fetchBookCalls = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(`${BACKENDURL}/api/book-calls`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setBookCalls(response.data);
-    } catch (err) {
-      console.error("Book call fetch error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
-      if (!isTokenExpired) {
-        toast.error("Failed to fetch book calls.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const fetchNewsletters = async () => {
     setLoading(true);
@@ -260,27 +180,6 @@ function AdminPanel() {
     }
   };
 
-
-  const handleResendConfirmation = async (id) => {
-    setSendingId(id);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await axios.post(
-        `${BACKENDURL}/api/admin/launchpad/resend-confirmation/${id}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success(response.data.message);
-    } catch (err) {
-      console.error("Resend confirmation error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
-      if (!isTokenExpired) {
-        toast.error(err.response?.data?.message || "Failed to resend confirmation email");
-      }
-    } finally {
-      setSendingId(null);
-    }
-  };
 
 
   const handleSearch = (query) => {
@@ -396,34 +295,10 @@ function AdminPanel() {
           `"${item.name || ''}","${item.email || ''}","${item.phone || ''}","${item.message ? item.message.replace(/"/g, '""') : ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
         ).join('\n');
         break;
-      case 'consultations':
-        csv = 'Name,Business Name,Email,Phone,Industry,Message,Submitted At\n';
-        csv += data.map(item =>
-          `"${item.name || ''}","${item.businessName || ''}","${item.email || ''}","${item.phone || ''}","${item.industry || ''}","${item.message ? item.message.replace(/"/g, '""') : ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
-        ).join('\n');
-        break;
-      case 'book-calls':
-        csv = 'Name,Email,Phone,Service,Date,Time,Submitted At\n';
-        csv += data.map(item =>
-          `"${item.name || ''}","${item.email || ''}","${item.phone || ''}","${item.service || ''}","${item.date || ''}","${item.time || ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
-        ).join('\n');
-        break;
       case 'newsletters':
         csv = 'Email,Subscribed At\n';
         csv += data.map(item =>
           `"${item.email || ''}","${new Date(item.subscribedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
-        ).join('\n');
-        break;
-      case 'launchpad':
-        csv = 'Application Number,Full Name,Email,Phone,Business Name,Industry,Custom Industry,Pitch Deck URL,Payment Status,Status,Rejection Reason,Submitted At\n';
-        csv += data.map(item =>
-          `"${item.applicationNumber || ''}","${item.fullName || ''}","${item.email || ''}","${item.phone || ''}","${item.businessName || ''}","${item.industry || ''}","${item.customIndustry || ''}","${item.pitchDeckUrl || ''}","${item.paymentStatus || ''}","${item.status || 'pending'}","${item.rejectionReason || ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
-        ).join('\n');
-        break;
-      case 'leads':
-        csv = 'Full Name,Email,Phone,Business Name,Industry,Custom Industry,Pitch Deck URL,Follow-up Status,Last Follow-up,Submitted At\n';
-        csv += data.map(item =>
-          `"${item.fullName || ''}","${item.email || ''}","${item.phone || ''}","${item.businessName || ''}","${item.industry || ''}","${item.customIndustry || ''}","${item.pitchDeckUrl || ''}","${item.followUpStatus || 'new'}","${item.lastFollowUp ? new Date(item.lastFollowUp).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) : ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
         ).join('\n');
         break;
     }
@@ -485,34 +360,6 @@ function AdminPanel() {
       ),
     },
     {
-      id: "consultations",
-      name: "Consultations",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M17 20h5v-2a2 2 0 00-2-2h-3m-2 4h-5v-2a2 2 0 012-2h3m-6-4V4h12v10m-6 4v2m-6-2h12"
-          />
-        </svg>
-      ),
-    },
-    {
-      id: "book-calls",
-      name: "Book Calls",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      ),
-    },
-    {
       id: "newsletters",
       name: "Newsletters",
       icon: (
@@ -523,24 +370,6 @@ function AdminPanel() {
             strokeWidth={2}
             d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
           />
-        </svg>
-      ),
-    },
-    {
-      id: "launchpad",
-      name: "Launchpad",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      ),
-    },
-    {
-      id: "leads",
-      name: "Leads",
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
       ),
     },
@@ -875,118 +704,7 @@ function AdminPanel() {
               </div>
             )}
 
-            {activeSection === "consultations" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Consultation Requests</h3>
-                    <p className="text-gray-600">View all consultation requests</p>
-                  </div>
-                  <button
-                    onClick={() => downloadCSV(consultations, 'consultations', 'consultations')}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    <span>Download CSV</span>
-                  </button>
-                </div>
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  {loading ? (
-                    <p>Loading...</p>
-                  ) : consultations.length === 0 ? (
-                    <p>No consultation requests found.</p>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Industry</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {consultations.map((consultation) => (
-                            <tr
-                              key={consultation._id}
-                              onClick={() => setSelectedItem({ type: 'consultation', data: consultation })}
-                              className="cursor-pointer hover:bg-gray-50"
-                            >
-                              <td className="px-6 py-4 whitespace-nowrap">{consultation.name}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{consultation.email}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{consultation.industry}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                {new Date(consultation.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {activeSection === "book-calls" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Book Call Requests</h3>
-                    <p className="text-gray-600">View all book call requests</p>
-                  </div>
-                  <button
-                    onClick={() => downloadCSV(bookCalls, 'book-calls', 'book-calls')}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    <span>Download CSV</span>
-                  </button>
-                </div>
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  {loading ? (
-                    <p>Loading...</p>
-                  ) : bookCalls.length === 0 ? (
-                    <p>No book call requests found.</p>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {bookCalls.map((call) => (
-                            <tr
-                              key={call._id}
-                              onClick={() => setSelectedItem({ type: 'book-call', data: call })}
-                              className="cursor-pointer hover:bg-gray-50"
-                            >
-                              <td className="px-6 py-4 whitespace-nowrap">{call.name}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{call.email}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{call.service}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                {new Date(call.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
+            
             {activeSection === "newsletters" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between flex-wrap gap-4">
@@ -1038,270 +756,13 @@ function AdminPanel() {
                 </div>
               </div>
             )}
-            {activeSection === "launchpad" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Launchpad Applications</h3>
-                    <p className="text-gray-600">View all paid launchpad applications</p>
-                  </div>
-                  <button
-                    onClick={() => downloadCSV(launchpadApplications, 'launchpad-applications', 'launchpad')}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    <span>Download CSV</span>
-                  </button>
-                </div>
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  {loading ? (
-                    <p>Loading...</p>
-                  ) : launchpadApplications.length === 0 ? (
-                    <p>No paid applications found.</p>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">App #</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Industry</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pitch Deck</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {launchpadApplications.map((application) => (
-                            <tr key={application._id}>
-                              <td className="px-6 py-4 whitespace-nowrap">{application.applicationNumber}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{application.fullName}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{application.email}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{application.businessName}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{application.industry}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                {new Date(application.submittedAt).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                {application.pitchDeckUrl ? (
-                                  <a
-                                    href={application.pitchDeckUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md text-sm font-medium transition-colors"
-                                  >
-                                    View
-                                  </a>
-                                ) : (
-                                  <span className="text-gray-500">No Pitch Deck</span>
-                                )}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                                <button
-                                  onClick={() => handleResendConfirmation(application._id)}
-                                  className={`px-3 py-1 rounded ${sendingId === application._id ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 text-white"
-                                    }`}
-                                  disabled={sendingId === application._id}
-                                  title="Resend Confirmation"
-                                >
-                                  {sendingId === application._id ? "Resending..." : "Resend Confirmation"}
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {activeSection === "leads" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Launchpad Leads</h3>
-                    <p className="text-gray-600">View all unpaid launchpad applications</p>
-                  </div>
-                  <button
-                    onClick={() => downloadCSV(leads, 'launchpad-leads', 'launchpad')}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    <span>Download CSV</span>
-                  </button>
-                </div>
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                  {loading ? (
-                    <p>Loading...</p>
-                  ) : leads.length === 0 ? (
-                    <p>No leads found.</p>
-                  ) : (
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Industry</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pitch Deck</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {leads.map((lead) => (
-                            <tr key={lead._id}>
-                              <td className="px-6 py-4 whitespace-nowrap">{lead.fullName}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{lead.email}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{lead.phone}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{lead.businessName}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{lead.industry}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                {lead.pitchDeckUrl ? (
-                                  <a
-                                    href={lead.pitchDeckUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline"
-                                  >
-                                    Open
-                                  </a>
-                                ) : (
-                                  "No Link"
-                                )}
-                              </td>
-
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                {new Date(lead.submittedAt).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                                <button
-                                  onClick={() => {
-                                    setSelectedLead(lead);
-                                    setEmailSubject(`Follow-up on your Launch Pad application`);
-                                    setEmailContent(`
-              <p>Dear ${lead.fullName},</p>
-              
-              <p>We noticed you started but didn't complete your Launch Pad application. 
-              We'd love to help you take the next step in your startup journey.</p>
-              
-              <p>The Launch Pad program offers:</p>
-              <ul>
-                <li>Expert consultations worth ₹10,000</li>
-                <li>Legal documents pack worth ₹8,000</li>
-                <li>Professional pitch deck worth ₹12,000</li>
-                <li>Marketing assets worth ₹7,000</li>
-                <li>DPIIT registration support worth ₹5,000</li>
-                <li>Grant application help worth ₹8,000</li>
-              </ul>
-              
-              <p>All this for just ₹10,000!</p>
-              
-              <p>Would you like to complete your application?</p>
-              
-              <p>Best regards,<br/>
-              The Startup Coach Team</p>
-            `);
-                                  }}
-                                  className="text-purple-600 hover:text-purple-800"
-                                  title="Follow Up"
-                                >
-                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                  </svg>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-            {/* Follow Up Modal */}
-            {selectedLead && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-                <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    Send Follow-up to {selectedLead.fullName}
-                  </h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                      <input
-                        type="text"
-                        value={emailSubject}
-                        onChange={(e) => setEmailSubject(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email Content</label>
-                      <textarea
-                        value={emailContent}
-                        onChange={(e) => setEmailContent(e.target.value)}
-                        rows={10}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-6 flex justify-end space-x-3">
-                    <button
-                      onClick={() => setSelectedLead(null)}
-                      className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={async () => {
-                        try {
-                          setIsSending(true);
-                          const response = await axios.post(
-                            `${BACKENDURL}/api/admin/launchpad/send-followup/${selectedLead._id}`,
-                            { subject: emailSubject, content: emailContent },
-                            {
-                              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-                            }
-                          );
-                          toast.success("Follow-up email sent successfully");
-                          setSelectedLead(null);
-                          fetchLeads();
-                        } catch (error) {
-                          console.error("Error sending follow-up:", error);
-                          toast.error("Failed to send follow-up email");
-                        } finally {
-                          setIsSending(false);
-                        }
-                      }}
-                      disabled={isSending}
-                      className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50"
-                    >
-                      {isSending ? "Sending..." : "Send Follow-up"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+            
             {/* Modal for Detailed View */}
             {selectedItem && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
                 <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     {selectedItem.type === 'contact' && 'Contact Details'}
-                    {selectedItem.type === 'consultation' && 'Consultation Details'}
-                    {selectedItem.type === 'book-call' && 'Book Call Details'}
                     {selectedItem.type === 'newsletter' && 'Newsletter Subscription Details'}
                   </h3>
                   <div className="space-y-4">
@@ -1314,31 +775,6 @@ function AdminPanel() {
                         <div className="whitespace-pre-line bg-gray-50 p-3 rounded-lg">
                           {selectedItem.data.message || 'N/A'}
                         </div>
-                        <p><strong>Submitted At:</strong> {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
-                      </>
-                    )}
-                    {selectedItem.type === 'consultation' && (
-                      <>
-                        <p><strong>Name:</strong> {selectedItem.data.name}</p>
-                        <p><strong>Business Name:</strong> {selectedItem.data.businessName || 'N/A'}</p>
-                        <p><strong>Email:</strong> {selectedItem.data.email}</p>
-                        <p><strong>Phone:</strong> {selectedItem.data.phone}</p>
-                        <p><strong>Industry:</strong> {selectedItem.data.industry}</p>
-                        <p><strong>Message:</strong></p>
-                        <div className="whitespace-pre-line bg-gray-50 p-3 rounded-lg">
-                          {selectedItem.data.message || 'N/A'}
-                        </div>
-                        <p><strong>Submitted At:</strong> {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
-                      </>
-                    )}
-                    {selectedItem.type === 'book-call' && (
-                      <>
-                        <p><strong>Name:</strong> {selectedItem.data.name}</p>
-                        <p><strong>Email:</strong> {selectedItem.data.email}</p>
-                        <p><strong>Phone:</strong> {selectedItem.data.phone}</p>
-                        <p><strong>Service:</strong> {selectedItem.data.service}</p>
-                        <p><strong>Date:</strong> {selectedItem.data.date}</p>
-                        <p><strong>Time:</strong> {selectedItem.data.time}</p>
                         <p><strong>Submitted At:</strong> {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
                       </>
                     )}
