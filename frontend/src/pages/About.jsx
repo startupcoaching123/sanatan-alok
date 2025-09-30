@@ -1,5 +1,7 @@
 "use client"
 import { Sun, Heart, Users, Target, Eye, Sparkles, ChevronLeft, ChevronRight, Star, Leaf } from "lucide-react"
+import { Helmet } from "react-helmet-async"
+import { Link } from "react-router-dom"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
@@ -83,7 +85,21 @@ function About() {
   ]
 
   return (
+
     <div className="min-h-screen font-poppins bg-gradient-to-b from-orange-50 via-white to-amber-50">
+      {/* seo */}
+<Helmet>
+  <title>About Sanatan Alok | Guiding Spiritual Awakening and Transformation</title>
+  <meta
+    name="description"
+    content="Learn about Sanatan Alok, a sanctuary for spiritual seekers. Discover our mission, vision, and dedicated promoters guiding you toward peace, abundance, and fulfillment through ancient wisdom and modern practices."
+  />
+  <meta
+    name="keywords"
+    content="Sanatan Alok, spiritual awakening, ancient Indian wisdom, meditation, mysticism, spiritual guidance, inner peace, holistic transformation"
+  />
+  <link rel="canonical" href="https://sanatanalok.com/about" />
+</Helmet>
       {/* Hero Section */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
         {/* Background decorative elements */}
@@ -325,12 +341,17 @@ function About() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform">
-                Start Your Journey
-              </button>
-              <button className="px-8 py-4 border-2 border-[#F0982E] text-[#F0982E] font-semibold rounded-full hover:bg-[#F0982E] hover:text-white transition-all">
-                Contact Us
-              </button>
+              <Link to="/join-program">
+                <button className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform">
+                  Start Your Journey
+                </button>
+              </Link>
+
+              <Link to="/contact-us">
+                <button className="px-8 py-4 border-2 border-[#F0982E] text-[#F0982E] font-semibold rounded-full hover:bg-[#F0982E] hover:text-white transition-all">
+                  Contact Us
+                </button>
+              </Link>
             </div>
           </div>
         </div>

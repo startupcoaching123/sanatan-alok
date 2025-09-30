@@ -1,5 +1,7 @@
 "use client"
 import { Clock, Users, Monitor, CheckCircle, Sparkles, Target, Heart, Zap, Crown } from "lucide-react"
+import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async"
 
 import one from "../assets/program_one.jpg";
 import two from "../assets/program_two.jpg";
@@ -13,6 +15,7 @@ function Programs() {
             price: "Free",
             features: ["Authentic Yoga", "Myth Busting", "Yogic Paths", "Inner Peace"],
             gradient: "from-emerald-500 to-green-600",
+            link: "/programs/essence-of-yoga",
         },
         {
             title: "Mantra Vidya: The Science of Sacred Sound",
@@ -21,6 +24,7 @@ function Programs() {
             price: "Free",
             features: ["Sacred Sound", "Energy Flow", "Vibration Science", "Chakra Activation"],
             gradient: "from-blue-500 to-indigo-600",
+            link: "/programs/mantra-vidya",
         },
         {
             title: "The Buddha Blueprint: Life Design for Sukh, Shanti & Samriddhi",
@@ -29,6 +33,7 @@ function Programs() {
             price: "Free",
             features: ["Desire Control", "Mind Clarity", "Balanced Living", "Stress Release"],
             gradient: "from-purple-500 to-violet-600",
+            link: "/programs/buddha-blueprint",
         },
         {
             title: "Chakra Intelligence: Decode Your Inner Energy Map",
@@ -37,8 +42,10 @@ function Programs() {
             price: "Free",
             features: ["Chakra Science", "Block Removal", "Emotional Balance", "Career Growth"],
             gradient: "from-pink-500 to-rose-600",
+            link: "/programs/chakra-intelligence",
         },
-    ]
+    ];
+
 
     const paidPrograms = [
         {
@@ -115,20 +122,32 @@ function Programs() {
 
             {/* Enroll Button pinned to bottom */}
             <div className="mt-auto pt-6">
-                <button
-                    className={`w-full py-3 px-6 rounded-full font-semibold transition-all duration-300 ${isPaid
-                            ? "bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 shadow-lg"
-                            : "bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:scale-105 shadow-lg"
-                        }`}
+                <Link
+                    to={program.link}
+                    className="w-full py-3 px-6 rounded-full font-semibold transition-all duration-300 bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:scale-105 shadow-lg text-center block"
                 >
-                    {isPaid ? "Enroll Now" : "Join Free"}
-                </button>
+                    Know More
+                </Link>
+
             </div>
         </div>
     );
 
     return (
         <div className="min-h-screen font-poppins bg-gradient-to-b from-orange-50 via-white to-amber-50">
+            {/* seo */}
+            <Helmet>
+                <title>Programs at Sanatan Alok | Spiritual Growth and Transformation</title>
+                <meta
+                    name="description"
+                    content="Explore Sanatan Alok's programs, including meditation, yoga, and sacred rituals, designed to guide you toward inner peace, spiritual awakening, and holistic transformation."
+                />
+                <meta
+                    name="keywords"
+                    content="Sanatan Alok programs, spiritual growth, meditation, yoga, sacred rituals, ancient wisdom, holistic transformation, inner peace"
+                />
+                <link rel="canonical" href="https://sanatanalok.com/programs" />
+            </Helmet>
             {/* Hero Section */}
             <section className="relative py-24 lg:py-32 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
                 {/* Background decorative elements */}
@@ -161,10 +180,10 @@ function Programs() {
                             <div className="text-2xl font-bold text-emerald-600">Free</div>
                             <div className="text-sm text-gray-600">Open Access</div>
                         </div>
-                        <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-md">
+                        {/* <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-md">
                             <div className="text-2xl font-bold text-[#F0982E]">Premium</div>
                             <div className="text-sm text-gray-600">Advanced Learning</div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
@@ -244,6 +263,7 @@ function Programs() {
             <section className="py-16 bg-white">
                 <div className="container mx-auto px-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+                        {/* Text Section */}
                         <div className="space-y-6 order-2 lg:order-1">
                             <h2 className="text-3xl md:text-4xl font-bold">
                                 Unlock Your Full{" "}
@@ -252,24 +272,30 @@ function Programs() {
                                 </span>
                             </h2>
                             <p className="text-lg text-gray-600 leading-relaxed">
-                                Ready to take your spiritual practice to the next level? Our premium programs offer advanced techniques,
-                                personalized guidance, and comprehensive certifications to help you master ancient wisdom traditions.
+                                All our programs are currently{" "}
+                                <span className="font-semibold text-[#F0982E]">completely free</span>
+                                &nbsp; to join. Dive deep into ancient wisdom traditions with structured guidance,
+                                transformative practices, and a supportive community — without any cost.
                             </p>
+
+                            {/* Free Access Highlights */}
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="text-center p-4 bg-amber-50 rounded-2xl">
-                                    <div className="text-2xl font-bold text-[#F0982E]">₹5,000</div>
-                                    <div className="text-sm text-gray-600">Premium Access</div>
+                                <div className="text-center p-4 bg-emerald-50 rounded-2xl">
+                                    <div className="text-2xl font-bold text-emerald-600">Free</div>
+                                    <div className="text-sm text-gray-600">Lifetime Access</div>
                                 </div>
-                                <div className="text-center p-4 bg-amber-50 rounded-2xl">
-                                    <div className="text-2xl font-bold text-[#F0982E]">Certified</div>
-                                    <div className="text-sm text-gray-600">Professional Training</div>
+                                <div className="text-center p-4 bg-emerald-50 rounded-2xl">
+                                    <div className="text-2xl font-bold text-emerald-600">100%</div>
+                                    <div className="text-sm text-gray-600">No Fees Required</div>
                                 </div>
                             </div>
                         </div>
+
+                        {/* Image Section */}
                         <div className="relative order-1 lg:order-2">
                             <img
                                 src={two}
-                                alt="Chakra energy healing"
+                                alt="Free Spiritual Programs"
                                 className="w-full h-96 object-cover rounded-3xl shadow-2xl"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl"></div>
@@ -277,6 +303,7 @@ function Programs() {
                     </div>
                 </div>
             </section>
+
 
             {/* Paid Programs Section */}
             {/* <section className="py-24 bg-gradient-to-br from-amber-50 to-orange-50">
@@ -366,12 +393,11 @@ function Programs() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <button className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform">
-                                Start with Free Programs
-                            </button>
-                            <button className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform">
-                                Explore Premium Programs
-                            </button>
+                            <Link to="/join-program">
+                                <button className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform">
+                                    Start with Free Programs
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

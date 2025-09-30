@@ -7,28 +7,28 @@ import {
   Star,
   CheckCircle,
   ArrowRight,
-  DollarSign,
-  CreditCard,
-  Smartphone,
-  Building,
+  Download,
+  Share2,
+  Copy,
 } from "lucide-react"
 import { useState } from "react"
-
+import { Helmet } from "react-helmet-async"
 import donation_one from "../assets/donation_one.jpg";
 import donation_two from "../assets/donation_two.jpg";
+// Import your QR code image - make sure to add this to your assets folder
+import qrCode from "../assets/donation-qr.jpg"; // You'll need to add this image
 
 function Donation() {
-  const [selectedAmount, setSelectedAmount] = useState(null)
-  const [customAmount, setCustomAmount] = useState("")
-  const [donorInfo, setDonorInfo] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  })
-  const [paymentMethod, setPaymentMethod] = useState("card")
+  const [copied, setCopied] = useState(false)
 
-  const predefinedAmounts = [500, 1000, 2500, 5000, 10000, 25000]
+  const upiId = "7678424144@kotak" // Replace with your actual UPI ID
+  const bankDetails = {
+    accountName: "Mantrenova Quest Pvt Ltd",
+    accountNumber: "6051861461",
+    ifscCode: "KKBK0004261",
+    bankName: "Kotak Mahindra Bank",
+    branchName: "GURGAON-SECTOR 10A"
+  }
 
   const impactAreas = [
     {
@@ -78,35 +78,81 @@ function Donation() {
     },
   ]
 
-  const handleAmountSelect = (amount) => {
-    setSelectedAmount(amount)
-    setCustomAmount("")
-  }
+  const donationSteps = [
+    {
+      step: 1,
+      title: "Scan QR Code",
+      description: "Use any UPI app to scan the QR code",
+      icon: "📱"
+    },
+    {
+      step: 2,
+      title: "Enter Amount",
+      description: "Enter your desired donation amount",
+      icon: "💰"
+    },
+    {
+      step: 3,
+      title: "Add Note",
+      description: "Mention 'Donation for Sanatan Alok'",
+      icon: "📝"
+    },
+    {
+      step: 4,
+      title: "Complete Payment",
+      description: "Confirm and complete your donation",
+      icon: "✅"
+    }
+  ]
 
-  const handleCustomAmountChange = (e) => {
-    setCustomAmount(e.target.value)
-    setSelectedAmount(null)
-  }
-
-  const handleInputChange = (e) => {
-    setDonorInfo({
-      ...donorInfo,
-      [e.target.name]: e.target.value,
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Handle donation submission
-    console.log("Donation submitted:", {
-      amount: selectedAmount || customAmount,
-      donorInfo,
-      paymentMethod,
-    })
+  const shareUPI = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Donate to Sanatan Alok',
+          text: `Support spiritual awakening by donating to Sanatan Alok. UPI ID: ${upiId}`,
+          url: window.location.href,
+        })
+      } catch (error) {
+        console.log('Error sharing:', error)
+      }
+    } else {
+      copyToClipboard(upiId)
+    }
+  }
+
+  const downloadQR = () => {
+    // Create a temporary link to download the QR code
+    const link = document.createElement('a')
+    link.href = qrCode
+    link.download = 'sanatan-alok-donation-qr.png'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 
   return (
     <div className="min-h-screen font-poppins bg-gradient-to-b from-orange-50 via-white to-amber-50">
+      {/* seo */}
+      <Helmet>
+        <title>Donate to Sanatan Alok | Support Spiritual Awakening</title>
+        <meta
+          name="description"
+          content="Support Sanatan Alok's mission of spiritual awakening and holistic transformation. Your donation helps us guide seekers through meditation, mysticism, and ancient wisdom."
+        />
+        <meta
+          name="keywords"
+          content="Sanatan Alok donation, support spiritual growth, meditation, ancient wisdom, holistic transformation, charity, spiritual awakening"
+        />
+        <link rel="canonical" href="https://sanatanalok.com/donation" />
+      </Helmet>
       {/* Hero Section */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
         {/* Background decorative elements */}
@@ -213,160 +259,129 @@ function Donation() {
         </div>
       </section>
 
-      {/* Donation Form Section */}
+      {/* QR Donation Section */}
       <section className="py-24 bg-gradient-to-br from-amber-50 to-orange-50">
         <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Make Your{" "}
+                Quick & Secure{" "}
                 <span className="bg-gradient-to-r from-[#F0982E] via-[#d97706] to-[#b45309] bg-clip-text text-transparent">
                   Donation
                 </span>
               </h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Choose an amount that resonates with your heart and join our mission of spiritual transformation.
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Scan the QR code with any UPI app to make your donation instantly. Simple, secure, and directly supports our mission.
               </p>
             </div>
 
-            <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 lg:p-12 shadow-xl border border-white/20">
-              <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Amount Selection */}
-                <div>
-                  <label className="block text-lg font-semibold text-gray-800 mb-6">Select Donation Amount</label>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                    {predefinedAmounts.map((amount) => (
-                      <button
-                        key={amount}
-                        type="button"
-                        onClick={() => handleAmountSelect(amount)}
-                        className={`p-4 rounded-2xl border-2 font-semibold transition-all ${
-                          selectedAmount === amount
-                            ? "border-[#F0982E] bg-[#F0982E] text-white shadow-lg"
-                            : "border-gray-200 bg-white hover:border-[#F0982E] hover:bg-amber-50"
-                        }`}
-                      >
-                        ₹{amount.toLocaleString()}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="relative">
-                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="number"
-                      placeholder="Enter custom amount"
-                      value={customAmount}
-                      onChange={handleCustomAmountChange}
-                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:border-[#F0982E] focus:outline-none text-lg"
-                    />
-                  </div>
-                </div>
-
-                {/* Donor Information */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      value={donorInfo.name}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#F0982E] focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={donorInfo.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#F0982E] focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={donorInfo.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#F0982E] focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Message (Optional)</label>
-                    <textarea
-                      name="message"
-                      rows="3"
-                      value={donorInfo.message}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#F0982E] focus:outline-none resize-none"
-                      placeholder="Share your thoughts or dedication..."
-                    />
-                  </div>
-                </div>
-
-                {/* Payment Method */}
-                <div>
-                  <label className="block text-lg font-semibold text-gray-800 mb-4">Payment Method</label>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod("card")}
-                      className={`p-4 rounded-2xl border-2 flex items-center justify-center space-x-3 transition-all ${
-                        paymentMethod === "card"
-                          ? "border-[#F0982E] bg-amber-50"
-                          : "border-gray-200 bg-white hover:border-[#F0982E]"
-                      }`}
-                    >
-                      <CreditCard className="w-5 h-5" />
-                      <span className="font-medium">Credit/Debit Card</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod("upi")}
-                      className={`p-4 rounded-2xl border-2 flex items-center justify-center space-x-3 transition-all ${
-                        paymentMethod === "upi"
-                          ? "border-[#F0982E] bg-amber-50"
-                          : "border-gray-200 bg-white hover:border-[#F0982E]"
-                      }`}
-                    >
-                      <Smartphone className="w-5 h-5" />
-                      <span className="font-medium">UPI</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPaymentMethod("bank")}
-                      className={`p-4 rounded-2xl border-2 flex items-center justify-center space-x-3 transition-all ${
-                        paymentMethod === "bank"
-                          ? "border-[#F0982E] bg-amber-50"
-                          : "border-gray-200 bg-white hover:border-[#F0982E]"
-                      }`}
-                    >
-                      <Building className="w-5 h-5" />
-                      <span className="font-medium">Net Banking</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Submit Button */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* QR Code Card */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
                 <div className="text-center">
-                  <button
-                    type="submit"
-                    className="inline-flex items-center px-12 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-all text-lg"
-                  >
-                    Donate Now
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </button>
-                  <p className="text-sm text-gray-500 mt-4">
-                    Your donation is secure and helps create positive change in the world.
-                  </p>
+                  <div className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-amber-600 bg-amber-100 rounded-full">
+                    📱 Scan & Donate
+                  </div>
+
+                  {/* QR Code Display */}
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl shadow-inner flex justify-center items-center mb-6">
+                    <img
+                      src={qrCode}
+                      alt="Donation QR Code for Sanatan Alok"
+                      className="max-w-xs w-full h-auto rounded-xl border border-amber-100"
+                    />
+                  </div>
+
+
+                  {/* UPI ID */}
+                  <div className="mb-6">
+                    <p className="text-sm text-gray-600 mb-2">UPI ID</p>
+                    <div className="flex items-center justify-center space-x-2">
+                      <code className="text-lg font-mono font-bold text-gray-800 bg-amber-50 px-4 py-2 rounded-lg">
+                        {upiId}
+                      </code>
+                      <button
+                        onClick={() => copyToClipboard(upiId)}
+                        className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                        title="Copy UPI ID"
+                      >
+                        <Copy className="w-5 h-5" />
+                      </button>
+                    </div>
+                    {copied && (
+                      <p className="text-green-600 text-sm mt-2">✓ UPI ID copied to clipboard!</p>
+                    )}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button
+                      onClick={downloadQR}
+                      className="flex items-center justify-center px-6 py-3 bg-amber-500 text-white font-medium rounded-full hover:bg-amber-600 transition-colors"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download QR
+                    </button>
+                    <button
+                      onClick={shareUPI}
+                      className="flex items-center justify-center px-6 py-3 border-2 border-amber-500 text-amber-600 font-medium rounded-full hover:bg-amber-50 transition-colors"
+                    >
+                      <Share2 className="w-4 h-4 mr-2" />
+                      Share
+                    </button>
+                  </div>
                 </div>
-              </form>
+              </div>
+
+              {/* Donation Steps */}
+              <div className="space-y-8">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6">How to Donate in 4 Simple Steps</h3>
+
+                {donationSteps.map((step, index) => (
+                  <div key={index} className="flex items-start space-x-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm">
+                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                      {step.icon}
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-gray-800 mb-1">{step.title}</h4>
+                      <p className="text-gray-600">{step.description}</p>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Bank Transfer Option */}
+                <div className="bg-white rounded-2xl p-6 shadow-md mt-8">
+                  <h4 className="text-xl font-bold text-gray-800 mb-4">Prefer Bank Transfer?</h4>
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Account Name:</span>
+                      <span className="font-medium">{bankDetails.accountName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Account Number:</span>
+                      <span className="font-medium">{bankDetails.accountNumber}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">IFSC Code:</span>
+                      <span className="font-medium">{bankDetails.ifscCode}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Branch Name:</span>
+                      <span className="font-medium">{bankDetails.branchName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Bank:</span>
+                      <span className="font-medium">{bankDetails.bankName}</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => copyToClipboard(JSON.stringify(bankDetails))}
+                    className="w-full mt-4 px-4 py-2 text-amber-600 border border-amber-300 rounded-lg hover:bg-amber-50 transition-colors"
+                  >
+                    Copy Bank Details
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -477,12 +492,13 @@ function Donation() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform">
+              <a
+                href="/donate"
+                className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform flex items-center justify-center"
+              >
                 Donate Now
-              </button>
-              <button className="px-8 py-4 border-2 border-[#F0982E] text-[#F0982E] font-semibold rounded-full hover:bg-[#F0982E] hover:text-white transition-all">
-                Learn More
-              </button>
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </a>
             </div>
           </div>
         </div>

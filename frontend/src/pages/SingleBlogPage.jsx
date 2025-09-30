@@ -104,7 +104,7 @@ function SingleBlogPage() {
         title: "Email Required",
         text: "Please enter your email address.",
         icon: "warning",
-        confirmButtonColor: "#7030A0",
+        confirmButtonColor: "#F0982E",
       })
       return
     }
@@ -120,7 +120,7 @@ function SingleBlogPage() {
         title: "Subscribed!",
         text: res.data.message || "You have successfully subscribed to our newsletter.",
         icon: "success",
-        confirmButtonColor: "#7030A0",
+        confirmButtonColor: "#F0982E",
       })
 
       setEmail("")
@@ -130,14 +130,14 @@ function SingleBlogPage() {
           title: "Already Subscribed",
           text: "This email is already registered for our newsletter.",
           icon: "warning",
-          confirmButtonColor: "#7030A0",
+          confirmButtonColor: "#F0982E",
         })
       } else {
         Swal.fire({
           title: "Oops!",
           text: "Something went wrong. Please try again later.",
           icon: "error",
-          confirmButtonColor: "#7030A0",
+          confirmButtonColor: "#F0982E",
         })
       }
     } finally {
@@ -179,7 +179,7 @@ function SingleBlogPage() {
             marginTop: "50px",
             background: "#1A1A1A",
             color: "#fff",
-            border: "1px solid #7030A0",
+            border: "1px solid #F0982E",
           },
         })
       })
@@ -300,7 +300,7 @@ function SingleBlogPage() {
           <title>Exploring Business Article | Sanatan Alok</title>
           <meta name="robots" content="noindex" />
         </Helmet>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-amber-50">
           <div className="bg-white border-b border-gray-200">
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center space-x-4">
@@ -343,7 +343,7 @@ function SingleBlogPage() {
           <title>Error Loading Business Article | Sanatan Alok</title>
           <meta name="robots" content="noindex" />
         </Helmet>
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-amber-50 flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-6">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -360,7 +360,7 @@ function SingleBlogPage() {
             <div className="space-x-4">
               <button
                 onClick={() => window.location.reload()}
-                className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                className="bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white px-6 py-2 rounded-lg hover:scale-105 transition-all duration-300"
               >
                 Try Again
               </button>
@@ -384,7 +384,7 @@ function SingleBlogPage() {
           <title>Business Article Not Found | Sanatan Alok</title>
           <meta name="robots" content="noindex" />
         </Helmet>
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-amber-50 flex items-center justify-center">
           <div className="text-center max-w-md mx-auto p-6">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -400,7 +400,7 @@ function SingleBlogPage() {
             <p className="text-gray-600 mb-6">The article you're looking for doesn't exist or has been moved.</p>
             <Link
               to="/blogs"
-              className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors inline-block"
+              className="bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white px-6 py-2 rounded-lg hover:scale-105 transition-all duration-300 inline-block"
             >
               Back to Blog
             </Link>
@@ -466,11 +466,11 @@ function SingleBlogPage() {
         <script type="application/ld+json">{generateStructuredData()}</script>
       </Helmet>
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-amber-50">
         {/* Reading Progress Bar */}
         <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
           <div
-            className="h-full bg-gradient-to-r from-purple-500 to-purple-600 transition-all duration-150 ease-out"
+            className="h-full bg-gradient-to-r from-[#F0982E] to-[#d97706] transition-all duration-150 ease-out"
             style={{ width: `${readingProgress}%` }}
           ></div>
         </div>
@@ -483,7 +483,6 @@ function SingleBlogPage() {
                 onClick={() => navigate("/blogs")}
                 className="flex items-center space-x-2 text-gray-600 hover:bg-gradient-to-r hover:from-[#F0982E] hover:to-[#d97706] hover:bg-clip-text hover:text-transparent transition-colors group"
               >
-
                 <svg
                   className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
                   fill="none"
@@ -546,7 +545,7 @@ function SingleBlogPage() {
 
                   <button
                     onClick={copyToClipboard}
-                    className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                    className="p-2 text-gray-400 hover:text-[#F0982E] hover:bg-orange-50 rounded-lg transition-colors"
                     title="Copy link"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -590,7 +589,7 @@ function SingleBlogPage() {
                         {blog.categories.slice(0, 3).map((category, index) => (
                           <span
                             key={index}
-                            className="px-3 py-1 bg-purple-100 text-purple-700 text-sm font-medium rounded-full"
+                            className="px-3 py-1 bg-amber-100 text-amber-700 text-sm font-medium rounded-full"
                           >
                             {typeof category === "object" ? category.name : category}
                           </span>
@@ -605,7 +604,7 @@ function SingleBlogPage() {
                     <div className="flex flex-wrap items-center text-gray-500 text-sm space-x-4 mb-4">
                       {blog.author && (
                         <>
-                          <span className="font-medium text-purple-600">{blog.author}</span>
+                          <span className="font-medium text-[#F0982E]">{blog.author}</span>
                           <span>•</span>
                         </>
                       )}
@@ -623,7 +622,7 @@ function SingleBlogPage() {
 
                   {/* Article Content with Responsive Tables */}
                   <div
-                    className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-purple-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-ul:text-gray-700 prose-ol:text-gray-700 prose-blockquote:border-purple-200 prose-blockquote:bg-purple-50 prose-blockquote:p-4 prose-blockquote:rounded-lg prose-img:rounded-lg prose-img:shadow-sm"
+                    className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-[#F0982E] prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-ul:text-gray-700 prose-ol:text-gray-700 prose-blockquote:border-amber-200 prose-blockquote:bg-amber-50 prose-blockquote:p-4 prose-blockquote:rounded-lg prose-img:rounded-lg prose-img:shadow-sm"
                     dangerouslySetInnerHTML={{ __html: processContent(blog.content) }}
                   />
 
@@ -671,7 +670,7 @@ function SingleBlogPage() {
                           </button>
                           <button
                             onClick={copyToClipboard}
-                            className="p-2 bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg transition-colors"
+                            className="p-2 bg-orange-50 hover:bg-orange-100 text-[#F0982E] rounded-lg transition-colors"
                             title="Copy link"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -694,54 +693,12 @@ function SingleBlogPage() {
             {/* Sidebar */}
             <div className="lg:col-span-1">
               <div className="sticky top-24 space-y-6">
-                {/* Table of Contents */}
-                {/* {tableOfContents.length > 0 && (
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                      <svg
-                        className="w-5 h-5 mr-2 text-purple-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 6h16M4 10h16M4 14h16M4 18h16"
-                        />
-                      </svg>
-                      Table of Contents
-                    </h3>
-                    <nav className="space-y-2">
-                      {tableOfContents.map((item, index) => (
-                        <a
-                          key={index}
-                          href={`#${item.id}`}
-                          className={`block text-sm hover:text-purple-600 transition-colors ${
-                            item.level === 1
-                              ? "font-semibold"
-                              : item.level === 2
-                                ? "ml-2"
-                                : item.level === 3
-                                  ? "ml-4"
-                                  : "ml-6"
-                          }`}
-                          style={{ color: item.level === 1 ? "#374151" : "#6B7280" }}
-                        >
-                          {item.text}
-                        </a>
-                      ))}
-                    </nav>
-                  </div>
-                )} */}
-
                 {/* Related Posts */}
                 {relatedBlogs.length > 0 && (
                   <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                     <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
                       <svg
-                        className="w-5 h-5 mr-2 text-purple-600"
+                        className="w-5 h-5 mr-2 text-[#F0982E]"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -760,7 +717,7 @@ function SingleBlogPage() {
                         <Link key={relatedBlog._id} to={`/blogs/${relatedBlog.slug}`} className="block group">
                           <article className="flex space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-sm font-semibold text-gray-900 group-hover:text-purple-600 transition-colors line-clamp-2 mb-1">
+                              <h4 className="text-sm font-semibold text-gray-900 group-hover:text-[#F0982E] transition-colors line-clamp-2 mb-1">
                                 {relatedBlog.title}
                               </h4>
                               <p className="text-xs text-gray-500">
@@ -773,7 +730,7 @@ function SingleBlogPage() {
                     </div>
                     <Link
                       to="/blogs"
-                      className="block mt-4 text-center text-purple-600 hover:text-purple-700 font-medium text-sm transition-colors"
+                      className="block mt-4 text-center text-[#F0982E] hover:text-[#d97706] font-medium text-sm transition-colors"
                     >
                       View All Articles →
                     </Link>
@@ -781,7 +738,7 @@ function SingleBlogPage() {
                 )}
 
                 {/* Newsletter Signup */}
-                <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-2xl p-6 text-white">
+                <div className="bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-2xl p-6 text-white">
                   <div className="flex items-center mb-3">
                     <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
@@ -793,7 +750,7 @@ function SingleBlogPage() {
                     </svg>
                     <h3 className="text-lg font-bold">Stay Updated</h3>
                   </div>
-                  <p className="text-purple-100 text-sm mb-4">
+                  <p className="text-orange-100 text-sm mb-4">
                     Get the latest insights and tips delivered to your inbox.
                   </p>
                   <form onSubmit={handleNewsletterSubmit} className="space-y-3">
@@ -802,13 +759,13 @@ function SingleBlogPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
-                      className="w-full px-4 py-2 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-300 border border-gray-200 bg-white transition-all"
+                      className="w-full px-4 py-2 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-300 border border-gray-200 bg-white transition-all"
                       disabled={newsletterLoading}
                     />
                     <button
                       type="submit"
                       disabled={newsletterLoading}
-                      className="w-full bg-white text-purple-600 font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                      className="w-full bg-white text-[#F0982E] font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     >
                       {newsletterLoading ? (
                         <>
@@ -834,7 +791,7 @@ function SingleBlogPage() {
                       )}
                     </button>
                   </form>
-                  <p className="text-xs text-purple-200 mt-2">No spam, unsubscribe at any time.</p>
+                  <p className="text-xs text-orange-200 mt-2">No spam, unsubscribe at any time.</p>
                 </div>
               </div>
             </div>

@@ -580,6 +580,69 @@ app.post('/api/send-contact', async (req, res) => {
   }
 });
 
+// Define Program Application Schema
+const programApplicationSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  phone: { type: String, required: true },
+  program: { type: String, required: true },
+  submittedAt: { type: Date, default: Date.now },
+});
+
+const ProgramApplication = mongoose.model('ProgramApplication', programApplicationSchema);
+
+// API to fetch all program applications (for admin)
+app.get('/api/program-applications', authenticateAdmin, async (req, res) => {
+  try {
+    const applications = await ProgramApplication.find().sort({ submittedAt: -1 });
+    res.json(applications);
+  } catch (error) {
+    console.error('Program application fetch error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// API to handle program application submission
+app.post('/api/free-program-apply', async (req, res) => {
+  const { name, email, phone, program } = req.body;
+
+  // Validate input
+  if (!name || !email || !phone || !program) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  try {
+    // Save to MongoDB
+    const application = new ProgramApplication({ name, email, phone, program });
+    await application.save();
+
+    // Prepare email
+    const mailOptions = {
+      from: email,
+      to: process.env.EMAIL_USER,
+      subject: `New Program Application: ${program} from ${name}`,
+      text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nProgram: ${program}\nSubmitted At: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`,
+      html: `
+        <h2>New Program Application</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Program:</strong> ${program}</p>
+        <p><small>Sent on: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</small></p>
+      `,
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Application sent and saved successfully' });
+  } catch (error) {
+    console.error('Error processing program application:', error);
+    res.status(500).json({ message: 'Error processing request', error: error.message });
+  }
+});
+
+
 // Newsletter APIs
 app.post("/api/newsletter/subscribe", async (req, res) => {
   const { email } = req.body;

@@ -100,7 +100,7 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Home slider  */
+/* Home slider */
 .ultra-modern-dots {
   bottom: 20px !important;
   display: flex !important;
@@ -163,10 +163,11 @@ body {
 
 .ultra-modern-dots li.slick-active button {
   width: 30px !important;
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.8), rgba(59, 130, 246, 0.8)) !important;
+  background: linear-gradient(135deg, #F0982E, #d97706) !important;
   border-color: rgba(255, 255, 255, 0.8) !important;
   transform: scale(1.1) !important;
-  box-shadow: 0 6px 25px rgba(147, 51, 234, 0.3) !important;
+  box-shadow: 0 6px 25px rgba(240, 152, 46, 0.3) !important;
+  /* Adjusted shadow to match orange */
 }
 
 .ultra-modern-dots li.slick-active button:before {
@@ -452,5 +453,3 @@ h3.heading {
 .bg-gradient-conic {
   background: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
 }
-
-

@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState} from "react"
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick"
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles, Star, Zap } from "lucide-react"
 import "slick-carousel/slick/slick.css"
@@ -35,6 +36,8 @@ const CustomNextArrow = ({ onClick }) => (
 )
 
 const HeroSlider = ({ slides }) => {
+  const navigate = useNavigate();
+
   const [currentSlide, setCurrentSlide] = useState(0)
 
   const settings = {
@@ -69,7 +72,9 @@ const HeroSlider = ({ slides }) => {
     ],
   }
 
+  
   return (
+    
     <div className="relative w-full h-screen overflow-hidden">
       <Slider {...settings}>
         {slides.map((slide, index) => (
@@ -125,7 +130,7 @@ const HeroSlider = ({ slides }) => {
                 {/* Button */}
                 <div className="flex flex-col sm:flex-row gap-4 mb-8 opacity-0 animate-[slideInUp_1s_ease-out_0.9s_forwards]">
                   <button
-                    onClick={slide.button1Action}
+                    onClick={() => navigate("/programs")} // Updated action
                     className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white rounded-xl bg-gradient-to-r from-[#F0982E] to-[#d97706] hover:from-[#d97706] hover:to-[#b45309] transform hover:scale-105 hover:-translate-y-1 transition-all duration-500 shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/20"
                   >
                     <span className="relative z-10 flex items-center">

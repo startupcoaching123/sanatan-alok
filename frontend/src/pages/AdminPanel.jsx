@@ -29,158 +29,165 @@ function AdminPanel() {
   const [categories, setCategories] = useState([])
   const [contacts, setContacts] = useState([])
   const [newsletters, setNewsletters] = useState([])
+  const [programApplications, setProgramApplications] = useState([])
   const [selectedItem, setSelectedItem] = useState(null)
-  const [emailContent, setEmailContent] = useState('');
-  const [emailSubject, setEmailSubject] = useState('');
-  const [isSending, setIsSending] = useState(false);
-  const [selectedLead, setSelectedLead] = useState(null);
-  const [sendingId, setSendingId] = useState(null);
-
 
   const navigate = useNavigate()
 
   useEffect(() => {
     const checkAuthAndFetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token")
 
         // First validate the session
-        const isValid = await validateSession();
+        const isValid = await validateSession()
         if (!isValid) {
-          localStorage.removeItem("token");
-          navigate("/admin/login");
-          return;
+          localStorage.removeItem("token")
+          navigate("/admin/login")
+          return
         }
 
-        // Only proceed with data fetching if validation passed
+        // Fetch data based on active section
         if (activeSection === "dashboard" || activeSection === "blogs") {
-          await fetchBlogs();
-          await fetchCategories();
+          await fetchBlogs()
+          await fetchCategories()
         }
-        if (activeSection === "contacts") await fetchContacts();
-        if (activeSection === "newsletters") await fetchNewsletters();
-
+        if (activeSection === "contacts") await fetchContacts()
+        if (activeSection === "newsletters") await fetchNewsletters()
+        if (activeSection === "program-applications") await fetchProgramApplications()
       } catch (error) {
-        console.error("Error in initial data fetching:", error);
-        // Handle token expiration during data fetching
+        console.error("Error in initial data fetching:", error)
         if (error.response?.status === 401) {
-          localStorage.removeItem("token");
-          navigate("/admin/login");
+          localStorage.removeItem("token")
+          navigate("/admin/login")
         }
       }
-    };
+    }
 
-    checkAuthAndFetchData();
-  }, [activeSection, navigate]);
-
-
+    checkAuthAndFetchData()
+  }, [activeSection, navigate])
 
   const handleTokenExpiration = async (error, navigate) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("token");
-      const Swal = (await import("sweetalert2")).default;
+      localStorage.removeItem("token")
+      const Swal = (await import("sweetalert2")).default
       await Swal.fire({
         title: "Session Expired",
         text: "Your session has expired. Please login again.",
         icon: "warning",
         confirmButtonColor: "#3085d6",
         confirmButtonText: "OK",
-      });
-      navigate("/admin/login");
-      return true; // Indicates token was expired
+      })
+      navigate("/admin/login")
+      return true // Indicates token was expired
     }
-    return false; // Token was not expired
-  };
+    return false // Token was not expired
+  }
 
   const fetchBlogs = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token")
       const response = await axios.get(`${BACKENDURL}/api/blogs`, {
         headers: { Authorization: `Bearer ${token}` },
-      });
+      })
 
-      setBlogs(response.data);
-      setFilteredBlogs(response.data);
+      setBlogs(response.data)
+      setFilteredBlogs(response.data)
       setStats({
         totalBlogs: response.data.length,
         publishedBlogs: response.data.filter((blog) => blog.status === "published").length,
         draftBlogs: response.data.filter((blog) => blog.status === "draft").length,
         totalViews: response.data.reduce((sum, blog) => sum + (blog.views || 0), 0),
-      });
+      })
     } catch (err) {
-      console.error("Blog fetch error:", err);
+      console.error("Blog fetch error:", err)
       if (err.response?.status === 401) {
-        localStorage.removeItem("token");
-        navigate("/admin/login");
+        localStorage.removeItem("token")
+        navigate("/admin/login")
       } else {
-        toast.error("Failed to fetch blogs. Please try again.");
+        toast.error("Failed to fetch blogs. Please try again.")
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const fetchCategories = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token")
       const response = await axios.get(`${BACKENDURL}/api/categories`, {
         headers: { Authorization: `Bearer ${token}` },
-      });
-      setCategories(response.data);
+      })
+      setCategories(response.data)
     } catch (err) {
-      console.error("Category fetch error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      console.error("Category fetch error:", err)
+      const isTokenExpired = await handleTokenExpiration(err, navigate)
       if (!isTokenExpired) {
-        toast.error("Failed to fetch categories.");
+        toast.error("Failed to fetch categories.")
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const fetchContacts = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token")
       const response = await axios.get(`${BACKENDURL}/api/contacts`, {
         headers: { Authorization: `Bearer ${token}` },
-      });
-      setContacts(response.data);
+      })
+      setContacts(response.data)
     } catch (err) {
-      console.error("Contact fetch error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      console.error("Contact fetch error:", err)
+      const isTokenExpired = await handleTokenExpiration(err, navigate)
       if (!isTokenExpired) {
-        toast.error("Failed to fetch contacts.");
+        toast.error("Failed to fetch contacts.")
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
-
+  }
 
   const fetchNewsletters = async () => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token")
       const response = await axios.get(`${BACKENDURL}/api/newsletter`, {
         headers: { Authorization: `Bearer ${token}` },
-      });
-      setNewsletters(response.data);
+      })
+      setNewsletters(response.data)
     } catch (err) {
-      console.error("Newsletter fetch error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      console.error("Newsletter fetch error:", err)
+      const isTokenExpired = await handleTokenExpiration(err, navigate)
       if (!isTokenExpired) {
-        toast.error("Failed to fetch newsletters.");
+        toast.error("Failed to fetch newsletters.")
       }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-
+  const fetchProgramApplications = async () => {
+    setLoading(true)
+    try {
+      const token = localStorage.getItem("token")
+      const response = await axios.get(`${BACKENDURL}/api/program-applications`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      setProgramApplications(response.data)
+    } catch (err) {
+      console.error("Program application fetch error:", err)
+      const isTokenExpired = await handleTokenExpiration(err, navigate)
+      if (!isTokenExpired) {
+        toast.error("Failed to fetch program applications.")
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleSearch = (query) => {
     setSearchQuery(query)
@@ -188,11 +195,13 @@ function AdminPanel() {
       setFilteredBlogs(blogs)
       return
     }
-    const filtered = blogs.filter(blog => {
-      const matchesSearch = blog.title.toLowerCase().includes(query.toLowerCase()) ||
+    const filtered = blogs.filter((blog) => {
+      const matchesSearch =
+        blog.title.toLowerCase().includes(query.toLowerCase()) ||
         blog.content.toLowerCase().includes(query.toLowerCase())
-      const matchesCategory = !selectedCategory ||
-        (blog.categories && blog.categories.some(cat => cat.name === selectedCategory))
+      const matchesCategory =
+        !selectedCategory ||
+        (blog.categories && blog.categories.some((cat) => cat.name === selectedCategory))
       return matchesSearch && matchesCategory
     })
     setFilteredBlogs(filtered)
@@ -209,50 +218,50 @@ function AdminPanel() {
 
   const handleCreate = async (formData) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token")
       await axios.post(`${BACKENDURL}/api/blogs`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
-      });
-      toast.success("Blog created successfully!");
-      fetchBlogs();
-      fetchCategories();
-      setSelectedBlog(null);
+      })
+      toast.success("Blog created successfully!")
+      fetchBlogs()
+      fetchCategories()
+      setSelectedBlog(null)
     } catch (err) {
-      console.error("Blog creation error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      console.error("Blog creation error:", err)
+      const isTokenExpired = await handleTokenExpiration(err, navigate)
       if (!isTokenExpired) {
-        toast.error(err.response?.data?.error || "Failed to create blog");
+        toast.error(err.response?.data?.error || "Failed to create blog")
       }
     }
-  };
+  }
 
   const handleUpdate = async (id, formData) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token")
       await axios.put(`${BACKENDURL}/api/blogs/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
-      });
-      toast.success("Blog updated successfully!");
-      fetchBlogs();
-      fetchCategories();
-      setSelectedBlog(null);
+      })
+      toast.success("Blog updated successfully!")
+      fetchBlogs()
+      fetchCategories()
+      setSelectedBlog(null)
     } catch (err) {
-      console.error("Blog update error:", err);
-      const isTokenExpired = await handleTokenExpiration(err, navigate);
+      console.error("Blog update error:", err)
+      const isTokenExpired = await handleTokenExpiration(err, navigate)
       if (!isTokenExpired) {
-        toast.error(err.response?.data?.error || "Failed to update blog");
+        toast.error(err.response?.data?.error || "Failed to update blog")
       }
     }
-  };
+  }
 
   const handleDelete = async (id) => {
-    const Swal = (await import("sweetalert2")).default;
+    const Swal = (await import("sweetalert2")).default
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -261,25 +270,25 @@ function AdminPanel() {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
-    });
+    })
     if (result.isConfirmed) {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token")
         await axios.delete(`${BACKENDURL}/api/blogs/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
-        });
-        toast.success("Blog deleted successfully!");
-        fetchBlogs();
-        Swal.fire("Deleted!", "Your blog has been deleted.", "success");
+        })
+        toast.success("Blog deleted successfully!")
+        fetchBlogs()
+        Swal.fire("Deleted!", "Your blog has been deleted.", "success")
       } catch (err) {
-        console.error("Blog deletion error:", err);
-        const isTokenExpired = await handleTokenExpiration(err, navigate);
+        console.error("Blog deletion error:", err)
+        const isTokenExpired = await handleTokenExpiration(err, navigate)
         if (!isTokenExpired) {
-          toast.error(err.response?.data?.error || "Failed to delete blog");
+          toast.error(err.response?.data?.error || "Failed to delete blog")
         }
       }
     }
-  };
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token")
@@ -287,29 +296,49 @@ function AdminPanel() {
   }
 
   const downloadCSV = (data, filename, type) => {
-    let csv = '';
+    let csv = ''
     switch (type) {
       case 'contacts':
-        csv = 'Name,Email,Phone,Message,Submitted At\n';
-        csv += data.map(item =>
-          `"${item.name || ''}","${item.email || ''}","${item.phone || ''}","${item.message ? item.message.replace(/"/g, '""') : ''}","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
-        ).join('\n');
-        break;
+        csv = 'Name,Email,Phone,Subject,Message,Submitted At\n'
+        csv += data
+          .map(
+            (item) =>
+              `"${item.name || ''}","${item.email || ''}","${item.phone || ''}","${item.subject || ''}","${
+                item.message ? item.message.replace(/"/g, '""') : ''
+              }","${new Date(item.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
+          )
+          .join('\n')
+        break
       case 'newsletters':
-        csv = 'Email,Subscribed At\n';
-        csv += data.map(item =>
-          `"${item.email || ''}","${new Date(item.subscribedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
-        ).join('\n');
-        break;
+        csv = 'Email,Subscribed At\n'
+        csv += data
+          .map(
+            (item) =>
+              `"${item.email || ''}","${new Date(item.subscribedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
+          )
+          .join('\n')
+        break
+      case 'program-applications':
+        csv = 'Name,Email,Phone,Program,Submitted At\n'
+        csv += data
+          .map(
+            (item) =>
+              `"${item.name || ''}","${item.email || ''}","${item.phone || ''}","${item.program || ''}","${new Date(
+                item.submittedAt
+              ).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`
+          )
+          .join('\n')
+        break
     }
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `${filename}.csv`);
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.setAttribute('href', url)
+    a.setAttribute('download', `${filename}.csv`)
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+
   const menuItems = [
     {
       id: "dashboard",
@@ -373,15 +402,29 @@ function AdminPanel() {
         </svg>
       ),
     },
-
+    {
+      id: "program-applications",
+      name: "Program Applications",
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+          />
+        </svg>
+      ),
+    },
   ]
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <div
-        className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
+        className={`${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}
       >
         <div className="flex items-center justify-center h-16 px-4 bg-gradient-to-r from-purple-600 to-purple-700">
           <h1 className="text-xl font-bold text-white">Admin Panel</h1>
@@ -395,10 +438,11 @@ function AdminPanel() {
                   setActiveSection(item.id)
                   setSidebarOpen(false)
                 }}
-                className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors ${activeSection === item.id
-                  ? "bg-purple-100 text-purple-700 border-r-4 border-purple-600"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                  }`}
+                className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors ${
+                  activeSection === item.id
+                    ? "bg-purple-100 text-purple-700 border-r-4 border-purple-600"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                }`}
               >
                 {item.icon}
                 <span className="ml-3 font-medium">{item.name}</span>
@@ -439,7 +483,7 @@ function AdminPanel() {
                 </svg>
               </button>
               <h2 className="ml-4 text-2xl font-bold text-gray-900 capitalize">
-                {activeSection === "dashboard" ? "Dashboard Overview" : activeSection}
+                {activeSection === "dashboard" ? "Dashboard Overview" : activeSection.replace("-", " ")}
               </h2>
             </div>
             <div className="flex items-center space-x-4">
@@ -584,7 +628,7 @@ function AdminPanel() {
                   {selectedBlog === null && (
                     <button
                       onClick={() => {
-                        setSelectedBlog({ status: 'published' })
+                        setSelectedBlog({ status: "published" })
                       }}
                       className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2"
                     >
@@ -658,11 +702,16 @@ function AdminPanel() {
                     <p className="text-gray-600">View all contact form submissions</p>
                   </div>
                   <button
-                    onClick={() => downloadCSV(contacts, 'contacts', 'contacts')}
+                    onClick={() => downloadCSV(contacts, "contacts", "contacts")}
                     className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                      />
                     </svg>
                     <span>Download CSV</span>
                   </button>
@@ -677,20 +726,30 @@ function AdminPanel() {
                       <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Submitted At</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Name
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Email
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Subject
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Submitted At
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                           {contacts.map((contact) => (
                             <tr
                               key={contact._id}
-                              onClick={() => setSelectedItem({ type: 'contact', data: contact })}
+                              onClick={() => setSelectedItem({ type: "contact", data: contact })}
                               className="cursor-pointer hover:bg-gray-50"
                             >
                               <td className="px-6 py-4 whitespace-nowrap">{contact.name}</td>
                               <td className="px-6 py-4 whitespace-nowrap">{contact.email}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{contact.subject}</td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 {new Date(contact.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
                               </td>
@@ -704,7 +763,6 @@ function AdminPanel() {
               </div>
             )}
 
-            
             {activeSection === "newsletters" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between flex-wrap gap-4">
@@ -713,11 +771,16 @@ function AdminPanel() {
                     <p className="text-gray-600">View all newsletter subscriptions</p>
                   </div>
                   <button
-                    onClick={() => downloadCSV(newsletters, 'newsletters', 'newsletters')}
+                    onClick={() => downloadCSV(newsletters, "newsletters", "newsletters")}
                     className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                      />
                     </svg>
                     <span>Download CSV</span>
                   </button>
@@ -732,15 +795,19 @@ function AdminPanel() {
                       <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                           <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subscribed At</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Email
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Subscribed At
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
                           {newsletters.map((newsletter) => (
                             <tr
                               key={newsletter._id}
-                              onClick={() => setSelectedItem({ type: 'newsletter', data: newsletter })}
+                              onClick={() => setSelectedItem({ type: "newsletter", data: newsletter })}
                               className="cursor-pointer hover:bg-gray-50"
                             >
                               <td className="px-6 py-4 whitespace-nowrap">{newsletter.email}</td>
@@ -756,32 +823,141 @@ function AdminPanel() {
                 </div>
               </div>
             )}
-            
+
+            {activeSection === "program-applications" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Program Applications</h3>
+                    <p className="text-gray-600">View all program application submissions</p>
+                  </div>
+                  <button
+                    onClick={() => downloadCSV(programApplications, "program-applications", "program-applications")}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                      />
+                    </svg>
+                    <span>Download CSV</span>
+                  </button>
+                </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  {loading ? (
+                    <p>Loading...</p>
+                  ) : programApplications.length === 0 ? (
+                    <p>No program applications found.</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Name
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Email
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Program
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Submitted At
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {programApplications.map((application) => (
+                            <tr
+                              key={application._id}
+                              onClick={() => setSelectedItem({ type: "program-application", data: application })}
+                              className="cursor-pointer hover:bg-gray-50"
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap">{application.name}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{application.email}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{application.program}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                {new Date(application.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {/* Modal for Detailed View */}
             {selectedItem && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
                 <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-y-auto">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    {selectedItem.type === 'contact' && 'Contact Details'}
-                    {selectedItem.type === 'newsletter' && 'Newsletter Subscription Details'}
+                    {selectedItem.type === "contact" && "Contact Details"}
+                    {selectedItem.type === "newsletter" && "Newsletter Subscription Details"}
+                    {selectedItem.type === "program-application" && "Program Application Details"}
                   </h3>
                   <div className="space-y-4">
-                    {selectedItem.type === 'contact' && (
+                    {selectedItem.type === "contact" && (
                       <>
-                        <p><strong>Name:</strong> {selectedItem.data.name}</p>
-                        <p><strong>Email:</strong> {selectedItem.data.email}</p>
-                        <p><strong>Phone:</strong> {selectedItem.data.phone || 'N/A'}</p>
-                        <p><strong>Message:</strong></p>
+                        <p>
+                          <strong>Name:</strong> {selectedItem.data.name}
+                        </p>
+                        <p>
+                          <strong>Email:</strong> {selectedItem.data.email}
+                        </p>
+                        <p>
+                          <strong>Phone:</strong> {selectedItem.data.phone || "N/A"}
+                        </p>
+                        <p>
+                          <strong>Subject:</strong> {selectedItem.data.subject}
+                        </p>
+                        <p>
+                          <strong>Message:</strong>
+                        </p>
                         <div className="whitespace-pre-line bg-gray-50 p-3 rounded-lg">
-                          {selectedItem.data.message || 'N/A'}
+                          {selectedItem.data.message || "N/A"}
                         </div>
-                        <p><strong>Submitted At:</strong> {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
+                        <p>
+                          <strong>Submitted At:</strong>{" "}
+                          {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+                        </p>
                       </>
                     )}
-                    {selectedItem.type === 'newsletter' && (
+                    {selectedItem.type === "newsletter" && (
                       <>
-                        <p><strong>Email:</strong> {selectedItem.data.email}</p>
-                        <p><strong>Subscribed At:</strong> {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</p>
+                        <p>
+                          <strong>Email:</strong> {selectedItem.data.email}
+                        </p>
+                        <p>
+                          <strong>Subscribed At:</strong>{" "}
+                          {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+                        </p>
+                      </>
+                    )}
+                    {selectedItem.type === "program-application" && (
+                      <>
+                        <p>
+                          <strong>Name:</strong> {selectedItem.data.name}
+                        </p>
+                        <p>
+                          <strong>Email:</strong> {selectedItem.data.email}
+                        </p>
+                        <p>
+                          <strong>Phone:</strong> {selectedItem.data.phone}
+                        </p>
+                        <p>
+                          <strong>Program:</strong> {selectedItem.data.program}
+                        </p>
+                        <p>
+                          <strong>Submitted At:</strong>{" "}
+                          {new Date(selectedItem.data.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}
+                        </p>
                       </>
                     )}
                   </div>

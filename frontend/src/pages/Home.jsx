@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState} from "react"
 import { Helmet } from "react-helmet-async"
 import HeroSlider from "../components/Slider/HeroSlider"
 import TestimonialSlider from "../components/Slider/TestimonialSlider"
@@ -28,6 +28,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react"
+
 
 const CustomPrevArrow = ({ onClick }) => (
   <button
@@ -72,15 +73,16 @@ function Home() {
     return () => clearTimeout(timer)
   }, [hasModalBeenShown])
 
-  const slides = [
+   const slides = [
     {
-      bgImage: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1274&auto=format&fit=crop",
+      bgImage:
+        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1274&auto=format&fit=crop",
       badge: "Spiritual Awakening",
       title: "Discover Your Inner Light",
       description:
         "Embark on a transformative journey of self-discovery through ancient wisdom, meditation practices, and sacred teachings that illuminate your path to enlightenment.",
       button1Text: "Begin Your Journey",
-      button1Action: openModal,
+      button1Action: () => navigate("/programs"),
       stats: [
         { number: "1000+", label: "Souls Guided" },
         { number: "95%", label: "Transformation Rate" },
@@ -88,20 +90,21 @@ function Home() {
       ],
     },
     {
-      bgImage: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1170&auto=format&fit=crop",
+      bgImage:
+        "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1170&auto=format&fit=crop",
       badge: "Sacred Practices",
       title: "Ancient Wisdom for Modern Souls",
       description:
         "Connect with timeless spiritual practices, healing modalities, and sacred rituals that nurture your soul and guide you toward inner peace and divine connection.",
       button1Text: "Explore Practices",
-      button1Action: openModal,
+      button1Action: () => navigate("/programs"),
       stats: [
         { number: "50+", label: "Sacred Practices" },
         { number: "24/7", label: "Spiritual Support" },
         { number: "∞", label: "Divine Blessings" },
       ],
     },
-  ]
+  ];
 
   const freePrograms = [
     {
@@ -111,6 +114,7 @@ function Home() {
       features: ["Authentic Yoga", "Myth Busting", "Yogic Paths", "Inner Peace"],
       description:
         "Discover the true essence of yoga beyond physical postures, exploring its spiritual dimensions and transformative power.",
+      link: "/programs/essence-of-yoga", // 👈 add link here
     },
     {
       title: "Mantra Vidya: The Science of Sacred Sound",
@@ -119,6 +123,7 @@ function Home() {
       features: ["Sacred Sound", "Energy Flow", "Vibration Science", "Chakra Activation"],
       description:
         "Learn the ancient science of mantras and how sacred sounds can transform your consciousness and energy.",
+      link: "/programs/mantra-vidya", // 👈 add link here
     },
     {
       title: "The Buddha Blueprint: Life Design for Sukh, Shanti & Samriddhi",
@@ -127,6 +132,7 @@ function Home() {
       features: ["Desire Control", "Mind Clarity", "Balanced Living", "Stress Release"],
       description:
         "Design a life of happiness, peace, and prosperity using Buddha's timeless teachings and practical wisdom.",
+      link: "/programs/buddha-blueprint", // 👈 add link here
     },
     {
       title: "Chakra Intelligence: Decode Your Inner Energy Map",
@@ -135,8 +141,10 @@ function Home() {
       features: ["Chakra Science", "Block Removal", "Emotional Balance", "Career Growth"],
       description:
         "Understand and balance your chakra system to unlock your full potential and achieve holistic well-being.",
+      link: "/programs/chakra-intelligence", // 👈 add link here
     },
-  ]
+  ];
+
 
   const programSliderSettings = {
     dots: true,
@@ -241,7 +249,7 @@ function Home() {
   return (
     <div className="min-h-screen font-poppins bg-gradient-to-b from-orange-50 via-white to-amber-50">
       <Helmet>
-        <title>Sanatana Lok | Spiritual Guidance & Healing</title>
+        <title>Sanatana Alok | Guiding Spiritual Awakening and Transformation</title>
         <meta
           name="description"
           content="Sanatana Lok offers meditation, natural healing, yoga, and sacred rituals to connect you with your true self and achieve inner peace."
@@ -337,7 +345,6 @@ function Home() {
             </p>
           </div>
 
-
           {/* Desktop and Tablet Grid */}
           <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
             {freePrograms.map((program, index) => (
@@ -384,17 +391,16 @@ function Home() {
                   </ul>
 
                   {/* Enroll Button (always aligned at bottom) */}
-                  <button
-                    onClick={openModal}
-                    className="mt-auto w-full py-4 px-6 rounded-2xl font-bold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 hover:shadow-lg transition-all duration-300 text-sm"
+                  <Link
+                    to={program.link}
+                    className="mt-auto w-full py-4 px-6 rounded-2xl font-bold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 hover:shadow-lg transition-all duration-300 text-sm text-center block"
                   >
-                    Enroll Now
-                  </button>
+                    Know More
+                  </Link>
                 </div>
               </div>
             ))}
           </div>
-
 
           {/* Mobile Slider */}
           <div className="md:hidden relative">
@@ -436,17 +442,27 @@ function Home() {
                         ))}
                       </ul>
 
-                      <button
-                        onClick={openModal}
-                        className="w-full py-4 px-6 rounded-2xl font-bold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 hover:shadow-lg transition-all duration-300 text-sm"
+                      <Link
+                        to={program.link}
+                        className="w-full py-4 px-6 rounded-2xl font-bold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 hover:shadow-lg transition-all duration-300 text-sm text-center block"
                       >
-                        Enroll Now
-                      </button>
+                        Know More
+                      </Link>
                     </div>
                   </div>
                 </div>
               ))}
             </Slider>
+          </div>
+
+          {/* Know More About Free Programs Button */}
+          <div className="text-center mt-12">
+            <Link to="/programs">
+              <button className="px-8 py-4 rounded-full font-semibold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white shadow-lg hover:scale-105 hover:shadow-lg transition-all duration-300">
+                Know More About Free Programs
+              </button>
+
+            </Link>
           </div>
         </div>
       </section>
@@ -538,12 +554,14 @@ function Home() {
                       ))}
                     </ul>
                   </div>
+                  <Link to="/join-program">
                   <button
                     onClick={openModal}
                     className="w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 transition-transform"
                   >
                     Begin Journey
                   </button>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -602,7 +620,7 @@ function Home() {
             ))}
           </div>
           <div className="text-center mt-16">
-            <Link to="/contact">
+            <Link to="/contact-us">
               <button className="inline-flex items-center px-10 py-5 text-white font-bold rounded-full bg-gradient-to-r from-[#F0982E] to-[#d97706] hover:scale-105 transition-transform">
                 Still have questions?
                 <ArrowRight className="w-6 h-6 ml-3" />
@@ -625,7 +643,7 @@ const FAQItem = ({ question, answer }) => {
         className="flex items-center justify-between w-full py-6 text-left group"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h3 className="text-lg font-serif font-bold text-foreground group-hover:text-primary transition-colors duration-300 pr-4">
+        <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-300 pr-4">
           {question}
         </h3>
         <div className="flex-shrink-0 ml-4">

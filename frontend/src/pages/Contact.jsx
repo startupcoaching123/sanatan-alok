@@ -1,5 +1,7 @@
 "use client"
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle, Globe, Heart } from "lucide-react"
+import { Helmet } from "react-helmet-async"
+import { Link } from "react-router-dom"
 import { useState } from "react"
 import Swal from "sweetalert2"
 
@@ -172,6 +174,19 @@ function Contact() {
 
   return (
     <div className="min-h-screen font-poppins bg-gradient-to-b from-orange-50 via-white to-amber-50">
+      {/* seo */}
+      <Helmet>
+        <title>Contact Sanatan Alok | Connect for Spiritual Guidance</title>
+        <meta
+          name="description"
+          content="Reach out to Sanatan Alok to begin your spiritual journey. Contact us for guidance on meditation, mysticism, and holistic transformation rooted in ancient wisdom."
+        />
+        <meta
+          name="keywords"
+          content="Sanatan Alok contact, spiritual guidance, meditation, ancient wisdom, holistic transformation, inner peace, mysticism"
+        />
+        <link rel="canonical" href="https://sanatanalok.com/contact" />
+      </Helmet>
       {/* Hero Section */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
         {/* Background decorative elements */}
@@ -447,12 +462,16 @@ function Contact() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform">
-                Schedule Consultation
-              </button>
-              <button className="px-8 py-4 border-2 border-[#F0982E] text-[#F0982E] font-semibold rounded-full hover:bg-[#F0982E] hover:text-white transition-all">
-                Join Our Community
-              </button>
+              <Link to="/join-program">
+                <button className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-semibold rounded-full shadow-lg hover:scale-105 transition-transform">
+                  Explore Free Programs
+                </button>
+              </Link>
+              <Link to="/join-program">
+                <button className="px-8 py-4 border-2 border-[#F0982E] text-[#F0982E] font-semibold rounded-full hover:bg-[#F0982E] hover:text-white transition-all">
+                  Join Free Program
+                </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import axios from "axios"
 import Swal from "sweetalert2"
-import { FaFacebookF, FaInstagram, FaEnvelope, FaPhone, FaMapMarkerAlt, FaArrowUp, FaHeart } from "react-icons/fa"
+import { FaFacebookF, FaInstagram, FaEnvelope, FaPhone, FaMapMarkerAlt, FaArrowUp } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 import logo from '../../assets/logo.png';
@@ -89,6 +89,16 @@ const Footer = () => {
                 { name: "Donate Us", href: "/donate" },
             ],
         },
+        {
+            title: "Free Programs",
+            links: [
+                { name: "Essence of Yoga", href: "/programs/essence-of-yoga" },
+                { name: "Mantra Vidya", href: "/programs/mantra-vidya" },
+                { name: "Buddha Blueprint", href: "/programs/buddha-blueprint" },
+                { name: "Chakra Intelligence", href: "/programs/chakra-intelligence" },
+                { name: "On Demand Satsang", href: "/on-demand-satsang" },
+            ],
+        },
     ]
 
     const socialLinks = [
@@ -98,14 +108,12 @@ const Footer = () => {
             name: "Facebook",
             color: "hover:text-blue-500",
         },
-        // { icon: <FaTwitter />, href: "#", name: "Twitter", color: "hover:text-blue-400" },
         {
             icon: <FaInstagram />,
             href: "https://www.instagram.com/sanatanalokofficial/",
             name: "Instagram",
             color: "hover:text-pink-500",
         },
-        // { icon: <FaLinkedinIn />, href: "https://www.linkedin.com/company/startup-coach-1000x/", name: "LinkedIn", color: "hover:text-blue-600" },
     ]
 
     return (
@@ -122,10 +130,10 @@ const Footer = () => {
 
                 {/* Main Footer Content */}
                 <div className="relative max-w-7xl mx-auto px-6 py-16">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-                        {/* Brand Section - Takes 2 columns on large screens */}
-                        <div className="lg:col-span-2 flex flex-col items-center md:items-start">
-                            <div className="flex items-center space-x-3 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+                        {/* Brand Section */}
+                        <div className="flex flex-col items-center md:items-start">
+                            <div className="flex items-center justify-center md:justify-start space-x-3 mb-6">
                                 <img
                                     src={logo}
                                     alt="Sanatan Alok Logo"
@@ -139,7 +147,7 @@ const Footer = () => {
 
                             {/* Contact Info */}
                             <div className="space-y-4 mb-8">
-                                <div className="flex items-center space-x-3 text-sm group">
+                                <div className="flex items-center justify-center md:justify-start space-x-3 text-sm group">
                                     <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-lg flex items-center justify-center">
                                         <FaEnvelope className="w-3 h-3 text-white" />
                                     </div>
@@ -150,20 +158,20 @@ const Footer = () => {
                                         light.sanatanaalok@gmail.com
                                     </a>
                                 </div>
-                                <div className="flex items-center space-x-3 text-sm group">
+                                <div className="flex items-center justify-center md:justify-start space-x-3 text-sm group">
                                     <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-lg flex items-center justify-center">
                                         <FaPhone className="w-3 h-3 text-white" />
                                     </div>
-                                    <a href="tel:7827468953" className="text-gray-700 hover:text-orange-600 transition-colors">
+                                    <a href="https://wa.me/917827468953" className="text-gray-700 hover:text-orange-600 transition-colors">
                                         +91 7827468953
                                     </a>
                                 </div>
-                                <div className="flex items-start space-x-3 text-sm">
+                                <div className="flex items-start justify-center md:justify-start space-x-3 text-sm">
                                     <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-lg flex items-center justify-center mt-0.5">
                                         <FaMapMarkerAlt className="w-3 h-3 text-white" />
                                     </div>
                                     <span className="text-gray-700 leading-relaxed">
-                                        704, 7th Floor, Palm Court, Mehrauli-Gurgaon Road, Sector 16, Gurugram, Haryana
+                                        Gurugram, Haryana, India
                                     </span>
                                 </div>
                             </div>
@@ -171,18 +179,41 @@ const Footer = () => {
 
                         {/* Quick Links */}
                         <div className="flex flex-col items-center md:items-start">
-                            <div className="flex items-center mb-6">
+                            <div className="flex items-center justify-center md:justify-start mb-6">
                                 <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-lg flex items-center justify-center mr-3">
                                     <div className="w-2 h-2 bg-white rounded-full"></div>
                                 </div>
                                 <h3 className="text-gray-800 font-bold text-xl">Quick Links</h3>
                             </div>
-                            <ul className="space-y-4">
+                            <ul className="space-y-4 text-center md:text-left">
                                 {footerSections[0].links.map((link, linkIndex) => (
                                     <li key={linkIndex}>
                                         <Link
                                             to={link.href}
-                                            className="text-gray-700 hover:text-orange-600 transition-all duration-200 text-sm hover:translate-x-2 transform inline-block group flex items-center"
+                                            className="text-gray-700 hover:text-orange-600 transition-all duration-200 text-sm hover:translate-x-2 transform inline-block group flex items-center justify-center md:justify-start"
+                                        >
+                                            <span className="w-1 h-1 bg-orange-400 rounded-full mr-3 group-hover:w-2 transition-all duration-200"></span>
+                                            {link.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Services */}
+                        <div className="flex flex-col items-center md:items-start">
+                            <div className="flex items-center justify-center md:justify-start mb-6">
+                                <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-lg flex items-center justify-center mr-3">
+                                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                                </div>
+                                <h3 className="text-gray-800 font-bold text-xl">Programs</h3>
+                            </div>
+                            <ul className="space-y-4 text-center md:text-left">
+                                {footerSections[1].links.map((link, linkIndex) => (
+                                    <li key={linkIndex}>
+                                        <Link
+                                            to={link.href}
+                                            className="text-gray-700 hover:text-orange-600 transition-all duration-200 text-sm hover:translate-x-2 transform inline-block group flex items-center justify-center md:justify-start"
                                         >
                                             <span className="w-1 h-1 bg-orange-400 rounded-full mr-3 group-hover:w-2 transition-all duration-200"></span>
                                             {link.name}
@@ -194,7 +225,7 @@ const Footer = () => {
 
                         {/* Newsletter Section */}
                         <div className="flex flex-col items-center md:items-start">
-                            <div className="flex items-center mb-6">
+                            <div className="flex items-center justify-center md:justify-start mb-6">
                                 <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-lg flex items-center justify-center mr-3">
                                     <FaEnvelope className="w-3 h-3 text-white" />
                                 </div>
@@ -226,10 +257,10 @@ const Footer = () => {
                                 </button>
                             </form>
 
-                            {/* Social Links moved here */}
+                            {/* Social Links */}
                             <div className="mt-8">
                                 <h4 className="text-gray-800 font-semibold mb-4 text-center md:text-left">Follow Us</h4>
-                                <div className="flex items-center space-x-3 justify-center md:justify-start">
+                                <div className="flex items-center justify-center md:justify-start space-x-3">
                                     {socialLinks.map((social, index) => (
                                         <a
                                             key={index}
@@ -253,19 +284,19 @@ const Footer = () => {
                             {/* Copyright */}
                             <div className="flex items-center space-x-2 text-sm text-gray-700">
                                 <span>© 2025 Sanatan Alok. All rights reserved.</span>
-                                <FaHeart className="w-4 h-4 text-orange-500 animate-pulse" />
-                                <span>Made with love for spiritual growth</span>
+                                {/* <FaHeart className="w-4 h-4 text-orange-500 animate-pulse" />
+                                <span>Made with love for spiritual growth</span> */}
                             </div>
 
                             {/* Additional Links */}
-                            <div className="flex items-center space-x-6 text-sm">
+                            {/* <div className="flex items-center space-x-6 text-sm">
                                 <Link to="/privacy" className="text-gray-700 hover:text-orange-600 transition-colors">
                                     Privacy Policy
                                 </Link>
                                 <Link to="/terms" className="text-gray-700 hover:text-orange-600 transition-colors">
                                     Terms of Service
                                 </Link>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
