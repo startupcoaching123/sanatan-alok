@@ -82,7 +82,7 @@ const Footer = () => {
             title: "Quick Links",
             links: [
                 { name: "Home", href: "/about-us" },
-                { name: "Programs", href: "/programsy" },
+                { name: "Programs", href: "/programs" },
                 { name: "About Us", href: "/about-us" },
                 { name: "Four Divine Vidyas", href: "/four-divine-vidyas" },
                 { name: "Blogs", href: "/blogs" },
