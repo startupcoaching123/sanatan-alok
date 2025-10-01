@@ -146,41 +146,40 @@ function Home() {
   ];
 
 
-  const programSliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 4000,
-    prevArrow: <CustomPrevArrow />,
-    nextArrow: <CustomNextArrow />,
-    // Important to prevent any “peek” of next slide
-    centerMode: false,
-    centerPadding: "0px",
-    adaptiveHeight: true,
-    responsive: [
-      {
-        breakpoint: 1024, // <= 1024px
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
+const programSliderSettings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 4000,
+  prevArrow: <CustomPrevArrow />,
+  nextArrow: <CustomNextArrow />,
+  centerMode: false,
+  centerPadding: "0px",
+  adaptiveHeight: true,
+  responsive: [
+    {
+      breakpoint: 1024, // <= 1024px
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
       },
-      {
-        breakpoint: 768, // <= 768px (mobile)
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          arrows: false,
-          centerMode: false,
-          centerPadding: "0px",
-          adaptiveHeight: true,
-        },
+    },
+    {
+      breakpoint: 768, // <= 768px (mobile)
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        centerMode: false,
+        centerPadding: "0px",
+        adaptiveHeight: true,
       },
-    ],
-  }
+    },
+  ],
+}
 
 
   const spiritualServices = [
