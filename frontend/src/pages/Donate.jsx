@@ -154,64 +154,65 @@ function Donation() {
         <link rel="canonical" href="https://sanatanalok.com/donation" />
       </Helmet>
       {/* Hero Section */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-gradient-to-br from-orange-300 to-amber-400 rounded-full blur-3xl"></div>
+<section className="relative py-12 lg:py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
+  {/* Background decorative elements */}
+  <div className="absolute inset-0 opacity-20">
+    <div className="absolute top-16 left-10 w-28 h-28 bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-full blur-3xl"></div>
+    <div className="absolute bottom-16 right-10 w-36 h-36 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full blur-3xl"></div>
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-52 h-52 bg-gradient-to-br from-orange-300 to-amber-400 rounded-full blur-3xl"></div>
+  </div>
+
+  <div className="relative container mx-auto px-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+      <div>
+        <div className="inline-flex items-center px-4 py-1.5 mb-4 text-sm font-medium text-amber-600 bg-amber-100 rounded-full">
+          <Heart className="w-4 h-4 mr-2" />
+          Make a Difference
         </div>
 
-        <div className="relative container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-            <div>
-              <div className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-amber-600 bg-amber-100 rounded-full">
-                <Heart className="w-4 h-4 mr-2" />
-                Make a Difference
-              </div>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+          Support{" "}
+          <span className="bg-gradient-to-r from-[#F0982E] via-[#d97706] to-[#b45309] bg-clip-text text-transparent">
+            Spiritual
+          </span>{" "}
+          Awakening
+        </h1>
 
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8">
-                Support{" "}
-                <span className="bg-gradient-to-r from-[#F0982E] via-[#d97706] to-[#b45309] bg-clip-text text-transparent">
-                  Spiritual
-                </span>{" "}
-                Awakening
-              </h1>
+        <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6">
+          Your generous donation helps us continue our mission of guiding souls toward inner peace,
+          spiritual growth, and authentic transformation. Together, we can create a more conscious world.
+        </p>
 
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-8">
-                Your generous donation helps us continue our mission of guiding souls toward inner peace, spiritual
-                growth, and authentic transformation. Together, we can create a more conscious world.
-              </p>
-
-              <div className="flex flex-wrap gap-6 mb-8">
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-md">
-                  <div className="text-2xl font-bold text-[#F0982E]">5000+</div>
-                  <div className="text-sm text-gray-600">Lives Touched</div>
-                </div>
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-md">
-                  <div className="text-2xl font-bold text-[#F0982E]">100+</div>
-                  <div className="text-sm text-gray-600">Programs Funded</div>
-                </div>
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-md">
-                  <div className="text-2xl font-bold text-[#F0982E]">∞</div>
-                  <div className="text-sm text-gray-600">Blessings Shared</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="relative z-10">
-                <img
-                  src={donation_one}
-                  alt="Spiritual community meditation"
-                  className="w-full h-96 object-cover rounded-3xl shadow-2xl"
-                />
-              </div>
-              <div className="absolute -bottom-6 -right-6 w-full h-full bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-3xl opacity-20"></div>
-            </div>
+        <div className="flex flex-wrap gap-4 mb-6">
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-md">
+            <div className="text-xl font-bold text-[#F0982E]">5000+</div>
+            <div className="text-sm text-gray-600">Lives Touched</div>
+          </div>
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-md">
+            <div className="text-xl font-bold text-[#F0982E]">100+</div>
+            <div className="text-sm text-gray-600">Programs Funded</div>
+          </div>
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-md">
+            <div className="text-xl font-bold text-[#F0982E]">∞</div>
+            <div className="text-sm text-gray-600">Blessings Shared</div>
           </div>
         </div>
-      </section>
+      </div>
+
+      <div className="relative">
+        <div className="relative z-10">
+          <img
+            src={donation_one}
+            alt="Spiritual community meditation"
+            className="w-full h-80 object-cover rounded-3xl shadow-2xl"
+          />
+        </div>
+        <div className="absolute -bottom-4 -right-4 w-full h-full bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-3xl opacity-20"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* Impact Areas Section */}
       <section className="py-24 bg-white">

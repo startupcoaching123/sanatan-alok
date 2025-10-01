@@ -4,6 +4,8 @@ import { useState } from "react"
 import { Sun, Heart, Focus as Lotus, Sparkles, Star, ChevronDown, ChevronUp, Users, CheckCircle, Monitor, Calendar, Video, Award, BookOpen, Zap, Globe, MessageCircle, Target, Volume2, Brain, Waves, Music } from 'lucide-react'
 import { Helmet } from "react-helmet-async"
 
+import { Link } from "react-router-dom"
+
 // You'll need to add your mantra program image
 import program1 from "../assets/mantra-vidya.jpg";
 
@@ -156,14 +158,12 @@ function MantraVidyaPage() {
 
               {/* Button */}
               <div className="flex justify-center sm:justify-start">
-                <a
-                  href="https://wa.me/917827468953?text=Hello%2C%20I%20would%20like%20to%20know%20more%20details%20about%20the%20Mantra%20Vidya%20program."
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/join-program"
                   className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-bold rounded-full shadow-xl hover:scale-105 transition-all duration-300 text-lg text-center w-full sm:w-auto"
                 >
                   JOIN THE FREE PROGRAM & GET CERTIFIED
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -390,14 +390,12 @@ function MantraVidyaPage() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a
-                    href="https://wa.me/917827468953?text=Hello%2C%20I%20would%20like%20to%20know%20more%20details%20about%20the%20Mantra%20Vidya%20program."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-bold rounded-full shadow-xl hover:scale-105 transition-all duration-300 text-lg flex items-center justify-center"
+                  <Link
+                    to="/join-program"
+                    className="px-8 py-4 bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white font-bold rounded-full shadow-xl hover:scale-105 transition-all duration-300 text-lg text-center w-full sm:w-auto"
                   >
                     Register Now
-                  </a>
+                  </Link>
 
                 </div>
               </div>

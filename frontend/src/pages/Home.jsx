@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import HeroSlider from "../components/Slider/HeroSlider"
 import TestimonialSlider from "../components/Slider/TestimonialSlider"
@@ -73,7 +73,7 @@ function Home() {
     return () => clearTimeout(timer)
   }, [hasModalBeenShown])
 
-   const slides = [
+  const slides = [
     {
       bgImage:
         "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1274&auto=format&fit=crop",
@@ -156,24 +156,32 @@ function Home() {
     autoplaySpeed: 4000,
     prevArrow: <CustomPrevArrow />,
     nextArrow: <CustomNextArrow />,
+    // Important to prevent any “peek” of next slide
+    centerMode: false,
+    centerPadding: "0px",
+    adaptiveHeight: true,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1024, // <= 1024px
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 768,
+        breakpoint: 768, // <= 768px (mobile)
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
           arrows: false,
+          centerMode: false,
+          centerPadding: "0px",
+          adaptiveHeight: true,
         },
       },
     ],
   }
+
 
   const spiritualServices = [
     {
@@ -406,8 +414,10 @@ function Home() {
           <div className="md:hidden relative">
             <Slider {...programSliderSettings}>
               {freePrograms.map((program, index) => (
-                <div key={index} className="px-4">
-                  <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 relative overflow-hidden mx-auto max-w-sm">
+                // <CHANGE> remove px-4 so each slide consumes full width
+                <div key={index} className="px-0">
+                  {/* <CHANGE> replace 'mx-auto max-w-sm' with 'w-full' to avoid peeking second slide */}
+                  <div className="w-full bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-amber-50 opacity-50"></div>
 
                     <div className="relative z-10">
@@ -425,12 +435,10 @@ function Home() {
                         </div>
                       </div>
 
-                      {/* Free Badge */}
                       <div className="text-center mb-6">
                         <span className="text-6xl font-black text-[#F0982E] tracking-tight">Free</span>
                       </div>
 
-                      {/* Features */}
                       <ul className="space-y-3 mb-8">
                         {program.features.map((feature, idx) => (
                           <li key={idx} className="flex items-center gap-3 text-sm text-gray-700">
@@ -454,6 +462,7 @@ function Home() {
               ))}
             </Slider>
           </div>
+
 
           {/* Know More About Free Programs Button */}
           <div className="text-center mt-12">
@@ -555,12 +564,12 @@ function Home() {
                     </ul>
                   </div>
                   <Link to="/join-program">
-                  <button
-                    onClick={openModal}
-                    className="w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 transition-transform"
-                  >
-                    Begin Journey
-                  </button>
+                    <button
+                      onClick={openModal}
+                      className="w-full py-3 px-6 rounded-xl font-semibold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 transition-transform"
+                    >
+                      Begin Journey
+                    </button>
                   </Link>
                 </div>
               </div>
