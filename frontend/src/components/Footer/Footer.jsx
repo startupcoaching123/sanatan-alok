@@ -84,6 +84,7 @@ const Footer = () => {
                 { name: "Home", href: "/about-us" },
                 { name: "Programs", href: "/programsy" },
                 { name: "About Us", href: "/about-us" },
+                { name: "Four Divine Vidyas", href: "/four-divine-vidyas" },
                 { name: "Blogs", href: "/blogs" },
                 { name: "Contact Us", href: "/contact-us" },
                 { name: "Donate Us", href: "/donate" },

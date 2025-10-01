@@ -275,7 +275,7 @@ function BlogPage() {
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Sanatan Alok Blog</h1>
             <p className="text-xl text-purple-100 max-w-2xl mx-auto">
               Guiding souls with eternal wisdom, Sanatan values, and a vision for a brighter tomorrow.
-              </p>
+            </p>
 
             {/* Search Bar */}
             {/* <div className="max-w-2xl mx-auto">
@@ -406,7 +406,7 @@ function BlogPage() {
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {filteredBlogs.map((blog) => (
                   <Link key={blog._id} to={`/blogs/${blog.slug}`} className="group block h-full">
-                    <article className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group-hover:border-purple-200 group-hover:-translate-y-1 h-full flex flex-col">
+                    <article className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 group-hover:border-amber-200 group-hover:-translate-y-1 h-full flex flex-col">
                       {/* Image Container - Fixed Height */}
                       <div className="relative overflow-hidden h-48">
                         {blog.featuredImage ? (
@@ -417,9 +417,9 @@ function BlogPage() {
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+                          <div className="w-full h-full bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center">
                             <svg
-                              className="w-16 h-16 text-purple-400"
+                              className="w-16 h-16 text-amber-400"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -445,7 +445,7 @@ function BlogPage() {
                             {blog.categories.slice(0, 2).map((category, index) => (
                               <span
                                 key={index}
-                                className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full"
+                                className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded-full"
                               >
                                 {typeof category === 'object' ? category.name : category}
                               </span>
@@ -454,7 +454,7 @@ function BlogPage() {
                         )}
 
                         {/* Title */}
-                        <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-200 line-clamp-3 flex-grow">
+                        <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-600 transition-colors duration-200 line-clamp-3 flex-grow">
                           {blog.title}
                         </h2>
 
@@ -471,12 +471,12 @@ function BlogPage() {
                             <span>{calculateReadTime(blog.content)} min read</span>
                           </div>
                           {blog.author && (
-                            <span className="text-purple-600 font-medium">{blog.author}</span>
+                            <span className="text-amber-600 font-medium">{blog.author}</span>
                           )}
                         </div>
 
                         {/* Read More Button */}
-                        <div className="flex items-center text-purple-600 font-semibold group-hover:text-purple-700 transition-colors mt-auto">
+                        <div className="flex items-center text-amber-600 font-semibold group-hover:text-amber-700 transition-colors mt-auto">
                           <span>Read More</span>
                           <svg
                             className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200"
@@ -490,7 +490,7 @@ function BlogPage() {
                       </div>
 
                       {/* Bottom accent */}
-                      <div className="h-1 bg-gradient-to-r from-purple-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                      <div className="h-1 bg-gradient-to-r from-[#F0982E] to-[#d97706] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
                     </article>
                   </Link>
                 ))}
