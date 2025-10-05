@@ -88,18 +88,19 @@ function About() {
 
     <div className="min-h-screen font-poppins bg-gradient-to-b from-orange-50 via-white to-amber-50">
       {/* seo */}
-<Helmet>
-  <title>About Sanatan Alok | Guiding Spiritual Awakening and Transformation</title>
-  <meta
-    name="description"
-    content="Learn about Sanatan Alok, a sanctuary for spiritual seekers. Discover our mission, vision, and dedicated promoters guiding you toward peace, abundance, and fulfillment through ancient wisdom and modern practices."
-  />
-  <meta
-    name="keywords"
-    content="Sanatan Alok, spiritual awakening, ancient Indian wisdom, meditation, mysticism, spiritual guidance, inner peace, holistic transformation"
-  />
-  <link rel="canonical" href="https://sanatanalok.com/about" />
-</Helmet>
+      <Helmet>
+        <title>About Sanatan Alok | Guiding Spiritual Awakening and Transformation</title>
+        <meta
+          name="description"
+          content="Discover Sanatan Alok, a sanctuary for spiritual seekers. Learn about our mission, vision, and the wise advisors guiding you towards peace, abundance, and fulfillment through ancient wisdom and modern practices."
+        />
+
+        <meta
+          name="keywords"
+          content="Sanatan Alok, spiritual awakening, ancient Indian wisdom, meditation, mysticism, spiritual guidance, inner peace, holistic transformation"
+        />
+        <link rel="canonical" href="https://sanatanalok.com/about" />
+      </Helmet>
       {/* Hero Section */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
         {/* Background decorative elements */}
@@ -257,12 +258,11 @@ function About() {
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Our{" "}
               <span className="bg-gradient-to-r from-[#F0982E] via-[#d97706] to-[#b45309] bg-clip-text text-transparent">
-                Promoters
+                Advisors
               </span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Meet the dedicated souls who founded and guide Sanatan Alok with wisdom, compassion, and deep spiritual
-              understanding.
+              Meet the trusted advisors of Sanatan Alok, whose wisdom and guidance help shape our vision and keep us rooted in spiritual values.
             </p>
           </div>
 
