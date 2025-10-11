@@ -145,12 +145,11 @@ function Home() {
     },
   ];
 
-
 const programSliderSettings = {
   dots: true,
   infinite: true,
   speed: 500,
-  slidesToShow: 3,
+  slidesToShow: 1, // ✅ make 1 the default
   slidesToScroll: 1,
   autoplay: true,
   autoplaySpeed: 4000,
@@ -161,25 +160,22 @@ const programSliderSettings = {
   adaptiveHeight: true,
   responsive: [
     {
-      breakpoint: 1024, // <= 1024px
+      breakpoint: 1024,
       settings: {
         slidesToShow: 2,
         slidesToScroll: 1,
       },
     },
     {
-      breakpoint: 768, // <= 768px (mobile)
+      breakpoint: 1280,
       settings: {
-        slidesToShow: 1,
+        slidesToShow: 3,
         slidesToScroll: 1,
-        arrows: false,
-        centerMode: false,
-        centerPadding: "0px",
-        adaptiveHeight: true,
       },
     },
   ],
-}
+};
+
 
 
   const spiritualServices = [
@@ -256,10 +252,10 @@ const programSliderSettings = {
   return (
     <div className="min-h-screen font-poppins bg-gradient-to-b from-orange-50 via-white to-amber-50">
       <Helmet>
-        <title>Sanatana Alok | Guiding Spiritual Awakening and Transformation</title>
+        <title>Sanatan Alok | Guiding Spiritual Awakening and Transformation</title>
         <meta
           name="description"
-          content="Sanatana Lok offers meditation, natural healing, yoga, and sacred rituals to connect you with your true self and achieve inner peace."
+          content="Sanatan ALok offers meditation, natural healing, yoga, and sacred rituals to connect you with your true self and achieve inner peace."
         />
         <link rel="canonical" href="https://sanatanalok.com/" />
       </Helmet>
@@ -504,7 +500,7 @@ const programSliderSettings = {
               </span>
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
-              Sanatana Lok is a sacred space where timeless wisdom meets modern understanding.
+              Sanatan ALok is a sacred space where timeless wisdom meets modern understanding.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed mb-8">
               Our mission is to guide seekers toward self-realization through spiritual practices, healing, and
