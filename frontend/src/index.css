@@ -46,21 +46,6 @@ html {
   height: 100%;
 }
 
-/* Force each slide to full width on small screens */
-@media (max-width: 768px) {
-  .slick-slide {
-    width: 100% !important;
-  }
-
-  .slick-track {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-  }
-
-  .slick-slide > div {
-    width: 100% !important;
-  }
-}
 
 
 /* Loading animation for images */
