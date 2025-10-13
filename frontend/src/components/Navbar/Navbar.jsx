@@ -28,7 +28,8 @@ const Navbar = () => {
         { id: 2, title: "Mantra Vidya", path: "/programs/mantra-vidya" },
         { id: 3, title: "The Buddha Blueprint", path: "/programs/buddha-blueprint" },
         { id: 4, title: "Chakra Intelligence", path: "/programs/chakra-intelligence" },
-        { id: 5, title: "On Demand Satsang", path: "/on-demand-satsang" },
+        { id: 5, title: "Ashtalaxmi Sadhana", path: "/programs/ashtalaxmi-sadhana" },
+        { id: 6, title: "On Demand Satsang", path: "/on-demand-satsang" },
       ],
     },
     {

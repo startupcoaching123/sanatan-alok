@@ -114,7 +114,7 @@ function Home() {
       features: ["Authentic Yoga", "Myth Busting", "Yogic Paths", "Inner Peace"],
       description:
         "Discover the true essence of yoga beyond physical postures, exploring its spiritual dimensions and transformative power.",
-      link: "/programs/essence-of-yoga", // 👈 add link here
+      link: "/programs/essence-of-yoga",
     },
     {
       title: "Mantra Vidya: The Science of Sacred Sound",
@@ -123,7 +123,7 @@ function Home() {
       features: ["Sacred Sound", "Energy Flow", "Vibration Science", "Chakra Activation"],
       description:
         "Learn the ancient science of mantras and how sacred sounds can transform your consciousness and energy.",
-      link: "/programs/mantra-vidya", // 👈 add link here
+      link: "/programs/mantra-vidya",
     },
     {
       title: "The Buddha Blueprint: Life Design for Sukh, Shanti & Samriddhi",
@@ -132,7 +132,7 @@ function Home() {
       features: ["Desire Control", "Mind Clarity", "Balanced Living", "Stress Release"],
       description:
         "Design a life of happiness, peace, and prosperity using Buddha's timeless teachings and practical wisdom.",
-      link: "/programs/buddha-blueprint", // 👈 add link here
+      link: "/programs/buddha-blueprint",
     },
     {
       title: "Chakra Intelligence: Decode Your Inner Energy Map",
@@ -141,40 +141,55 @@ function Home() {
       features: ["Chakra Science", "Block Removal", "Emotional Balance", "Career Growth"],
       description:
         "Understand and balance your chakra system to unlock your full potential and achieve holistic well-being.",
-      link: "/programs/chakra-intelligence", // 👈 add link here
+      link: "/programs/chakra-intelligence",
+    },
+    {
+      title: "🌸 ASHTALAXMI SADHANA 🌸",
+      duration: "2 Hours | Live Session",
+      format: "Online (Zoom)",
+      features: [
+        "Eight Energies",
+        "Mantra Meditation",
+        "Inner Alignment",
+        "Authentic Leadership",
+      ],
+      description:
+        "Invoke the eight divine energies of Ashta Laxmi to manifest abundance, inner harmony, and spiritual prosperity through guided mantra meditation.",
+      link: "/programs/ashtalaxmi-sadhana",
     },
   ];
 
-const programSliderSettings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1, // ✅ make 1 the default
-  slidesToScroll: 1,
-  autoplay: true,
-  autoplaySpeed: 4000,
-  prevArrow: <CustomPrevArrow />,
-  nextArrow: <CustomNextArrow />,
-  centerMode: false,
-  centerPadding: "0px",
-  adaptiveHeight: true,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
+
+  const programSliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1, // ✅ make 1 the default
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    prevArrow: <CustomPrevArrow />,
+    nextArrow: <CustomNextArrow />,
+    centerMode: false,
+    centerPadding: "0px",
+    adaptiveHeight: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
       },
-    },
-    {
-      breakpoint: 1280,
-      settings: {
-        slidesToShow: 3,
-        slidesToScroll: 1,
+      {
+        breakpoint: 1280,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
       },
-    },
-  ],
-};
+    ],
+  };
 
 
 
@@ -349,60 +364,122 @@ const programSliderSettings = {
           </div>
 
           {/* Desktop and Tablet Grid */}
-          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-            {freePrograms.map((program, index) => (
-              <div
-                key={index}
-                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:-translate-y-3 relative overflow-hidden h-full flex flex-col"
-              >
-                {/* Card background gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50/30 to-yellow-50/20 group-hover:opacity-100 transition-opacity duration-500"></div>
+          {/* Free Programs Section */}
+          <div className="hidden md:flex flex-col items-center space-y-12 max-w-7xl mx-auto">
 
-                <div className="relative z-10 flex flex-col h-full">
-                  {/* Header */}
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4 leading-tight group-hover:text-[#F0982E] transition-colors min-h-[60px]">
-                      {program.title}
-                    </h3>
-                    <div className="flex items-center justify-center gap-4 text-sm text-gray-600 mb-2">
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4 text-[#F0982E]" />
-                        <span>{program.duration}</span>
+            {/* Top row: 3 cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+              {freePrograms.slice(0, 3).map((program, index) => (
+                <div
+                  key={index}
+                  className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:-translate-y-3 relative overflow-hidden h-full flex flex-col"
+                >
+                  {/* Card background gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50/30 to-yellow-50/20 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                  <div className="relative z-10 flex flex-col h-full">
+                    {/* Header */}
+                    <div className="text-center mb-6">
+                      <h3 className="text-xl font-bold text-gray-800 mb-4 leading-tight group-hover:text-[#F0982E] transition-colors min-h-[60px]">
+                        {program.title}
+                      </h3>
+                      <div className="flex items-center justify-center gap-4 text-sm text-gray-600 mb-2">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-4 h-4 text-[#F0982E]" />
+                          <span>{program.duration}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-center gap-1 text-sm text-gray-600">
+                        <Monitor className="w-4 h-4 text-[#F0982E]" />
+                        <span>{program.format}</span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-center gap-1 text-sm text-gray-600">
-                      <Monitor className="w-4 h-4 text-[#F0982E]" />
-                      <span>{program.format}</span>
+
+                    {/* Free Badge */}
+                    <div className="text-center my-6 min-h-[70px] flex items-center justify-center">
+                      <span className="text-6xl font-black text-[#F0982E] tracking-tight">Free</span>
                     </div>
+
+                    {/* Features */}
+                    <ul className="space-y-3 mb-8 flex-grow">
+                      {program.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-center gap-3 text-sm text-gray-700">
+                          <div className="w-5 h-5 rounded-full bg-[#F0982E] flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="font-medium">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Button */}
+                    <Link
+                      to={program.link}
+                      className="mt-auto w-full py-4 px-6 rounded-2xl font-bold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 hover:shadow-lg transition-all duration-300 text-sm text-center block"
+                    >
+                      Know More
+                    </Link>
                   </div>
-
-                  {/* Free Badge with fixed height */}
-                  <div className="text-center my-6 min-h-[70px] flex items-center justify-center">
-                    <span className="text-6xl font-black text-[#F0982E] tracking-tight">Free</span>
-                  </div>
-
-                  {/* Features */}
-                  <ul className="space-y-3 mb-8 flex-grow">
-                    {program.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center gap-3 text-sm text-gray-700">
-                        <div className="w-5 h-5 rounded-full bg-[#F0982E] flex items-center justify-center flex-shrink-0">
-                          <CheckCircle className="w-3 h-3 text-white" />
-                        </div>
-                        <span className="font-medium">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Enroll Button (always aligned at bottom) */}
-                  <Link
-                    to={program.link}
-                    className="mt-auto w-full py-4 px-6 rounded-2xl font-bold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 hover:shadow-lg transition-all duration-300 text-sm text-center block"
-                  >
-                    Know More
-                  </Link>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Bottom row: 2 cards centered */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full lg:w-2/3">
+              {freePrograms.slice(3, 5).map((program, index) => (
+                <div
+                  key={index + 3}
+                  className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:-translate-y-3 relative overflow-hidden h-full flex flex-col"
+                >
+                  {/* Card background gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50/30 to-yellow-50/20 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                  <div className="relative z-10 flex flex-col h-full">
+                    {/* Header */}
+                    <div className="text-center mb-6">
+                      <h3 className="text-xl font-bold text-gray-800 mb-4 leading-tight group-hover:text-[#F0982E] transition-colors min-h-[60px]">
+                        {program.title}
+                      </h3>
+                      <div className="flex items-center justify-center gap-4 text-sm text-gray-600 mb-2">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-4 h-4 text-[#F0982E]" />
+                          <span>{program.duration}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-center gap-1 text-sm text-gray-600">
+                        <Monitor className="w-4 h-4 text-[#F0982E]" />
+                        <span>{program.format}</span>
+                      </div>
+                    </div>
+
+                    {/* Free Badge */}
+                    <div className="text-center my-6 min-h-[70px] flex items-center justify-center">
+                      <span className="text-6xl font-black text-[#F0982E] tracking-tight">Free</span>
+                    </div>
+
+                    {/* Features */}
+                    <ul className="space-y-3 mb-8 flex-grow">
+                      {program.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-center gap-3 text-sm text-gray-700">
+                          <div className="w-5 h-5 rounded-full bg-[#F0982E] flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="font-medium">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Button */}
+                    <Link
+                      to={program.link}
+                      className="mt-auto w-full py-4 px-6 rounded-2xl font-bold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white hover:scale-105 hover:shadow-lg transition-all duration-300 text-sm text-center block"
+                    >
+                      Know More
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Mobile Slider */}

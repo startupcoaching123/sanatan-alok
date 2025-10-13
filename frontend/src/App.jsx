@@ -16,6 +16,7 @@ import Program1 from './pages/Program1.jsx';
 import Program2 from './pages/Program2.jsx';
 import Program3 from './pages/Program3.jsx';
 import Program4 from './pages/Program4.jsx';
+import Program5 from './pages/Program5.jsx';
 import OnDemandSatsang from './pages/OnDemandSatsang.jsx';
 import FourDivine from './pages/FourDivine.jsx';
 import JoinProgram from './pages/JoinProgram.jsx';
@@ -48,6 +49,7 @@ function App() {
             <Route path="/programs/mantra-vidya" element={<Program2 />} />
             <Route path="/programs/buddha-blueprint" element={<Program3 />} />
             <Route path="/programs/chakra-intelligence" element={<Program4 />} />
+            <Route path="/programs/ashtalaxmi-sadhana" element={<Program5 />} />
             <Route path="join-program" element={<JoinProgram />} />
             <Route path="on-demand-satsang" element={<OnDemandSatsang />} />
             <Route path="four-divine-vidyas" element={<FourDivine />} />

@@ -44,6 +44,15 @@ function Programs() {
             gradient: "from-pink-500 to-rose-600",
             link: "/programs/chakra-intelligence",
         },
+        {
+            title: "🌸 ASHTALAXMI SADHANA 🌸",
+            duration: "2 Hours | Live Session",
+            mode: "Online (Zoom)",
+            price: "Free",
+            features: ["Eight Energies", "Mantra Meditation", "Inner Alignment", "Authentic Leadership"],
+            gradient: "from-orange-500 to-amber-600",
+            link: "/programs/ashtalaxmi-sadhana",
+        },
     ];
 
 
@@ -234,6 +243,7 @@ function Programs() {
             {/* Free Programs Section */}
             <section className="py-24 bg-gradient-to-br from-emerald-50 to-green-50">
                 <div className="container mx-auto px-6">
+                    {/* Heading */}
                     <div className="text-center mb-20">
                         <div className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-emerald-600 bg-emerald-100 rounded-full">
                             <Heart className="w-4 h-4 mr-2" />
@@ -251,13 +261,25 @@ function Programs() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-                        {freePrograms.map((program, index) => (
-                            <ProgramCard key={index} program={program} isPaid={false} />
-                        ))}
+                    {/* 3 + 2 Layout */}
+                    <div className="max-w-7xl mx-auto flex flex-col items-center space-y-12">
+                        {/* Top row (3 cards) */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+                            {freePrograms.slice(0, 3).map((program, index) => (
+                                <ProgramCard key={index} program={program} isPaid={false} />
+                            ))}
+                        </div>
+
+                        {/* Bottom row (2 cards, centered) */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full lg:w-2/3">
+                            {freePrograms.slice(3, 5).map((program, index) => (
+                                <ProgramCard key={index + 3} program={program} isPaid={false} />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
+
 
             {/* Second Inspirational Image Section */}
             <section className="py-16 bg-white">

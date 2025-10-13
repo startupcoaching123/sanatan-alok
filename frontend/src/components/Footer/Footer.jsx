@@ -97,6 +97,7 @@ const Footer = () => {
                 { name: "Mantra Vidya", href: "/programs/mantra-vidya" },
                 { name: "Buddha Blueprint", href: "/programs/buddha-blueprint" },
                 { name: "Chakra Intelligence", href: "/programs/chakra-intelligence" },
+                { name: "Ashtalaxmi Sadhana", href: "/programs/ashtalaxmi-sadhana" },
                 { name: "On Demand Satsang", href: "/on-demand-satsang" },
             ],
         },
