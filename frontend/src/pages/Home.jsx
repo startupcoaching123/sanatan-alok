@@ -5,11 +5,12 @@ import { Helmet } from "react-helmet-async"
 import HeroSlider from "../components/Slider/HeroSlider"
 import TestimonialSlider from "../components/Slider/TestimonialSlider"
 import StatsSection from "../components/StatsSection/StatsSection"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import Slider from "react-slick"
-import meditationImg from "../assets/meditation.jpg";
+import meditationImg from "../assets/meditation.jpg"
+import program5Img from "../assets/program5.jpg"
 import {
   Leaf,
   Sun,
@@ -28,7 +29,6 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react"
-
 
 const CustomPrevArrow = ({ onClick }) => (
   <button
@@ -49,6 +49,7 @@ const CustomNextArrow = ({ onClick }) => (
 )
 
 function Home() {
+  const navigate = useNavigate()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [hasModalBeenShown, setHasModalBeenShown] = useState(false)
 
@@ -61,22 +62,17 @@ function Home() {
     setIsModalOpen(false)
   }
 
-  // Show modal once after 7s
+  // Show modal instantly once on initial load
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!hasModalBeenShown) {
-        setIsModalOpen(true)
-        setHasModalBeenShown(true)
-      }
-    }, 7000)
-
-    return () => clearTimeout(timer)
+    if (!hasModalBeenShown) {
+      setIsModalOpen(true)
+      setHasModalBeenShown(true)
+    }
   }, [hasModalBeenShown])
 
   const slides = [
     {
-      bgImage:
-        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1274&auto=format&fit=crop",
+      bgImage: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1274&auto=format&fit=crop",
       badge: "Spiritual Awakening",
       title: "Discover Your Inner Light",
       description:
@@ -90,8 +86,7 @@ function Home() {
       ],
     },
     {
-      bgImage:
-        "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1170&auto=format&fit=crop",
+      bgImage: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1170&auto=format&fit=crop",
       badge: "Sacred Practices",
       title: "Ancient Wisdom for Modern Souls",
       description:
@@ -104,7 +99,7 @@ function Home() {
         { number: "∞", label: "Divine Blessings" },
       ],
     },
-  ];
+  ]
 
   const freePrograms = [
     {
@@ -147,18 +142,12 @@ function Home() {
       title: "🌸 ASHTALAXMI SADHANA 🌸",
       duration: "2 Hours | Live Session",
       format: "Online (Zoom)",
-      features: [
-        "Eight Energies",
-        "Mantra Meditation",
-        "Inner Alignment",
-        "Authentic Leadership",
-      ],
+      features: ["Eight Energies", "Mantra Meditation", "Inner Alignment", "Authentic Leadership"],
       description:
         "Invoke the eight divine energies of Ashta Laxmi to manifest abundance, inner harmony, and spiritual prosperity through guided mantra meditation.",
       link: "/programs/ashtalaxmi-sadhana",
     },
-  ];
-
+  ]
 
   const programSliderSettings = {
     dots: true,
@@ -189,9 +178,7 @@ function Home() {
         },
       },
     ],
-  };
-
-
+  }
 
   const spiritualServices = [
     {
@@ -266,6 +253,36 @@ function Home() {
 
   return (
     <div className="min-h-screen font-poppins bg-gradient-to-b from-orange-50 via-white to-amber-50">
+      {/* Popup banner image: opens instantly, clickable to redirect, with close button */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-lg">
+            <button
+              type="button"
+              onClick={closeModal}
+              aria-label="Close popup"
+              className="absolute -top-3 -right-3 w-9 h-9 rounded-full bg-white text-gray-700 shadow-md hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-amber-300 flex items-center justify-center"
+            >
+              <span aria-hidden="true" className="text-xl leading-none">
+                {"×"}
+              </span>
+            </button>
+
+            <Link
+              to="/programs/ashtalaxmi-sadhana"
+              className="block rounded-2xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-amber-300"
+            >
+              <img
+                src={program5Img || "/placeholder.svg"}
+                alt="Ashtalaxmi Sadhana program banner"
+                className="w-full h-auto object-cover rounded-2xl shadow-2xl"
+              />
+            </Link>
+          </div>
+        </div>
+      )}
+      {/* /popup */}
+
       <Helmet>
         <title>Sanatan Alok | Guiding Spiritual Awakening and Transformation</title>
         <meta
@@ -357,16 +374,14 @@ function Home() {
 
             {/* Subheading */}
             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Explore transformative programs designed to nurture your mind, body, and spirit.
-              Each offering helps you unlock inner potential, create balance, and live with
-              greater clarity and purpose.
+              Explore transformative programs designed to nurture your mind, body, and spirit. Each offering helps you
+              unlock inner potential, create balance, and live with greater clarity and purpose.
             </p>
           </div>
 
           {/* Desktop and Tablet Grid */}
           {/* Free Programs Section */}
           <div className="hidden md:flex flex-col items-center space-y-12 max-w-7xl mx-auto">
-
             {/* Top row: 3 cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
               {freePrograms.slice(0, 3).map((program, index) => (
@@ -486,9 +501,9 @@ function Home() {
           <div className="md:hidden relative">
             <Slider {...programSliderSettings}>
               {freePrograms.map((program, index) => (
-                // <CHANGE> remove px-4 so each slide consumes full width
+                // remove px-4 so each slide consumes full width
                 <div key={index} className="px-0">
-                  {/* <CHANGE> replace 'mx-auto max-w-sm' with 'w-full' to avoid peeking second slide */}
+                  {/* replace 'mx-auto max-w-sm' with 'w-full' to avoid peeking second slide */}
                   <div className="w-full bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-amber-50 opacity-50"></div>
 
@@ -535,14 +550,12 @@ function Home() {
             </Slider>
           </div>
 
-
           {/* Know More About Free Programs Button */}
           <div className="text-center mt-12">
             <Link to="/programs">
               <button className="px-8 py-4 rounded-full font-semibold bg-gradient-to-r from-[#F0982E] to-[#d97706] text-white shadow-lg hover:scale-105 hover:shadow-lg transition-all duration-300">
                 Know More About Free Programs
               </button>
-
             </Link>
           </div>
         </div>
@@ -553,7 +566,7 @@ function Home() {
         <div className="relative container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
             <img
-              src={meditationImg}
+              src={meditationImg || "/placeholder.svg"}
               alt="Peaceful meditation garden"
               className="w-full h-[500px] lg:h-[600px] object-cover rounded-3xl shadow-lg"
             />
