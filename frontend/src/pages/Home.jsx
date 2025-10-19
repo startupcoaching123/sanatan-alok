@@ -254,7 +254,7 @@ function Home() {
   return (
     <div className="min-h-screen font-poppins bg-gradient-to-b from-orange-50 via-white to-amber-50">
       {/* Popup banner image: opens instantly, clickable to redirect, with close button */}
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <div className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4">
           <div className="relative w-full max-w-lg">
             <button
@@ -280,7 +280,7 @@ function Home() {
             </Link>
           </div>
         </div>
-      )}
+      )} */}
       {/* /popup */}
 
       <Helmet>
