@@ -11,7 +11,7 @@ import innerLeadership from "../assets/inner-leadership.jpg"
 import innerCompass from "../assets/inner-compass.jpg"
 import pathsToAwakening from "../assets/paths-to-awakening.jpg"
 
-function ExperientialMasterclassesPage() {
+function ExperimentalMasterclassesPage() {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedProgram, setSelectedProgram] = useState(null)
     const navigate = useNavigate()
@@ -37,7 +37,7 @@ function ExperientialMasterclassesPage() {
             description: "Modern life constantly pulls us into chaos — deadlines, screens, and the endless chase for more. This transformative session reveals the deeper mechanics of stress and emotional imbalance.",
             highlights: [
                 "Understand energy imbalances and thought patterns",
-                "Learn experiential techniques of awareness and breath",
+                "Learn experimental techniques of awareness and breath",
                 "Shift from reaction to conscious response",
                 "Guided process to dissolve anxiety and rebalance energy"
             ],
@@ -132,13 +132,13 @@ function ExperientialMasterclassesPage() {
             icon: Sparkles,
         },
         {
-            title: "Experiential Learning",
+            title: "Experimental Learning",
             description: "Move beyond theory into direct experience through guided practices and meditations.",
             icon: Brain,
         },
         {
             title: "Personal Guidance",
-            description: "Learn directly from Anand Ishaan, spiritual mentor with deep experiential knowledge.",
+            description: "Learn directly from Anand Ishaan, spiritual mentor with deep experimental knowledge.",
             icon: Users,
         },
         {
@@ -165,7 +165,7 @@ function ExperientialMasterclassesPage() {
                             <h1 className="text-4xl md:text-6xl font-bold leading-tight">
                                 Sanatan Alok{" "}
                                 <span className="bg-gradient-to-r from-amber-500 via-orange-600 to-amber-700 bg-clip-text text-transparent">
-                                    Experiential Masterclasses
+                                    Experimental Masterclasses
                                 </span>
                             </h1>
 
@@ -212,7 +212,7 @@ function ExperientialMasterclassesPage() {
                             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                                 <img
                                     src={masterclassHero || "/placeholder.svg"}
-                                    alt="Sanatan Alok Experiential Masterclasses"
+                                    alt="Sanatan Alok Experimental Masterclasses"
                                     className="w-full h-auto object-cover"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
@@ -383,14 +383,14 @@ function ExperientialMasterclassesPage() {
                             </h2>
 
                             <p className="text-lg text-gray-600 leading-relaxed">
-                                Spiritual mentor and guide of Sanatan Alok, Anand Ishaan brings deep experiential knowledge
+                                Spiritual mentor and guide of Sanatan Alok, Anand Ishaan brings deep experimental knowledge
                                 and compassionate guidance to each masterclass. His approach blends traditional wisdom with
                                 contemporary understanding, making ancient practices accessible and relevant for modern seekers.
                             </p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="bg-amber-50 rounded-2xl p-4 border border-amber-100">
-                                    <h4 className="font-bold text-amber-700 mb-2">Deep Experiential Knowledge</h4>
+                                    <h4 className="font-bold text-amber-700 mb-2">Deep Experimental Knowledge</h4>
                                     <p className="text-sm text-gray-600">Years of practice and realization</p>
                                 </div>
                                 <div className="bg-amber-50 rounded-2xl p-4 border border-amber-100">
@@ -460,7 +460,7 @@ function ExperientialMasterclassesPage() {
                         Ready to Begin Your Transformative Journey?
                     </h2>
                     <p className="text-amber-100 text-lg mb-8 max-w-2xl mx-auto">
-                        Join Anand Ishaan in these experiential masterclasses and discover the harmony between ancient wisdom and modern life.
+                        Join Anand Ishaan in these experimental masterclasses and discover the harmony between ancient wisdom and modern life.
                     </p>
                     {/* <CHANGE> Changed button text to "Join Now" and added navigation to /join-program */}
                     <button
@@ -574,4 +574,4 @@ const FAQItem = ({ question, answer }) => {
     )
 }
 
-export default ExperientialMasterclassesPage
+export default ExperimentalMasterclassesPage

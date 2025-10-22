@@ -54,7 +54,7 @@ function Programs() {
         //     link: "/programs/ashtalaxmi-sadhana",
         // },
         {
-            title: "Experiential Masterclasses",
+            title: "Experimental Masterclasses",
             duration: "2 Hours | Transformative Sessions",
             mode: "In-person (Delhi NCR)",
             price: "Free",
