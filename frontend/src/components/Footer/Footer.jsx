@@ -97,7 +97,7 @@ const Footer = () => {
                 { name: "Buddha Blueprint", href: "/programs/buddha-blueprint" },
                 { name: "Chakra Intelligence", href: "/programs/chakra-intelligence" },
                 { name: "Four Divine Vidyas", href: "/programs/four-divine-vidyas" },
-                { name: "Experimental Masterclass", href: "/programs/experimental-masterclass" },
+                { name: "Experiential Masterclass", href: "/programs/experiential-masterclass" },
                 // { name: "Ashtalaxmi Sadhana", href: "/programs/ashtalaxmi-sadhana" },
                 { name: "On Demand Satsang", href: "/on-demand-satsang" },
             ],

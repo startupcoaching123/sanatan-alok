@@ -19,7 +19,7 @@ export default function JoinFreePrograms() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [submitted, setSubmitted] = useState(false)
 
-    const programs = ["Unlocking the Essence of Yoga", "Mantra Vidya", "The Buddha Blueprint", "Chakra Intelligence", "Experimental Masterclass", "Four Divine Vidyas", "On Demand Satsang"]
+    const programs = ["Unlocking the Essence of Yoga", "Mantra Vidya", "The Buddha Blueprint", "Chakra Intelligence", "Experiential Masterclass", "Four Divine Vidyas", "On Demand Satsang"]
 
     const handleInputChange = (e) => {
         const { name, value } = e.target

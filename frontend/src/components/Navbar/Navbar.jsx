@@ -28,7 +28,7 @@ const Navbar = () => {
         { id: 2, title: "Mantra Vidya", path: "/programs/mantra-vidya" },
         { id: 3, title: "The Buddha Blueprint", path: "/programs/buddha-blueprint" },
         { id: 4, title: "Chakra Intelligence", path: "/programs/chakra-intelligence" },
-        { id: 5, title: "Experimental Masterclass", path: "/programs/experimental-masterclass" },
+        { id: 5, title: "Experiential Masterclass", path: "/programs/experiential-masterclass" },
         { id: 5, title: "Four Divine Vidyas", path: "/programs/four-divine-vidyas" },
         // { id: 5, title: "Ashtalaxmi Sadhana", path: "/programs/ashtalaxmi-sadhana" },
         { id: 7, title: "On Demand Satsang", path: "/on-demand-satsang" },

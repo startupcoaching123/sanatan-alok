@@ -139,13 +139,13 @@ function Home() {
       link: "/programs/chakra-intelligence",
     },
     {
-      title: "Experimental Masterclass",
+      title: "Experiential Masterclass",
       duration: "2 Hours | Transformative Sessions",
       format: "In-person (Delhi NCR)",
       features: ["Ancient Wisdom", "Guided Practices", "Personal Transformation", "Community Support"],
       description:
         "Transformative 2-hour sessions designed to harmonize the modern mind with timeless spiritual wisdom through direct experience.",
-      link: "/programs/experimental-masterclass",
+      link: "/programs/experiential-masterclass",
     },
     {
       title: "Four Divine VIdyas",

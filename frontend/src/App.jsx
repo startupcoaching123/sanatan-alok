@@ -51,7 +51,7 @@ function App() {
             <Route path="/programs/buddha-blueprint" element={<Program3 />} />
             <Route path="/programs/chakra-intelligence" element={<Program4 />} />
             <Route path="/programs/ashtalaxmi-sadhana" element={<Program5 />} />
-            <Route path="/programs/experimental-masterclass" element={<Program6 />} />
+            <Route path="/programs/experiential-masterclass" element={<Program6 />} />
             <Route path="join-program" element={<JoinProgram />} />
             <Route path="on-demand-satsang" element={<OnDemandSatsang />} />
             <Route path="/programs/four-divine-vidyas" element={<FourDivine />} />
