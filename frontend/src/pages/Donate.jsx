@@ -15,11 +15,12 @@ import { useState } from "react"
 import { Helmet } from "react-helmet-async"
 import donation_one from "../assets/donation_one.jpg";
 import donation_two from "../assets/donation_two.jpg";
-// Import your QR code image - make sure to add this to your assets folder
-import qrCode from "../assets/donation-qr.jpg"; // You'll need to add this image
+import qrCode from "../assets/donation-qr.jpg";
+import qrCodeHdfc from "../assets/donation-qr.jpg";
 
 function Donation() {
   const [copied, setCopied] = useState(false)
+  const [copiedBank, setCopiedBank] = useState(null)
 
   const upiId = "7678424144@kotak" // Replace with your actual UPI ID
   const bankDetails = {
@@ -28,6 +29,14 @@ function Donation() {
     ifscCode: "KKBK0004261",
     bankName: "Kotak Mahindra Bank",
     branchName: "GURGAON-SECTOR 10A"
+  }
+
+  const bankDetailsHdfc = {
+    accountName: "MantreNova Quest Pvt Ltd",
+    accountNumber: "50200114334430",
+    ifscCode: "HDFC0000572",
+    bankName: "HDFC Bank",
+    branchName: "VATIKA ATRIUM"
   }
 
   const impactAreas = [
@@ -128,6 +137,7 @@ function Donation() {
     }
   }
 
+
   const downloadQR = () => {
     // Create a temporary link to download the QR code
     const link = document.createElement('a')
@@ -154,64 +164,64 @@ function Donation() {
         <link rel="canonical" href="https://sanatanalok.com/donation" />
       </Helmet>
       {/* Hero Section */}
-<section className="relative py-12 lg:py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
-  {/* Background decorative elements */}
-  <div className="absolute inset-0 opacity-20">
-    <div className="absolute top-16 left-10 w-28 h-28 bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-full blur-3xl"></div>
-    <div className="absolute bottom-16 right-10 w-36 h-36 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full blur-3xl"></div>
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-52 h-52 bg-gradient-to-br from-orange-300 to-amber-400 rounded-full blur-3xl"></div>
-  </div>
-
-  <div className="relative container mx-auto px-6">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-      <div>
-        <div className="inline-flex items-center px-4 py-1.5 mb-4 text-sm font-medium text-amber-600 bg-amber-100 rounded-full">
-          <Heart className="w-4 h-4 mr-2" />
-          Make a Difference
+      <section className="relative py-12 lg:py-20 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-16 left-10 w-28 h-28 bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-full blur-3xl"></div>
+          <div className="absolute bottom-16 right-10 w-36 h-36 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-52 h-52 bg-gradient-to-br from-orange-300 to-amber-400 rounded-full blur-3xl"></div>
         </div>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-          Support{" "}
-          <span className="bg-gradient-to-r from-[#F0982E] via-[#d97706] to-[#b45309] bg-clip-text text-transparent">
-            Spiritual
-          </span>{" "}
-          Awakening
-        </h1>
+        <div className="relative container mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+            <div>
+              <div className="inline-flex items-center px-4 py-1.5 mb-4 text-sm font-medium text-amber-600 bg-amber-100 rounded-full">
+                <Heart className="w-4 h-4 mr-2" />
+                Make a Difference
+              </div>
 
-        <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6">
-          Your generous donation helps us continue our mission of guiding souls toward inner peace,
-          spiritual growth, and authentic transformation. Together, we can create a more conscious world.
-        </p>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                Support{" "}
+                <span className="bg-gradient-to-r from-[#F0982E] via-[#d97706] to-[#b45309] bg-clip-text text-transparent">
+                  Spiritual
+                </span>{" "}
+                Awakening
+              </h1>
 
-        <div className="flex flex-wrap gap-4 mb-6">
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-md">
-            <div className="text-xl font-bold text-[#F0982E]">5000+</div>
-            <div className="text-sm text-gray-600">Lives Touched</div>
-          </div>
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-md">
-            <div className="text-xl font-bold text-[#F0982E]">100+</div>
-            <div className="text-sm text-gray-600">Programs Funded</div>
-          </div>
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-md">
-            <div className="text-xl font-bold text-[#F0982E]">∞</div>
-            <div className="text-sm text-gray-600">Blessings Shared</div>
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-6">
+                Your generous donation helps us continue our mission of guiding souls toward inner peace,
+                spiritual growth, and authentic transformation. Together, we can create a more conscious world.
+              </p>
+
+              <div className="flex flex-wrap gap-4 mb-6">
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-md">
+                  <div className="text-xl font-bold text-[#F0982E]">5000+</div>
+                  <div className="text-sm text-gray-600">Lives Touched</div>
+                </div>
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-md">
+                  <div className="text-xl font-bold text-[#F0982E]">100+</div>
+                  <div className="text-sm text-gray-600">Programs Funded</div>
+                </div>
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 shadow-md">
+                  <div className="text-xl font-bold text-[#F0982E]">∞</div>
+                  <div className="text-sm text-gray-600">Blessings Shared</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="relative z-10">
+                <img
+                  src={donation_one}
+                  alt="Spiritual community meditation"
+                  className="w-full h-80 object-cover rounded-3xl shadow-2xl"
+                />
+              </div>
+              <div className="absolute -bottom-4 -right-4 w-full h-full bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-3xl opacity-20"></div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div className="relative">
-        <div className="relative z-10">
-          <img
-            src={donation_one}
-            alt="Spiritual community meditation"
-            className="w-full h-80 object-cover rounded-3xl shadow-2xl"
-          />
-        </div>
-        <div className="absolute -bottom-4 -right-4 w-full h-full bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-3xl opacity-20"></div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
 
       {/* Impact Areas Section */}
@@ -276,25 +286,23 @@ function Donation() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* QR Code Card */}
+            {/* <CHANGE> Updated layout to show two QR codes side by side */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+              {/* First QR Code Card - Kotak */}
               <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
                 <div className="text-center">
                   <div className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-amber-600 bg-amber-100 rounded-full">
-                    📱 Scan & Donate
+                    📱 Scan & Donate (Kotak)
                   </div>
 
-                  {/* QR Code Display */}
                   <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl shadow-inner flex justify-center items-center mb-6">
                     <img
-                      src={qrCode}
-                      alt="Donation QR Code for Sanatan Alok"
+                      src={qrCode || "/placeholder.svg"}
+                      alt="Donation QR Code for Sanatan Alok - Kotak"
                       className="max-w-xs w-full h-auto rounded-xl border border-amber-100"
                     />
                   </div>
 
-
-                  {/* UPI ID */}
                   <div className="mb-6">
                     <p className="text-sm text-gray-600 mb-2">UPI ID</p>
                     <div className="flex items-center justify-center space-x-2">
@@ -314,7 +322,6 @@ function Donation() {
                     )}
                   </div>
 
-                  {/* Action Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <button
                       onClick={downloadQR}
@@ -331,63 +338,136 @@ function Donation() {
                       Share
                     </button>
                   </div>
+
+                  {/* Bank Details for Kotak */}
+                  <div className="bg-white rounded-2xl p-6 shadow-md mt-8">
+                    <h4 className="text-lg font-bold text-gray-800 mb-4">Bank Transfer Details</h4>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Account Name:</span>
+                        <span className="font-medium">{bankDetails.accountName}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Account Number:</span>
+                        <span className="font-medium">{bankDetails.accountNumber}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">IFSC Code:</span>
+                        <span className="font-medium">{bankDetails.ifscCode}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Branch Name:</span>
+                        <span className="font-medium">{bankDetails.branchName}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Bank:</span>
+                        <span className="font-medium">{bankDetails.bankName}</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(JSON.stringify(bankDetails), 'kotak')}
+                      className="w-full mt-4 px-4 py-2 text-amber-600 border border-amber-300 rounded-lg hover:bg-amber-50 transition-colors"
+                    >
+                      {copiedBank === 'kotak' ? '✓ Copied!' : 'Copy Bank Details'}
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Donation Steps */}
-              <div className="space-y-8">
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">How to Donate in 4 Simple Steps</h3>
+              {/* <CHANGE> Added second QR Code Card - HDFC */}
+              <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+                <div className="text-center">
+                  <div className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-amber-600 bg-amber-100 rounded-full">
+                    📱 Scan & Donate (HDFC)
+                  </div>
 
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl shadow-inner flex justify-center items-center mb-6">
+                    <img
+                      src={qrCodeHdfc || "/placeholder.svg"}
+                      alt="Donation QR Code for Sanatan Alok - HDFC"
+                      className="max-w-xs w-full h-auto rounded-xl border border-amber-100"
+                    />
+                  </div>
+
+                  <div className="mb-6">
+                    <p className="text-sm text-gray-600 mb-2">Bank Transfer Method</p>
+                    <div className="text-lg font-mono font-bold text-gray-800 bg-amber-50 px-4 py-2 rounded-lg">
+                      HDFC Bank
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3 justify-center">
+                    <button
+                      onClick={() => {
+                        const link = document.createElement('a')
+                        link.href = qrCodeHdfc
+                        link.download = 'sanatan-alok-donation-qr-hdfc.png'
+                        document.body.appendChild(link)
+                        link.click()
+                        document.body.removeChild(link)
+                      }}
+                      className="flex items-center justify-center px-6 py-3 bg-amber-500 text-white font-medium rounded-full hover:bg-amber-600 transition-colors"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download QR
+                    </button>
+                  </div>
+
+                  {/* Bank Details for HDFC */}
+                  <div className="bg-white rounded-2xl p-6 shadow-md mt-8">
+                    <h4 className="text-lg font-bold text-gray-800 mb-4">Bank Transfer Details</h4>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Account Name:</span>
+                        <span className="font-medium">{bankDetailsHdfc.accountName}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Account Number:</span>
+                        <span className="font-medium">{bankDetailsHdfc.accountNumber}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">IFSC Code:</span>
+                        <span className="font-medium">{bankDetailsHdfc.ifscCode}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Branch Name:</span>
+                        <span className="font-medium">{bankDetailsHdfc.branchName}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Bank:</span>
+                        <span className="font-medium">{bankDetailsHdfc.bankName}</span>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => copyToClipboard(JSON.stringify(bankDetailsHdfc), 'hdfc')}
+                      className="w-full mt-4 px-4 py-2 text-amber-600 border border-amber-300 rounded-lg hover:bg-amber-50 transition-colors"
+                    >
+                      {copiedBank === 'hdfc' ? '✓ Copied!' : 'Copy Bank Details'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Donation Steps */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20">
+              <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">How to Donate in 4 Simple Steps</h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {donationSteps.map((step, index) => (
-                  <div key={index} className="flex items-start space-x-4 p-4 rounded-2xl bg-white/50 backdrop-blur-sm">
-                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  <div key={index} className="flex flex-col items-center text-center p-4 rounded-2xl bg-white/50 backdrop-blur-sm">
+                    <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-[#F0982E] to-[#d97706] rounded-full flex items-center justify-center text-white font-bold text-lg mb-3">
                       {step.icon}
                     </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-gray-800 mb-1">{step.title}</h4>
-                      <p className="text-gray-600">{step.description}</p>
-                    </div>
+                    <h4 className="text-lg font-semibold text-gray-800 mb-1">{step.title}</h4>
+                    <p className="text-gray-600 text-sm">{step.description}</p>
                   </div>
                 ))}
-
-                {/* Bank Transfer Option */}
-                <div className="bg-white rounded-2xl p-6 shadow-md mt-8">
-                  <h4 className="text-xl font-bold text-gray-800 mb-4">Prefer Bank Transfer?</h4>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Account Name:</span>
-                      <span className="font-medium">{bankDetails.accountName}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Account Number:</span>
-                      <span className="font-medium">{bankDetails.accountNumber}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">IFSC Code:</span>
-                      <span className="font-medium">{bankDetails.ifscCode}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Branch Name:</span>
-                      <span className="font-medium">{bankDetails.branchName}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Bank:</span>
-                      <span className="font-medium">{bankDetails.bankName}</span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => copyToClipboard(JSON.stringify(bankDetails))}
-                    className="w-full mt-4 px-4 py-2 text-amber-600 border border-amber-300 rounded-lg hover:bg-amber-50 transition-colors"
-                  >
-                    Copy Bank Details
-                  </button>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
       {/* Testimonials Section */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">

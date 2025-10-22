@@ -436,8 +436,8 @@ function Contact() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-1">Visiting Hours</h4>
-                    <p className="text-gray-600 text-sm">Monday - Saturday: 9:00 AM - 6:00 PM</p>
-                    <p className="text-gray-600 text-sm">Sunday: 10:00 AM - 4:00 PM</p>
+                    <p className="text-gray-600 text-sm">Monday - Saturday: 11:00 AM - 4:00 PM</p>
+                    <p className="text-gray-600 text-sm">Sunday: 11:00 AM - 4:00 PM</p>
                   </div>
                 </div>
               </div>

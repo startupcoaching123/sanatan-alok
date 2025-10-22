@@ -44,14 +44,32 @@ function Programs() {
             gradient: "from-pink-500 to-rose-600",
             link: "/programs/chakra-intelligence",
         },
+        // {
+        //     title: "🌸 ASHTALAXMI SADHANA 🌸",
+        //     duration: "2 Hours | Live Session",
+        //     mode: "Online (Zoom)",
+        //     price: "Free",
+        //     features: ["Eight Energies", "Mantra Meditation", "Inner Alignment", "Authentic Leadership"],
+        //     gradient: "from-orange-500 to-amber-600",
+        //     link: "/programs/ashtalaxmi-sadhana",
+        // },
         {
-            title: "🌸 ASHTALAXMI SADHANA 🌸",
-            duration: "2 Hours | Live Session",
-            mode: "Online (Zoom)",
+            title: "Experiential Masterclasses",
+            duration: "2 Hours | Transformative Sessions",
+            mode: "In-person (Delhi NCR)",
             price: "Free",
-            features: ["Eight Energies", "Mantra Meditation", "Inner Alignment", "Authentic Leadership"],
-            gradient: "from-orange-500 to-amber-600",
-            link: "/programs/ashtalaxmi-sadhana",
+            features: ["Ancient Wisdom", "Guided Practices", "Personal Transformation", "Community Support"],
+            gradient: "from-teal-500 to-cyan-600",
+            link: "/programs/experimental-masterclass",
+        },
+        {
+            title: "Four Divine Vidyās",
+            duration: "Sacred Energy Sciences",
+            mode: "Guidance Sessions",
+            price: "Free",
+            features: ["Energy Harmonization", "Spiritual Transformation", "Divine Connection", "Personal Growth"],
+            gradient: "from-indigo-500 to-purple-600",
+            link: "/programs/four-divine-vidyas",
         },
     ];
 
@@ -261,18 +279,18 @@ function Programs() {
                         </p>
                     </div>
 
-                    {/* 3 + 2 Layout */}
-                    <div className="max-w-7xl mx-auto flex flex-col items-center space-y-12">
-                        {/* Top row (3 cards) */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+                    {/* 3 + 3 Layout */}
+                    <div className="max-w-7xl mx-auto flex flex-col items-center space-y-8">
+                        {/* First Row (3 cards) */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
                             {freePrograms.slice(0, 3).map((program, index) => (
                                 <ProgramCard key={index} program={program} isPaid={false} />
                             ))}
                         </div>
 
-                        {/* Bottom row (2 cards, centered) */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full lg:w-2/3">
-                            {freePrograms.slice(3, 5).map((program, index) => (
+                        {/* Second Row (3 cards) */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+                            {freePrograms.slice(3, 6).map((program, index) => (
                                 <ProgramCard key={index + 3} program={program} isPaid={false} />
                             ))}
                         </div>

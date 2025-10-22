@@ -1,172 +1,234 @@
+import { useState } from 'react';
+import { Link } from "react-router-dom";
 
+// <CHANGE> Import 4 portrait images for each Vidyā
+import shivaShaktiImage from '../assets/shiva-shakti.jpg';
+import hanumatKripaImage from '../assets/hanumat-kripa.jpg';
+import sarasvatiAnugrahImage from '../assets/sarasvati-anugraha.jpg';
+import ashtaLakshmiImage from '../assets/ashta-lakshmi.jpg';
 
-import { Helmet } from "react-helmet-async"
-import bhagwan from "../assets/bhagwan.jpg";
 export default function FourDivineVidyas() {
+    const [expandedVidya, setExpandedVidya] = useState(null);
+
+    const vidyas = [
+        {
+            id: 1,
+            title: 'Shiva Shakti Vidyā',
+            sanskrit: 'शिवशक्ति विद्या',
+            icon: '🔱',
+            image: shivaShaktiImage,
+            subtitle: 'The Union of Consciousness and Energy',
+            description: 'The union of Shiva and Shakti represents the eternal balance of pure awareness and dynamic energy. Shiva Shakti Vidyā awakens this divine equilibrium within through sacred symbols blessed by Lord Shiva Himself.',
+            fullDescription: 'It is not therapy, but a spiritual science of vibration and grace — harmonizing energy, awakening peace, and catalyzing inner transformation. By practicing this Vidyā, you become a living channel of Shiva\'s grace — uplifting yourself while transmitting serenity and strength into the world.',
+            benefits: ['Inner Balance', 'Peace & Harmony', 'Spiritual Transformation', 'Energy Harmonization'],
+            color: 'from-orange-500 to-amber-600'
+        },
+        {
+            id: 2,
+            title: 'Hanumat Kripā Vidyā',
+            sanskrit: 'हनुमत्कृपा विद्या',
+            icon: '🐒',
+            image: hanumatKripaImage,
+            subtitle: 'Awakening Strength, Protection & Devotion',
+            description: 'Hanumat Kripā Vidyā carries the vital force (prāṇa-śakti) and blessings of Lord Hanuman — the embodiment of devotion, courage, and tireless service.',
+            fullDescription: 'This Vidyā awakens resilience, fearlessness, and divine protection within and around you. Through its sacred symbols and energy processes, you invite Hanuman\'s unstoppable grace into your life — restoring vitality and radiating power to others.',
+            benefits: ['Courage & Strength', 'Divine Protection', 'Resilience', 'Fearlessness'],
+            color: 'from-red-500 to-orange-600'
+        },
+        {
+            id: 3,
+            title: 'Sarasvatī Anugraha Vidyā',
+            sanskrit: 'सरस्वती अनुग्रह विद्या',
+            icon: '🎶',
+            image: sarasvatiAnugrahImage,
+            subtitle: 'The Flow of Wisdom, Sound & Clarity',
+            description: 'Goddess Sarasvatī is the eternal fountain of wisdom, eloquence, and intuitive knowledge. This Vidyā works through divine sound, symbol, and meditative process to open the flow of learning, insight, and refined perception.',
+            fullDescription: 'It harmonizes the mind and refines the intellect, awakening inspiration and clarity. Practicing Sarasvatī Anugraha Vidyā aligns your consciousness with the rhythm of divine knowledge, blessing your thoughts, speech, and creative expression.',
+            benefits: ['Wisdom & Knowledge', 'Clarity & Focus', 'Creative Expression', 'Eloquence'],
+            color: 'from-blue-500 to-cyan-600'
+        },
+        {
+            id: 4,
+            title: 'Aṣṭa-Lakṣmī Kripā Vidyā',
+            sanskrit: 'अष्टलक्ष्मी कृपा विद्या',
+            icon: '💰',
+            image: ashtaLakshmiImage,
+            subtitle: 'Divine Abundance, Prosperity & Fulfilment',
+            description: 'The eight forms of Maha Lakṣmī represent eight streams of divine abundance — spiritual, material, emotional, and karmic. Aṣṭa-Lakṣmī Kripā Vidyā aligns you with these sacred currents.',
+            fullDescription: 'Through symbols and meditative energy practices, it dissolves scarcity and activates the flow of grace in every dimension of life. This Vidyā cultivates gratitude, generosity, and radiance — transforming prosperity into a spiritual expression of divine harmony.',
+            benefits: ['Abundance & Prosperity', 'Financial Growth', 'Gratitude', 'Generosity'],
+            color: 'from-yellow-500 to-amber-600'
+        }
+    ];
+
     return (
-        <main className="bg-white text-slate-800">
-            <Helmet>
-                <title>Four Divine Vidyās | Sanatan Alok Spiritual Program</title>
-                <meta
-                    name="description"
-                    content="Discover Sanatan Alok's Four Divine Vidyās—Shiva Shakti, Hanumat Kripā, Sarasvatī Anugraha, and Aṣṭa-Lakṣmī Kripā—sacred energy-healing practices for spiritual awakening, balance, and abundance."
-                />
-                <meta
-                    name="keywords"
-                    content="Sanatan Alok Four Divine Vidyas, Shiva Shakti Vidya, Hanumat Kripa Vidya, Sarasvati Anugraha Vidya, Ashta Lakshmi Kripa Vidya, spiritual awakening, energy healing, ancient wisdom"
-                />
-                <link rel="canonical" href="https://sanatanalok.com/four-divine-vidyas" />
-            </Helmet>
-            {/* Header */}
-            <header className="relative overflow-hidden border-b border-transparent bg-gradient-to-br from-amber-50 via-white to-amber-100">
-                {/* Decorative background glows */}
+        <main className="bg-gradient-to-b from-amber-50 via-white to-amber-50 text-slate-800">
+            {/* Hero Section */}
+            <header className="relative overflow-hidden border-b border-amber-100">
                 <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute -top-16 -left-24 h-48 w-48 rounded-full bg-amber-200/60 blur-3xl" />
-                    <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-amber-300/40 blur-3xl" />
+                    <div className="absolute -top-32 -left-32 h-64 w-64 rounded-full bg-amber-200/40 blur-3xl" />
+                    <div className="absolute -bottom-32 -right-32 h-64 w-64 rounded-full bg-amber-300/30 blur-3xl" />
                 </div>
 
-                <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                    <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
-                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                        Spiritual Sciences of Energy
+                <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+                    <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-white px-4 py-2 text-sm font-medium text-amber-700 shadow-sm">
+                        <span className="h-2 w-2 rounded-full bg-amber-500" />
+                        Sacred Sciences of Energy
                     </div>
-                    <h1 className="text-pretty text-3xl font-semibold tracking-tight sm:text-4xl">
-                        <span className="bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
+
+                    <h1 className="text-pretty text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                        <span className="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-800 bg-clip-text text-transparent">
                             Four Divine Vidyās
                         </span>
                     </h1>
-                    <p className="mt-3 max-w-3xl text-m leading-relaxed text-slate-600">
-                        The Four Divine Vidyās — Shiva Shakti, Hanumat Kripā, Sarasvatī Anugraha, and Aṣṭa-Lakṣmī Kripā — are sacred
-                        sciences of energy revealed through divine grace. They awaken balance, wisdom, strength, and abundance,
-                        offering seekers a joyful path to self-harmony, spiritual empowerment, and the ability to radiate healing
-                        vibrations for the good of all.
+
+                    <p className="text-lg sm:text-xl text-slate-700 max-w-3xl leading-relaxed mb-8">
+                        Sacred pathways of energy, grace, and transformation. Each Vidyā awakens a unique dimension of consciousness — balance, strength, wisdom, and abundance — guiding seekers toward harmony, empowerment, and the ability to radiate healing vibrations for the good of all.
                     </p>
+
+                    <div className="flex flex-wrap gap-4">
+                        <Link
+                            to="/join-program"
+                            className="inline-block px-8 py-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold rounded-full hover:shadow-lg transition-all hover:-translate-y-1"
+                        >
+                            Join Program
+                        </Link>
+                    </div>
                 </div>
             </header>
 
-            {/* Image Section */}
-            <section className="border-b border-slate-200">
-                <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-                    <figure className="group overflow-hidden rounded-3xl border border-amber-100 bg-white/70 shadow-lg backdrop-blur">
-                        <img
-                            className="w-full h-auto object-contain rounded-3xl bg-black"
-                            src={bhagwan}
-                            alt="Devotional image space for the Lord"
-                        />
-                    </figure>
-                </div>
-            </section>
-
-
-            {/* Introduction */}
-            <section className="border-b border-slate-200">
-                <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-                    <h2 className="text-2xl font-semibold">Introduction</h2>
-                    <div className="mt-4 space-y-4 text-m leading-relaxed text-slate-700">
-                        <p>
-                            Energy is the very breath of the universe — the life-force flowing through every being, every thought, and
-                            every action. The ancient seers knew that when this energy is awakened with devotion and guided with
-                            wisdom, it becomes a stream of divine grace that uplifts both the self and others.
-                        </p>
-                        <p>
-                            The Four Vidyās offered here — Shiva Shakti Vidyā, Hanumat Kripā Vidyā, Sarasvatī Anugraha Vidyā, and
-                            Aṣṭa-Lakṣmī Kripā Vidyā — are sacred energy-healing disciplines revealed for seekers who wish to walk the
-                            path of transformation, balance, wisdom, and abundance.
-                        </p>
-                        <p>
-                            These Vidyās are not systems of medical treatment or cures for illness. Instead, they are spiritual
-                            sciences of energy that help harmonize the mind, awaken inner strength, inspire learning, and attract
-                            prosperity. Some are based on divine symbols, others on a blend of symbols and sacred processes — but all
-                            are rooted in the grace of the Deities they invoke.
-                        </p>
-                        <p>
-                            When you learn these Vidyās, you receive more than a practice. You receive a living connection — a
-                            blessing that flows through you to nurture your life and also radiate healing vibrations to those around
-                            you.
-                        </p>
+            {/* Introduction Section */}
+            <section className="border-b border-amber-100">
+                <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+                    <h2 className="text-3xl font-bold text-slate-900 mb-8">Introduction</h2>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div className="space-y-6 text-slate-700 leading-relaxed">
+                            <p className="text-lg">
+                                Energy is the very breath of the universe — the life-force flowing through every being, every thought, and every action. The ancient seers realized that when this energy is awakened with devotion and guided with wisdom, it becomes a stream of divine grace that uplifts both the self and the world.
+                            </p>
+                            <p className="text-lg">
+                                The Four Vidyās offered through Sanatan Alok are spiritual sciences of energy, revealed for seekers who wish to walk the path of transformation, balance, wisdom, and abundance.
+                            </p>
+                        </div>
+                        <div className="space-y-6 text-slate-700 leading-relaxed">
+                            <p className="text-lg">
+                                These are not systems of medical treatment or substitutes for therapy. They are pathways of higher energy harmonization — awakening inner strength, clarity, creativity, and prosperity.
+                            </p>
+                            <p className="text-lg">
+                                To learn these Vidyās is to receive more than knowledge — it is to receive a living connection, a stream of divine blessing that flows through you, nurturing your life and radiating healing vibrations to all around you.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* Vidyā Cards */}
-            <section>
-                <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                        {/* Shiva Shakti Vidyā */}
-                        <article className="rounded-2xl border border-amber-100 bg-white/80 p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
-                            <div className="h-1 w-16 rounded-full bg-gradient-to-r from-amber-400 to-amber-600" />
-                            <div className="mt-3 inline-flex items-center gap-2 rounded-md bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
-                                Shiva Shakti Vidyā
-                            </div>
-                            <h3 className="mt-1 text-lg font-semibold">शिवशक्ति विद्या</h3>
-                            <p className="mt-3 text-sm leading-relaxed text-slate-700">
-                                The union of Shiva and Shakti is the eternal balance of pure consciousness and cosmic energy. Shiva
-                                Shakti Vidyā awakens you to that divine balance through sacred symbols blessed by Lord Shiva Himself.
-                                This is not a medical therapy but a spiritual science of channeling higher vibrations for harmony,
-                                peace, and transformation. By learning and practicing this Vidyā, you become a channel of Shiva’s grace
-                                — uplifting yourself and sharing this flow of divine energy with others.
-                            </p>
-                        </article>
+            {/* Vidyā Cards Section */}
+            <section className="py-20">
+                <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                    <h2 className="text-3xl font-bold text-slate-900 mb-16 text-center">The Four Sacred Vidyās</h2>
 
-                        {/* Hanumat Kripā Vidyā */}
-                        <article className="rounded-2xl border border-amber-100 bg-white/80 p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
-                            <div className="h-1 w-16 rounded-full bg-gradient-to-r from-amber-400 to-amber-600" />
-                            <div className="mt-3 inline-flex items-center gap-2 rounded-md bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
-                                Hanumat Kripā Vidyā
-                            </div>
-                            <h3 className="mt-1 text-lg font-semibold">हनुमत्कृपा विद्या</h3>
-                            <p className="mt-3 text-sm leading-relaxed text-slate-700">
-                                Lord Hanuman embodies unwavering devotion, boundless strength, and fearless service. Hanumat Kripā Vidyā
-                                carries His blessings through sacred symbols charged with His divine grace. This Vidyā is not about
-                                treating illnesses, but about awakening courage, resilience, and divine protection within and around
-                                you. By learning this Vidyā, you invite Hanuman’s unstoppable energy into your life, becoming both
-                                strengthened in spirit and a radiant source of healing vibrations for others.
-                            </p>
-                        </article>
+                    <div className="space-y-20">
+                        {vidyas.map((vidya, index) => (
+                            <div
+                                key={vidya.id}
+                                className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 items-center`}
+                            >
+                                {/* Image */}
+                                <div className="flex-1 flex justify-center">
+                                    <div className="relative w-full max-w-sm">
+                                        <div className={`absolute inset-0 bg-gradient-to-br ${vidya.color} rounded-3xl blur-2xl opacity-20`} />
+                                        <img
+                                            src={vidya.image || "/placeholder.svg"}
+                                            alt={vidya.title}
+                                            className="relative w-full h-auto rounded-3xl shadow-2xl object-cover aspect-[3/4]"
+                                        />
+                                    </div>
+                                </div>
 
-                        {/* Sarasvatī Anugraha Vidyā */}
-                        <article className="rounded-2xl border border-amber-100 bg-white/80 p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
-                            <div className="h-1 w-16 rounded-full bg-gradient-to-r from-amber-400 to-amber-600" />
-                            <div className="mt-3 inline-flex items-center gap-2 rounded-md bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
-                                Sarasvatī Anugraha Vidyā
-                            </div>
-                            <h3 className="mt-1 text-lg font-semibold">सरस्वती अनुग्रह विद्या</h3>
-                            <p className="mt-3 text-sm leading-relaxed text-slate-700">
-                                Goddess Saraswati is the eternal source of wisdom, clarity, and eloquence. Sarasvatī Anugraha Vidyā is a
-                                sacred practice of symbols and graceful processes that open the flow of learning, creativity, and pure
-                                knowledge. This Vidyā is not concerned with sickness, but with refining the mind, deepening
-                                concentration, and receiving the blessings of Saraswati for education and higher wisdom. By learning
-                                this Vidyā, you align yourself with the river of divine knowledge, blessing both your own path and
-                                inspiring others with light and clarity.
-                            </p>
-                        </article>
+                                {/* Content */}
+                                <div className="flex-1 space-y-6">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-4xl">{vidya.icon}</span>
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-slate-900">{vidya.title}</h3>
+                                            <p className="text-lg font-semibold text-amber-700">{vidya.sanskrit}</p>
+                                        </div>
+                                    </div>
 
-                        {/* Aṣṭa-Lakṣmī Kripā Vidyā */}
-                        <article className="rounded-2xl border border-amber-100 bg-white/80 p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
-                            <div className="h-1 w-16 rounded-full bg-gradient-to-r from-amber-400 to-amber-600" />
-                            <div className="mt-3 inline-flex items-center gap-2 rounded-md bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
-                                Aṣṭa-Lakṣmī Kripā Vidyā
+                                    <div className="h-1 w-20 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full" />
+
+                                    <p className="text-lg font-semibold text-slate-800">{vidya.subtitle}</p>
+
+                                    <p className="text-slate-700 leading-relaxed">
+                                        {vidya.description}
+                                    </p>
+
+                                    <p className="text-slate-700 leading-relaxed">
+                                        {vidya.fullDescription}
+                                    </p>
+
+                                    {/* Benefits */}
+                                    <div className="grid grid-cols-2 gap-3 pt-4">
+                                        {vidya.benefits.map((benefit, idx) => (
+                                            <div
+                                                key={idx}
+                                                className="flex items-center gap-2 p-3 bg-amber-50 rounded-lg border border-amber-100"
+                                            >
+                                                <span className="text-amber-600 font-bold">✓</span>
+                                                <span className="text-sm font-medium text-slate-700">{benefit}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* CTA */}
+                                    <Link
+                                        to="/join-program"
+                                        className={`mt-6 px-8 py-3 bg-gradient-to-r ${vidya.color} text-white font-semibold rounded-full hover:shadow-lg transition-all hover:-translate-y-1 w-full md:w-auto`}>
+                                        Learn More
+                                    </Link>
+                                </div>
                             </div>
-                            <h3 className="mt-1 text-lg font-semibold">अष्टलक्ष्मी कृपा विद्या</h3>
-                            <p className="mt-3 text-sm leading-relaxed text-slate-700">
-                                The eight forms of Goddess Lakshmi bestow wealth, harmony, and abundance in every aspect of life.
-                                Aṣṭa-Lakṣmī Kripā Vidyā combines sacred symbols with divine processes to attune you to these streams of
-                                prosperity. This Vidyā is not a cure for illness — it is a spiritual path for inviting financial
-                                richness, material growth, and all-round abundance through the grace of Ashta Lakshmi. By learning this
-                                Vidyā, you open the doors of prosperity for yourself and become a channel of abundance for others as
-                                well.
-                            </p>
-                        </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Enrollment Section */}
+            <section className="border-t border-amber-100 bg-gradient-to-r from-amber-50 to-orange-50 py-16">
+                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 className="text-3xl font-bold text-slate-900 mb-6">Ready to Begin Your Journey?</h2>
+                    <p className="text-lg text-slate-700 mb-8 leading-relaxed">
+                        Enrollment for each Vidyā opens periodically. Dates and details are announced through our official website and social media platforms. You may also form a small seeker group or request personal guidance.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <Link
+                            to="/join-program"
+                            className="inline-block px-8 py-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold rounded-full hover:shadow-lg transition-all hover:-translate-y-1"
+                        >
+                            Express Interest
+                        </Link>
+                        <Link
+                            to="/contact-us"
+                            className="px-8 py-4 border-2 border-amber-600 text-amber-700 font-semibold rounded-full hover:bg-amber-50 transition-all">
+                            Contact Us
+                        </Link>
                     </div>
 
-                    {/* Enrollment Note */}
-                    <div className="mt-10 rounded-2xl border border-amber-100 bg-amber-50/70 px-5 py-5 text-sm text-slate-700 shadow-sm">
-                        ✨ Enrollment for each Vidyā opens periodically. Dates will be shared on this website and across our social
-                        media platforms. You may also express your interest by filling out the form or writing to us directly, and
-                        we will inform you of the next upcoming batch.
-                    </div>
+                    <p className="mt-8 text-sm text-slate-600">
+                        📧 Email: light.sanatanaalok@gmail.com | 💬 WhatsApp: Message us to connect
+                    </p>
+                </div>
+            </section>
+
+            {/* Footer Note */}
+            <section className="py-12 border-t border-amber-100">
+                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                        ✨ These Vidyās are spiritual sciences of energy and are not substitutes for medical treatment or therapy. They are pathways of higher energy harmonization designed to support your spiritual journey and overall well-being.
+                    </p>
                 </div>
             </section>
         </main>
-    )
+    );
 }

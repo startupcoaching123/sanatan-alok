@@ -139,14 +139,32 @@ function Home() {
       link: "/programs/chakra-intelligence",
     },
     {
-      title: "🌸 ASHTALAXMI SADHANA 🌸",
-      duration: "2 Hours | Live Session",
-      format: "Online (Zoom)",
-      features: ["Eight Energies", "Mantra Meditation", "Inner Alignment", "Authentic Leadership"],
+      title: "Experimental Masterclass",
+      duration: "2 Hours | Transformative Sessions",
+      format: "In-person (Delhi NCR)",
+      features: ["Ancient Wisdom", "Guided Practices", "Personal Transformation", "Community Support"],
       description:
-        "Invoke the eight divine energies of Ashta Laxmi to manifest abundance, inner harmony, and spiritual prosperity through guided mantra meditation.",
-      link: "/programs/ashtalaxmi-sadhana",
+        "Transformative 2-hour sessions designed to harmonize the modern mind with timeless spiritual wisdom through direct experience.",
+      link: "/programs/experimental-masterclass",
     },
+    {
+      title: "Four Divine VIdyas",
+      duration: "Sacred Energy Sciences",
+      format: "Guidance Sessions",
+      features: ["Energy Harmonization", "Spiritual Transformation", "Divine Connection", "Personal Growth"],
+      description:
+        "Sacred pathways of energy, grace, and transformation awakening balance, strength, wisdom, and abundance.",
+      link: "/programs/four-divine-vidyas",
+    },
+    // {
+    //   title: "🌸 ASHTALAXMI SADHANA 🌸",
+    //   duration: "2 Hours | Live Session",
+    //   format: "Online (Zoom)",
+    //   features: ["Eight Energies", "Mantra Meditation", "Inner Alignment", "Authentic Leadership"],
+    //   description:
+    //     "Invoke the eight divine energies of Ashta Laxmi to manifest abundance, inner harmony, and spiritual prosperity through guided mantra meditation.",
+    //   link: "/programs/ashtalaxmi-sadhana",
+    // },
   ]
 
   const programSliderSettings = {
@@ -381,9 +399,9 @@ function Home() {
 
           {/* Desktop and Tablet Grid */}
           {/* Free Programs Section */}
-          <div className="hidden md:flex flex-col items-center space-y-12 max-w-7xl mx-auto">
-            {/* Top row: 3 cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+          <div className="hidden md:flex flex-col items-center space-y-8 max-w-7xl mx-auto">
+            {/* First Row: 3 cards */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
               {freePrograms.slice(0, 3).map((program, index) => (
                 <div
                   key={index}
@@ -439,9 +457,9 @@ function Home() {
               ))}
             </div>
 
-            {/* Bottom row: 2 cards centered */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full lg:w-2/3">
-              {freePrograms.slice(3, 5).map((program, index) => (
+            {/* Second Row: 3 cards */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+              {freePrograms.slice(3, 6).map((program, index) => (
                 <div
                   key={index + 3}
                   className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:-translate-y-3 relative overflow-hidden h-full flex flex-col"
@@ -501,9 +519,7 @@ function Home() {
           <div className="md:hidden relative">
             <Slider {...programSliderSettings}>
               {freePrograms.map((program, index) => (
-                // remove px-4 so each slide consumes full width
                 <div key={index} className="px-0">
-                  {/* replace 'mx-auto max-w-sm' with 'w-full' to avoid peeking second slide */}
                   <div className="w-full bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/20 relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-amber-50 opacity-50"></div>
 
