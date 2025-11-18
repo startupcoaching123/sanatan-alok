@@ -21,6 +21,7 @@ import Program6 from './pages/Program6.jsx';
 import OnDemandSatsang from './pages/OnDemandSatsang.jsx';
 import FourDivine from './pages/FourDivine.jsx';
 import JoinProgram from './pages/JoinProgram.jsx';
+import RegisterProgram from './pages/RegisterProgram.jsx';
 import Donate from "./pages/Donate";
 import Blogs from "./pages/Blogs";
 import SingleBlogPage from "./pages/SingleBlogPage";
@@ -53,6 +54,7 @@ function App() {
             <Route path="/programs/ashtalaxmi-sadhana" element={<Program5 />} />
             <Route path="/programs/experiential-masterclass" element={<Program6 />} />
             <Route path="join-program" element={<JoinProgram />} />
+            <Route path="register-now" element={<RegisterProgram />} />
             <Route path="on-demand-satsang" element={<OnDemandSatsang />} />
             <Route path="/programs/four-divine-vidyas" element={<FourDivine />} />
             <Route path="/support-us" element={<Donate />} />

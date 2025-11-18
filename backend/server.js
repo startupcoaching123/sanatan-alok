@@ -20,12 +20,10 @@ app.use(cookieParser());
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://www.sanatanalok.com",
   "https://www.sanatanalok.com",
-  "https://www.sanatanalok.com/",
-  "http://www.sanatanalok.com/",
+  "https://www.api.sanatanalok.com",
   "https://sanatanalok.com",
-  "http://sanatanalok.com/",
+  "https://api.sanatanalok.com",
 ];
 
 app.use(
